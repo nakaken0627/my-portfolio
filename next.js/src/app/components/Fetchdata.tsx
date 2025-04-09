@@ -1,6 +1,3 @@
-//expressサーバからAPIを呼び出して結果を表示する
-//成功パターン（メッセージの表示）と失敗パータン（error）を考える
-
 "use client";
 
 import { useEffect, useState } from "react";
