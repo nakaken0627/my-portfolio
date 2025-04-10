@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
-import pool from "../database";
+import pool from "../../config/database";
 
 const router = express.Router();
 
-router.get("/users", async (req: Request, res: Response) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
     const result = await pool.query("SELECT * FROM users");
     res.json(result.rows);
