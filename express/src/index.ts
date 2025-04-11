@@ -1,16 +1,16 @@
 import express from "express";
-import * as dotenv from "dotenv"; //環境変数が設定可能
+import dotenv from "dotenv"; //環境変数が設定可能
 import cors from "cors";
-import apiRouter from "./routes/api";
-import usersRouter from "./routes/users";
 import type { Express, Request, Response } from "express";
 
-import session from "express-session";
+import apiRouter from "./routes/api";
+import usersRouter from "./routes/users";
+import authRouter from "./routes/auth";
+
+import session, { Cookie } from "express-session";
+import passport from "passport";
 
 const app: Express = express();
-
-import cookieParser from "cookie-parser";
-app.use(cookieParser("mysecret"));
 
 //環境変数を設定するdotenv(未設定)
 dotenv.config();
@@ -22,25 +22,32 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-const verifyPass = app.use("/secret", (req, res, next) => {
-  const { password } = req.query;
-  if (password === "supersecret") {
-    return next();
-  } else {
-    // res.send("パスワードが必要です");
-    throw new Error("パスワードが必要です");
-  }
-});
+app.use(express.urlencoded({ extended: false })); // body-parser の代替 (フォームデータ用)
+app.use(express.json()); // body-parser の代替 (JSON データ用)
+
+//セッションの初期設定
+const sessionOptions = {
+  secret: "mysecret",
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: process.env.NODE_ENV === "production" },
+};
+app.use(session(sessionOptions));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 //ルートパスにリクエストがきた際の処理
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!!");
 });
 
-//apiにリクエストが来た際の処理
+app.use("/api/signup", authRouter);
+
+//エンドポイントの動作確認
 app.use("/api", apiRouter);
 
-//DBに接続するための設定
+//DBとの接続確認
 app.use("/users", usersRouter);
 
 app.get("/greet", (req, res) => {

@@ -13,10 +13,18 @@ const pool = new Pool({
   password: process.env.DB_PASSWORD,
 });
 
-// PostgreSQLに接続する
-pool
-  .connect()
-  .then(() => console.log("PostgreSQLに接続しました"))
-  .catch((err) => console.error("PostgreSQLへの接続に失敗しました", err));
+// 余計なリソースを消費しないためにも起動時の接続は不要
+// pool
+//   .connect()
+//   .then(() => console.log("PostgreSQLに接続しました"))
+//   .catch((err) => console.error("PostgreSQLへの接続に失敗しました", err));
+
+pool.on("connect", () => {
+  console.log("PostgreSQLに接続しました");
+});
+
+pool.on("error", (err) => {
+  console.error("PostgreSQL接続エラー:", err);
+});
 
 export default pool;
