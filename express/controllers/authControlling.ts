@@ -1,3 +1,5 @@
+//フロントエンドからのリクエストに対する処理を記載
+
 import { Request, Response, NextFunction } from "express";
 import userModel from "../models/userModel";
 
@@ -16,6 +18,7 @@ class AuthController {
       }
       //ユーザー登録
       const newUser = await userModel.createUser(username, password);
+      // console.log(newUser);
 
       // サインアップ後に自動的にログインする
       req.login(newUser, (err) => {

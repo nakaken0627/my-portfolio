@@ -1,7 +1,7 @@
 export default function RegisterPage() {
   return (
     <>
-      <h1>registered</h1>
+      <h1>登録済み画面</h1>
     </>
   );
 }

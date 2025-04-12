@@ -1,5 +1,7 @@
+//認証方法の定義、セッションへの保存
+
 import passport from "passport";
-import LocalStrategy from "passport-local";
+import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
 import pool from "./database";
 

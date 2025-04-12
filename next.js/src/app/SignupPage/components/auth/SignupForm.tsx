@@ -20,7 +20,7 @@ function SignupForm() {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/api/signup", {
+      const response = await fetch("http://localhost:3001/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,6 +29,7 @@ function SignupForm() {
       });
 
       const data = await response.json();
+      console.log(data);
 
       if (response.ok) {
         console.log("サインアップ成功", data);
@@ -82,7 +83,6 @@ function SignupForm() {
           required
         />
       </div>
-      <input type="password" />
       <button type="submit">登録</button>
     </form>
   );

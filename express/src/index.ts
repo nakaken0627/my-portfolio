@@ -1,5 +1,5 @@
 import express from "express";
-import dotenv from "dotenv"; //環境変数が設定可能
+import dotenv from "dotenv";
 import cors from "cors";
 import type { Express, Request, Response } from "express";
 
@@ -7,9 +7,10 @@ import apiRouter from "./routes/api";
 import usersRouter from "./routes/users";
 import authRouter from "./routes/auth";
 
-import session, { Cookie } from "express-session";
-import passport from "passport";
+import session from "express-session";
+import passport from "../config/passport";
 
+//expressのインスタンスを作成
 const app: Express = express();
 
 //環境変数を設定するdotenv(未設定)
@@ -22,8 +23,10 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-app.use(express.urlencoded({ extended: false })); // body-parser の代替 (フォームデータ用)
-app.use(express.json()); // body-parser の代替 (JSON データ用)
+//body-parser の代替 (フォームデータ用)
+app.use(express.urlencoded({ extended: false }));
+// body-parser の代替 (JSON データ用)
+app.use(express.json());
 
 //セッションの初期設定
 const sessionOptions = {
@@ -33,7 +36,6 @@ const sessionOptions = {
   cookie: { secure: process.env.NODE_ENV === "production" },
 };
 app.use(session(sessionOptions));
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -42,35 +44,16 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!!");
 });
 
-app.use("/api/signup", authRouter);
+//サインアップ機能
+app.post("/auth/signup", authRouter);
 
-//エンドポイントの動作確認
+//エンドポイントの動作確認用
 app.use("/api", apiRouter);
 
-//DBとの接続確認
+//DBとの接続確認用
 app.use("/users", usersRouter);
 
-app.get("/greet", (req, res) => {
-  const { name } = req.cookies;
-  res.send(`ようこそ${name}さん`);
-});
-
-app.get("/setname", (req, res) => {
-  res.cookie("name", "yamada");
-  res.cookie("animal", "cat");
-  res.send("クッキー送ったよ");
-});
-
-app.get("/getsignedcookie", (req, res) => {
-  res.cookie("fruit", "grape", { signed: true });
-  res.send("署名付きクッキー");
-});
-
-app.get("/verifyfuruit", (req, res) => {
-  console.log(req.signedCookies);
-  res.send(req.signedCookies);
-});
-
+//エラーハンドラー
 app.use((req, res) => {
   res.status(404).send("ページが見つかりません");
 });

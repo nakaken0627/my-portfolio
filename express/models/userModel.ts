@@ -1,8 +1,11 @@
+//DBへの操作など裏側の処理を記載
+
 import { PoolClient } from "pg";
 import pool from "../config/database";
 import bcrypt from "bcrypt";
 
 class UserModel {
+  //ユーザー名の重複がないか確認
   async findByUsername(username: string): Promise<string | null> {
     const client: PoolClient = await pool.connect();
     try {
@@ -10,13 +13,14 @@ class UserModel {
         "SELECT * FROM users WHERE username=$1",
         [username]
       );
-      //リターンが２以上になる可能性はないのか？→ユーザー名を一意に設定
+
       return result.rows[0] || null;
     } finally {
       client.release();
     }
   }
 
+  //重複確認後にユーザー登録
   async createUser(username: string, password: string): Promise<any> {
     const client: PoolClient = await pool.connect();
     try {
@@ -31,6 +35,7 @@ class UserModel {
     }
   }
 
+  //ログイン時に入力PWとDBのハッシュ化したPWを確認
   async comparePassword(
     plainPassword: string,
     hashedPassword?: string
