@@ -3,6 +3,6 @@ import AuthController from "../../controllers/authControlling";
 
 const router = express.Router();
 
-router.post("/", AuthController.signup);
+router.post("/signup", AuthController.signup);
 
 export default router;

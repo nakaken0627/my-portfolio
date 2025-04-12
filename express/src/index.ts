@@ -6,9 +6,12 @@ import type { Express, Request, Response } from "express";
 import apiRouter from "./routes/api";
 import usersRouter from "./routes/users";
 import authRouter from "./routes/auth";
+import pgSession from "connect-pg-simple";
 
 import session from "express-session";
 import passport from "../config/passport";
+import pool from "../config/database";
+import connectPgSimple from "connect-pg-simple";
 
 //expressのインスタンスを作成
 const app: Express = express();
@@ -30,11 +33,21 @@ app.use(express.json());
 
 //セッションの初期設定
 const sessionOptions = {
+  //   store: new (connectPgSimple(session))({
+  //     pool: pool,
+  //     tableName: "user-sessions",
+  //   }),
+  //   secret: "mysecret",
+  //   resave: false,
+  //   saveUninitialized: false,
+  //   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
+  // };
   secret: "mysecret",
   resave: false,
   saveUninitialized: false,
   cookie: { secure: process.env.NODE_ENV === "production" },
 };
+
 app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -45,7 +58,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 //サインアップ機能
-app.post("/auth/signup", authRouter);
+app.use("/auth", authRouter);
 
 //エンドポイントの動作確認用
 app.use("/api", apiRouter);

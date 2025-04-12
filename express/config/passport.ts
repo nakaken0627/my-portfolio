@@ -29,10 +29,12 @@ passport.use(
   })
 );
 
+//セッションへ保存する情報を定義
 passport.serializeUser((user: any, done) => {
   done(null, user.id);
 });
 
+//センションからユーザー情報を復元
 passport.deserializeUser(async (id: number, done) => {
   try {
     const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
