@@ -36,6 +36,11 @@ class AuthController {
       res.status(500).json({ message: "サーバエラー" });
     }
   }
+
+  // async signin(req: Request, res: Response, next: NextFunction) {
+  //   const [username, password] = await req.body;
+  //   const data = await userModel.comparePassword(username, password);
+  // }
 }
 
 export default new AuthController();
