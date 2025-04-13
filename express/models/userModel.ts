@@ -4,6 +4,11 @@ import { PoolClient } from "pg";
 import pool from "../config/database";
 import bcrypt from "bcrypt";
 
+export interface User {
+  id: number;
+  username: string;
+}
+
 class UserModel {
   //ユーザー名の重複がないか確認
   async findByUsername(username: string): Promise<string | null> {

@@ -33,20 +33,20 @@ app.use(express.json());
 
 //セッションの初期設定
 const sessionOptions = {
-  //   store: new (connectPgSimple(session))({
-  //     pool: pool,
-  //     tableName: "user-sessions",
-  //   }),
-  //   secret: "mysecret",
-  //   resave: false,
-  //   saveUninitialized: false,
-  //   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
-  // };
+  store: new (connectPgSimple(session))({
+    pool: pool,
+    tableName: "user-sessions",
+  }),
   secret: "mysecret",
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: process.env.NODE_ENV === "production" },
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
 };
+// secret: "mysecret",
+// resave: false,
+// saveUninitialized: false,
+// cookie: { secure: process.env.NODE_ENV === "production" },
+// };
 
 app.use(session(sessionOptions));
 app.use(passport.initialize());
