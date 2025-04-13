@@ -4,6 +4,11 @@ import { PoolClient } from "pg";
 import pool from "../config/database";
 import bcrypt from "bcrypt";
 
+export interface User {
+  id: number;
+  username: string;
+}
+
 class UserModel {
   //ユーザー名の重複がないか確認
   async findByUsername(username: string): Promise<string | null> {
@@ -35,16 +40,29 @@ class UserModel {
     }
   }
 
-  //ログイン時に入力PWとDBのハッシュ化したPWを確認
-  async comparePassword(
-    plainPassword: string,
-    hashedPassword?: string
-  ): Promise<boolean> {
-    if (!hashedPassword) {
-      return false;
-    }
-    return await bcrypt.compare(plainPassword, hashedPassword);
-  }
+  // //ログイン時に入力PWとDBのハッシュ化したPWを確認
+  // async comparePassword(
+  //   username: string,
+  //   plainPassword: string
+  //   // hashedPassword?: string
+  // ): Promise<boolean> {
+  //   const client: PoolClient = await pool.connect();
+  //   try {
+  //     const hashedPassword = await client.query(
+  //       "SELECT password FROM users WHERE name = $1",
+  //       [username]
+  //     );
+
+  //     if (!hashedPassword) {
+  //       return false;
+  //     } else {
+  //       const result = await bcrypt.compare(plainPassword, hashedPassword);
+  //       return result;
+  //     }
+  //   } finally {
+  //     client.release();
+  //   }
+  // }
 }
 
 export default new UserModel();
