@@ -1,3 +1,13 @@
 {
-  "cSpell.words": ["Fetchdata"]
+  "scripts": {
+    "format": "prettier --check \"**/*.{ts,tsx,js,jsx,cjs,mjs,md,json,lintstagedrc,yml,yaml}\"",
+    "format:fix": "prettier --write \"**/*.{ts,tsx,js,jsx,cjs,mjs,md,json,lintstagedrc,yml,yaml}\"",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix"
+  },
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always"
+  },
+  "cSpell.words": ["ianvs", "lintstagedrc", "turbopack"]
 }

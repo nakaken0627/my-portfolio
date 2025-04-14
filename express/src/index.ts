@@ -6,7 +6,7 @@ import type { Express, Request, Response } from "express";
 import apiRouter from "./routes/api";
 import usersRouter from "./routes/users";
 import authRouter from "./routes/auth";
-import pgSession from "connect-pg-simple";
+// import pgSession from "connect-pg-simple";
 
 import session from "express-session";
 import passport from "../config/passport";
