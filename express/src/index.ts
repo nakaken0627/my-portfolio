@@ -3,14 +3,13 @@ import dotenv from "dotenv";
 import cors from "cors";
 import type { Express, Request, Response } from "express";
 
-import apiRouter from "./routes/api";
-import usersRouter from "./routes/users";
-import authRouter from "./routes/auth";
-// import pgSession from "connect-pg-simple";
+import apiRouter from "./routes/api.js";
+import usersRouter from "./routes/users.js";
+import authRouter from "./routes/auth.js";
 
 import session from "express-session";
-import passport from "../config/passport";
-import pool from "../config/database";
+import passportCompany from "../config/passportCompany.js"; //user用を作成する際に確認必須
+import pool from "../config/database.js";
 import connectPgSimple from "connect-pg-simple";
 
 //expressのインスタンスを作成
@@ -44,16 +43,22 @@ const sessionOptions = {
   createTableIfMissing: true,
 };
 
+//現状のままだとセッション時にCompanyとUserで競合が発生するため注意
 app.use(session(sessionOptions));
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passportCompany.initialize());
+app.use(passportCompany.session());
+
+app.use((req, res, next) => {
+  console.log("Session data:", req.session);
+  next();
+});
 
 //ルートパスにリクエストがきた際の処理
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!!");
 });
 
-//サインアップ機能
+//認証機能
 app.use("/auth", authRouter);
 
 //エンドポイントの動作確認用
