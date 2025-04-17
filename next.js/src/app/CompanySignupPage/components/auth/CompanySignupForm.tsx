@@ -24,6 +24,7 @@ function CompanySignupForm() {
         "http://localhost:3001/auth/company/signup",
         {
           method: "POST",
+          credentials: "include", //クロスオリジンであってもcookieをリクエストと一緒に送る場合に必須
           headers: {
             "Content-Type": "application/json",
           },

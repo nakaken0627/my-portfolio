@@ -9,6 +9,7 @@ router.get("/hello", (req: Request, res: Response) => {
 });
 
 router.get("/mycompany", (req, res) => {
+  // console.log(req.isAuthenticated());
   if (!req.isAuthenticated()) {
     res.status(401).json({ message: "認証に失敗しました" });
   }

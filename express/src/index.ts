@@ -37,11 +37,11 @@ const sessionOptions = {
     pool: pool,
     tableName: "session",
   }),
-  secret: "mysecret",
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
-  createTableIfMissing: true,
+  secret: "mysecret", //署名付きcookieの秘密鍵
+  resave: false, //セッションが変更されていない場合でも保存するかどうか
+  saveUninitialized: false, //セッションが初期化されていない場合でも保存するかどうか
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000, secure: false, httpOnly: true }, // secure: trueにするとhttpsでないとcookieが送信されない、httpOnly: trueにすると外部の悪質なJavaScriptからcookieがアクセスできなくなる
+  createTableIfMissing: true, //sessionテーブルが存在しない場合に自動作成するオプション
 };
 
 //現状のままだとセッション時にCompanyとUserで競合が発生するため注意

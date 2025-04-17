@@ -10,7 +10,7 @@ export default function MyCompanyPage() {
       try {
         const res = await fetch("http://localhost:3001/api/mycompany", {
           method: "GET",
-          credentials: "include",
+          credentials: "include", //cookieデータをつけて送る
         });
         const data = await res.json();
         setMyCompany(data.name);
