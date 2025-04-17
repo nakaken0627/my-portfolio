@@ -1,3 +1,35 @@
-.env
-.node_modules
+# OS関連
 .DS_Store
+Thumbs.db
+
+# node_modules
+node_modules/
+
+# 環境変数
+.env
+.env.*   # .env.local や .env.production なども除外
+
+# ログファイル
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# TypeScriptビルド成果物
+dist/
+build/
+
+# テスト関連
+coverage/
+*.lcov
+
+# IDE / エディタ設定
+.vscode/
+.idea/
+
+# Docker関連（必要に応じて）
+docker-compose.override.yml
+*.local.yml
+
+# 一時ファイル
+*.log
+*.tmp

@@ -1,7 +1,7 @@
 //DBへの操作など裏側の処理を記載
 
 import { PoolClient } from "pg";
-import pool from "../config/database";
+import pool from "../config/database.js";
 import bcrypt from "bcrypt";
 
 export interface User {
@@ -14,10 +14,7 @@ class UserModel {
   async findByUsername(username: string): Promise<string | null> {
     const client: PoolClient = await pool.connect();
     try {
-      const result = await client.query(
-        "SELECT * FROM users WHERE username=$1",
-        [username]
-      );
+      const result = await client.query("SELECT * FROM users WHERE username=$1", [username]);
 
       return result.rows[0] || null;
     } finally {
@@ -39,30 +36,6 @@ class UserModel {
       client.release();
     }
   }
-
-  // //ログイン時に入力PWとDBのハッシュ化したPWを確認
-  // async comparePassword(
-  //   username: string,
-  //   plainPassword: string
-  //   // hashedPassword?: string
-  // ): Promise<boolean> {
-  //   const client: PoolClient = await pool.connect();
-  //   try {
-  //     const hashedPassword = await client.query(
-  //       "SELECT password FROM users WHERE name = $1",
-  //       [username]
-  //     );
-
-  //     if (!hashedPassword) {
-  //       return false;
-  //     } else {
-  //       const result = await bcrypt.compare(plainPassword, hashedPassword);
-  //       return result;
-  //     }
-  //   } finally {
-  //     client.release();
-  //   }
-  // }
 }
 
 export default new UserModel();

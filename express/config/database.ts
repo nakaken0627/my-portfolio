@@ -1,7 +1,9 @@
 // PostgreSQLデータベースへの接続設定
 
-import { Pool } from "pg"; // PostgreSQLのクライアントライブラリをインポート
+import pg from "pg"; // PostgreSQLのクライアントライブラリをインポート
 import dotenv from "dotenv"; // dotenvをインポートして環境変数を読み込む
+
+const { Pool } = pg;
 
 dotenv.config();
 
