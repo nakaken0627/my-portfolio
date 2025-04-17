@@ -48,8 +48,6 @@
    http://localhost:3001
    ```
 
----
-
 ### PostgreSQL の構築手順
 
 #### Docker を使用した簡単な構築方法
@@ -92,10 +90,22 @@
    docker-compose up -d
    ```
 4. PostgreSQL が起動していることを確認します:
+
    ```bash
    docker ps
    ```
+
    `my_portfolio_db` コンテナがリストに表示されていれば成功です。
+
+5. サーバを停止します:
+
+   ```bash
+   docker-compose down
+   ```
+
+   `my_portfolio_db` コンテナがリストに表示されていないことを確認して下さい。
+
+---
 
 #### 手動で構築する場合
 
