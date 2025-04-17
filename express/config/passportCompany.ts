@@ -8,30 +8,36 @@ import pool from "./database.js";
 const passportCompany = passport;
 
 passportCompany.use(
-  new LocalStrategy(async (inputName: string, inputPassword: string, done: any) => {
-    try {
-      const result = await pool.query("SELECT * FROM companies WHERE company_name = $1", [inputName]);
-      const getCompany = result.rows[0];
+  new LocalStrategy(
+    {
+      usernameField: "companyName",
+      passwordField: "companyPassword",
+    },
+    async (companyName: string, companyPassword: string, done: any) => {
+      try {
+        const result = await pool.query("SELECT * FROM companies WHERE name = $1", [companyName]);
+        const getCompany = result.rows[0];
 
-      if (!getCompany) {
-        return done(null, false, { message: "ユーザー名が間違っています" }); //userがない場合はリテラル型の”false”にすることで認証成功時にのみ別の方を適用する
-      }
-      const isPasswordValid = await bcrypt.compare(inputPassword, getCompany.company_password);
+        if (!getCompany) {
+          return done(null, false, { message: "ユーザー名が間違っています" }); //userがない場合はリテラル型の”false”にすることで認証成功時にのみ別の方を適用する
+        }
+        const isPasswordValid = await bcrypt.compare(companyPassword, getCompany.password);
 
-      if (!isPasswordValid) {
-        return done(null, false, { message: "パスワードが間違っています" });
+        if (!isPasswordValid) {
+          return done(null, false, { message: "パスワードが間違っています" });
+        }
+        return done(null, getCompany);
+      } catch (error) {
+        return done(error);
       }
-      return done(null, getCompany);
-    } catch (error) {
-      return done(error);
     }
-  })
+  )
 );
 
 //セッションへ保存する情報を定義
 passportCompany.serializeUser((company: any, done) => {
   const data = {
-    id: company.company_id,
+    id: company.id,
     type: "company",
   };
   done(null, data);
@@ -52,7 +58,7 @@ passport.deserializeUser(async (data: any, done) => {
     return done(null, false);
   }
   try {
-    const result = await pool.query("SELECT * FROM companies WHERE company_id = $1", [data.id]);
+    const result = await pool.query("SELECT * FROM companies WHERE id = $1", [data.id]);
     const company = result.rows[0];
     if (company) {
       done(null, company);

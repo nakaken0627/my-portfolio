@@ -18,7 +18,7 @@ class AuthController {
       }
       //ユーザー登録
       const newCompany = await companyModel.createCompany(companyName, companyPassword);
-      console.log("newCompany:", newCompany);
+      console.log("[authCompanyControlling]newCompany:", newCompany);
 
       // サインアップ後に自動的にログインする
       req.login(newCompany, (err) => {
@@ -28,13 +28,13 @@ class AuthController {
         res.status(201).json({
           message: "登録成功",
           company: {
-            id: newCompany.company_id,
-            companyName: newCompany.company_name,
+            id: newCompany.id,
+            companyName: newCompany.name,
           },
         });
       });
     } catch (error) {
-      console.log("サインアップ処理エラー", error);
+      console.log("[authCompanyControlling]サインアップ処理エラー", error);
       res.status(500).json({ message: "サーバエラー" });
     }
   }

@@ -36,7 +36,7 @@ function CompanySignupForm() {
 
       if (response.ok) {
         console.log("サインアップ成功", data);
-        router.push("/dashboardForCompany");
+        router.push("/MyCompanyPage");
       } else {
         console.log("登録済み");
         setError(data.message || "サインアップに失敗しました");

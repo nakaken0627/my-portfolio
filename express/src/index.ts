@@ -22,6 +22,7 @@ const port = process.env.PORT || 3001;
 //特定のサーバからのアクセスを許可するcors設定
 const corsOptions = {
   origin: "http://localhost:3000",
+  credentials: true,
 };
 app.use(cors(corsOptions));
 
@@ -49,7 +50,7 @@ app.use(passportCompany.initialize());
 app.use(passportCompany.session());
 
 app.use((req, res, next) => {
-  console.log("Session data:", req.session);
+  // console.log("[index.ts]Session data:", req.session);
   next();
 });
 
@@ -58,10 +59,10 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!!");
 });
 
-//認証機能
+//認証用
 app.use("/auth", authRouter);
 
-//エンドポイントの動作確認用
+//情報取得用
 app.use("/api", apiRouter);
 
 //DBとの接続確認用

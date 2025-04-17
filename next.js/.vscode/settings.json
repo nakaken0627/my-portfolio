@@ -9,5 +9,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
   },
-  "cSpell.words": ["ianvs", "lintstagedrc", "turbopack"]
+  "cSpell.words": ["ianvs", "lintstagedrc", "turbopack", "vercel"]
 }

@@ -8,4 +8,11 @@ router.get("/hello", (req: Request, res: Response) => {
   res.json({ message: "Hello from Express!!" });
 });
 
+router.get("/mycompany", (req, res) => {
+  if (!req.isAuthenticated()) {
+    res.status(401).json({ message: "認証に失敗しました" });
+  }
+  res.status(200).json(req.user);
+});
+
 export default router;

@@ -1,7 +1,7 @@
 //フロントエンドからのリクエストに対する処理を記載
 
 import { Request, Response, NextFunction } from "express";
-import userModel from "../models/userModel.js";
+import userModel from "../models/userModel";
 
 class AuthController {
   async signup(req: Request, res: Response, next: NextFunction) {
