@@ -38,6 +38,25 @@ router.post("/company/login", (req: Request, res: Response, next: NextFunction) 
   })(req, res, next);
 });
 
+router.get("/company/logout", (req: Request, res: Response, next: NextFunction) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    req.session.destroy((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.clearCookie("connect.sid", {
+        path: "/",
+        httpOnly: true, //jsから悪意を持ってcookieを取得するのを防ぐために必要
+        secure: false, // HTTPSで通信があった際に実行する ※本番環境では true にする必要がある
+      });
+      res.status(200).json({ message: "ログアウトしました" });
+    });
+  });
+});
+
 //user用サインアップ機能のため、一旦影響が出ないよう対象外
 // router.post("/signup", AuthController.signup);
 

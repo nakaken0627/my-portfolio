@@ -69,7 +69,7 @@ function SigninForm() {
           required
         />
       </div>
-      <button type="submit">登録</button>
+      <button type="submit">ログイン</button>
     </form>
   );
 }
