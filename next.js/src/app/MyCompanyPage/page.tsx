@@ -3,9 +3,17 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+type Product = {
+  name: string;
+  model_number: string;
+  price: number;
+  description: string;
+};
+
 export default function MyCompanyPage() {
   const router = useRouter();
-  const [myCompany, setMyCompany] = useState("");
+  // const [myCompany, setMyCompany] = useState(""); //string型のみになっているためエラーの可能性あり
+  const [myCompany, setMyCompany] = useState<Product[]>([]); //string型のみになっているためエラーの可能性あり
 
   useEffect(() => {
     const fetchMycompany = async () => {
@@ -15,7 +23,8 @@ export default function MyCompanyPage() {
           credentials: "include", //cookieデータをつけて送る
         });
         const data = await res.json();
-        setMyCompany(data.name);
+        console.log("[MyCompanyPage]myCompanyデータ取得成功", data);
+        setMyCompany(data);
       } catch (err) {
         console.error("[MycompanyPage]myCompanyデータ取得エラー", err);
       }
@@ -41,7 +50,7 @@ export default function MyCompanyPage() {
   return (
     <>
       <h1>登録済み画面(販売企業様)</h1>
-      <div>ようこそ、{myCompany}様</div>
+      <div>ようこそ、{myCompany[0]?.name}様</div>
       <button onClick={handleClickLogout}>ログアウト</button>
       <div>{}</div>
     </>

@@ -4,21 +4,20 @@ import { PoolClient } from "pg";
 import pool from "../config/database.js";
 import bcrypt from "bcrypt";
 
-export type Company = {
-  companyId: number;
-  companyName: string;
-  companyPassword: string;
-  id: number;
+export type Product = {
   name: string;
+  model_number: string;
+  price: number;
+  description: string;
+  findCompanyProducts(companyId: number): Promise<any[]>;
 };
 
 class CompanyModel {
-  async findByCompanyName(companyName: string): Promise<Company | null> {
+  async findByCompanyName(companyName: string): Promise<Product | null> {
     const client: PoolClient = await pool.connect();
     try {
       const result = await client.query("SELECT * FROM companies WHERE name = $1", [companyName]);
-
-      return result.rows[0] || null;
+      return result.rows;
     } finally {
       client.release();
     }
@@ -34,6 +33,20 @@ class CompanyModel {
         [companyName, hashedPassword]
       );
       return result.rows[0];
+    } finally {
+      client.release();
+    }
+  }
+
+  async findCompanyProducts(companyId: number) {
+    const client: PoolClient = await pool.connect();
+    try {
+      const result = await client.query(
+        "SELECT companies.name, model_number, products.name, price, description FROM products INNER JOIN companies ON companies.id = products.company_id WHERE company_id = $1",
+        [companyId]
+      );
+
+      return result.rows[0] || null;
     } finally {
       client.release();
     }
