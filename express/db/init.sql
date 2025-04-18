@@ -1,5 +1,7 @@
 set client_encoding = 'UTF8';
 
+DROP TABLE IF EXISTS companies;
+
 CREATE TABLE IF NOT EXISTS companies (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
