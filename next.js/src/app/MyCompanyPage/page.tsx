@@ -52,7 +52,6 @@ export default function MyCompanyPage() {
       <h1>登録済み画面(販売企業様)</h1>
       <div>ようこそ、{myCompany[0]?.name}様</div>
       <button onClick={handleClickLogout}>ログアウト</button>
-      <div>{}</div>
     </>
   );
 }

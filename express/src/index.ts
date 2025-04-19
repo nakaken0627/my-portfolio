@@ -18,6 +18,10 @@ const app: Express = express();
 //環境変数を設定するdotenv(未設定)
 dotenv.config();
 const port = process.env.PORT || 3001;
+const sessionSecret = process.env.SESSION_SECRET;
+if (!sessionSecret) {
+  throw new Error("SESSION_SECRET is not defined in the environment variables.");
+}
 
 //特定のサーバからのアクセスを許可するcors設定
 const corsOptions = {
@@ -35,7 +39,7 @@ app.use(express.json());
 const sessionOptions = {
   store: new (connectPgSimple(session))({
     pool: pool,
-    tableName: "session",
+    tableName: sessionSecret,
   }),
   secret: "mysecret", //署名付きcookieの秘密鍵
   resave: false, //セッションが変更されていない場合でも保存するかどうか
