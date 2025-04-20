@@ -1,7 +1,5 @@
 set client_encoding = 'UTF8';
 
-DROP TABLE IF EXISTS companies;
-
 CREATE TABLE IF NOT EXISTS companies (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
@@ -10,14 +8,20 @@ CREATE TABLE IF NOT EXISTS companies (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE session (
+INSERT INTO companies (name, password) VALUES
+('test','$2b$12$PxTKfG6oLgpMyCnsBAL1YuS1q/UltDnRPWsDiUVuWvKoLeCR3UQIO'),
+('a','$2b$12$Yff5Q9lzma7PnGk16K8xHu0XeR2zNVEfGXwqnSrOqw5g1Fi.rvQj6'),
+('b','$2b$12$noG404YnA8SovqIJ6oc5NeLoYm.NUVjSun.jaOmLjc93wC4L6uILW'),
+('c','$2b$12$lk3bnxUtj0y7dRrCWGz.v.20Tp98jOs5Z.UtZLQdCoozoqt88OXW6');
+
+CREATE TABLE IF NOT EXISTS session (
     sid VARCHAR NOT NULL PRIMARY KEY,
     sess JSON NOT NULL,
     expire TIMESTAMP NOT NULL,
     type VARCHAR NOT NULL DEFAULT 'company'
 );
 
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
     company_id INTEGER NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
     model_number VARCHAR(100),

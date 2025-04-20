@@ -4,6 +4,11 @@ import { PoolClient } from "pg";
 import pool from "../config/database.js";
 import bcrypt from "bcrypt";
 
+export type Company = {
+  id: number;
+  name: string;
+};
+
 export type Product = {
   name: string;
   model_number: string;
@@ -13,11 +18,11 @@ export type Product = {
 };
 
 class CompanyModel {
-  async findByCompanyName(companyName: string): Promise<Product | null> {
+  async findByCompanyName(companyName: string): Promise<Company | null> {
     const client: PoolClient = await pool.connect();
     try {
       const result = await client.query("SELECT * FROM companies WHERE name = $1", [companyName]);
-      return result.rows;
+      return result.rows[0];
     } finally {
       client.release();
     }
@@ -38,15 +43,16 @@ class CompanyModel {
     }
   }
 
-  async findCompanyProducts(companyId: number) {
+  //企業idを指定して、商品情報を取得
+  async findCompanyProducts(companyId: number): Promise<Product[] | null> {
     const client: PoolClient = await pool.connect();
     try {
       const result = await client.query(
-        "SELECT companies.name, model_number, products.name, price, description FROM products INNER JOIN companies ON companies.id = products.company_id WHERE company_id = $1",
+        "SELECT companies.name as company_name , model_number, products.name, price, description FROM products INNER JOIN companies ON companies.id = products.company_id WHERE company_id = $1",
         [companyId]
       );
 
-      return result.rows[0] || null;
+      return result.rows;
     } finally {
       client.release();
     }
