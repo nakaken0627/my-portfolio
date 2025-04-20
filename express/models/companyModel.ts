@@ -10,6 +10,7 @@ export type Company = {
 };
 
 export type Product = {
+  company_name: string;
   name: string;
   model_number: string;
   price: number;
@@ -53,6 +54,19 @@ class CompanyModel {
       );
 
       return result.rows;
+    } finally {
+      client.release();
+    }
+  }
+
+  async addCompanyProduct(company_id: string, model_number: string, name: string, price: number, description: string) {
+    const client: PoolClient = await pool.connect();
+    try {
+      const result = await client.query(
+        "INSERT INTO products (company_id, model_number, name, price, description) VALUES ($1,$2,$3,$4,$5) RETURNING name,price ",
+        [company_id, model_number, name, price, description]
+      );
+      return result.rows[0];
     } finally {
       client.release();
     }

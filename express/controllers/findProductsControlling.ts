@@ -32,5 +32,21 @@ class AuthController {
       next(err);
     }
   };
+
+  addProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    if (!req.body) {
+      console.log("[findProductsControlling]addProduct:データがありません");
+      return;
+    }
+    const { company_id, model_number, name, price, description } = req.body;
+
+    try {
+      const result = await CompanyModel.addCompanyProduct(company_id, model_number, name, price, description);
+      res.status(200).json(result);
+    } catch (err) {
+      res.status(500).json({ message: "サーバエラー", err });
+      next(err);
+    }
+  };
 }
 export default new AuthController();

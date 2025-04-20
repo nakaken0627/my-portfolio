@@ -21,4 +21,6 @@ router.get("/mycompany", (req: Request, res: Response) => {
 //フロントのリクエストにある企業IDから商品一覧を一括取得するAPI
 router.get("/myproducts", findProdustsController.findProducts);
 
+router.post("/addproduct", findProdustsController.addProduct);
+
 export default router;

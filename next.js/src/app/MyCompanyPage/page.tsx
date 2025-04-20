@@ -1,5 +1,6 @@
 "use client";
 
+import { setDefaultAutoSelectFamily } from "node:net";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -19,6 +20,12 @@ export default function MyCompanyPage() {
   const router = useRouter();
   const [myProducts, setMyProducts] = useState<Product[]>([]);
   const [myCompany, setMyCompany] = useState<Company | null>(null); //バックエンド側からオブジェクトとして受け取る（配列ではない）
+
+  const [companyId, setCompanyId] = useState<number>();
+  const [modelNum, setModelNum] = useState("");
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState();
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     const fetchMyCompany = async () => {
@@ -71,6 +78,8 @@ export default function MyCompanyPage() {
     }
   };
 
+  const handleSubmitProduct = () => {};
+
   return (
     <>
       <h1>登録済み画面(販売企業様)</h1>
@@ -100,6 +109,58 @@ export default function MyCompanyPage() {
           })}
         </tbody>
       </table>
+      <hr />
+      {/* company_id, model_number, name, price, description */}
+      <form onSubmit={handleSubmitProduct}>
+        <div>
+          <label htmlFor="modelNum">型番</label>
+          <input
+            type="text"
+            id="modelNum"
+            name="model_number"
+            value={modelNum}
+            placeholder="model_number"
+            onChange={(e) => setModelNum(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="modelNum">商品名</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={name}
+            placeholder="商品名"
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="modelNum">金額</label>
+          <input
+            type="number"
+            id="price"
+            name="price"
+            value={price}
+            placeholder="金額"
+            onChange={(e) => setPrice(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="modelNum">説明</label>
+          <input
+            type="text"
+            id="description"
+            name="description"
+            value={description}
+            placeholder="説明"
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+        </div>
+      </form>
     </>
   );
 }
