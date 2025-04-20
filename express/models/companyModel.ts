@@ -48,7 +48,16 @@ class CompanyModel {
     const client: PoolClient = await pool.connect();
     try {
       const result = await client.query(
-        "SELECT companies.name as company_name , model_number, products.name, price, description FROM products INNER JOIN companies ON companies.id = products.company_id WHERE company_id = $1",
+        `SELECT
+          companies.name as company_name ,
+          model_number, 
+          products.id,
+          products.name, 
+          price, 
+          description 
+          FROM products 
+          INNER JOIN companies ON companies.id = products.company_id 
+          WHERE company_id = $1`,
         [companyId]
       );
 

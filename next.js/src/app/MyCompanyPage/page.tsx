@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 type Product = {
   company_name: string;
+  id: number;
   name: string;
   model_number: string;
   price: number;
@@ -88,9 +89,9 @@ export default function MyCompanyPage() {
           </tr>
         </thead>
         <tbody>
-          {myProducts.map((product, index) => {
+          {myProducts.map((product) => {
             return (
-              <tr key={index}>
+              <tr key={product.id}>
                 <td>{product.name}</td>
                 <td>{product.model_number}</td>
                 <td>{Math.round(product.price)}</td>
