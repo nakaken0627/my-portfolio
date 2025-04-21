@@ -82,6 +82,24 @@ class CompanyModel {
       client.release();
     }
   }
+
+  async deleteCompanyProducts(companyId: number, productsIds: number[]): Promise<number[]> {
+    // console.log("[companyModel]deleteCompanyProducts:", companyId, productsIds);
+    const client: PoolClient = await pool.connect();
+    try {
+      const result = await client.query(
+        `DELETE FROM products
+        WHERE company_id = $1 
+        AND id =ANY($2::int[])
+        RETURNING *`,
+        [companyId, productsIds]
+      );
+      // console.log("[companyModel]deleteCompanyProducts:", result);
+      return result.rows;
+    } finally {
+      client.release();
+    }
+  }
 }
 
 export default new CompanyModel();

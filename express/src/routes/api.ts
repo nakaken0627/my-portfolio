@@ -23,4 +23,6 @@ router.get("/myproducts", ProductController.findProducts);
 
 router.post("/addproduct", ProductController.addProduct);
 
+router.post("/deleteproducts", ProductController.deleteProducts);
+
 export default router;
