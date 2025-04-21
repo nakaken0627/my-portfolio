@@ -29,7 +29,7 @@ export default function MyCompanyPage() {
   const [description, setDescription] = useState("");
 
   //削除候補を配列として保管
-  const [selectedIDs, setSelectedIds] = useState<number[]>([]);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
   const fetchMyCompany = async () => {
     try {
@@ -133,7 +133,7 @@ export default function MyCompanyPage() {
         },
         body: JSON.stringify({
           companyId: myCompany?.id,
-          productsIds: selectedIDs,
+          productsIds: selectedIds,
         }),
       });
 
@@ -181,7 +181,7 @@ export default function MyCompanyPage() {
                 <td>
                   <input
                     type="checkbox"
-                    checked={selectedIDs.includes(product.id)}
+                    checked={selectedIds.includes(product.id)}
                     onChange={() => handleCheckBoxStatus(product.id)}
                   />
                 </td>
