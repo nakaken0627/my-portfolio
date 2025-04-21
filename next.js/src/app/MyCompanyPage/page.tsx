@@ -1,6 +1,5 @@
 "use client";
 
-import { setDefaultAutoSelectFamily } from "node:net";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -14,6 +13,7 @@ type Product = {
 };
 
 type Company = {
+  id: number;
   name: string;
 };
 
@@ -22,47 +22,42 @@ export default function MyCompanyPage() {
   const [myProducts, setMyProducts] = useState<Product[]>([]);
   const [myCompany, setMyCompany] = useState<Company | null>(null); //バックエンド側からオブジェクトとして受け取る（配列ではない）
 
-  const [companyId, setCompanyId] = useState<number>();
   const [modelNum, setModelNum] = useState("");
   const [name, setName] = useState("");
-  const [price, setPrice] = useState();
+  const [price, setPrice] = useState<number>(0);
   const [description, setDescription] = useState("");
 
-  useEffect(() => {
-    const fetchMyCompany = async () => {
-      try {
-        const res = await fetch("http://localhost:3001/api/mycompany", {
-          method: "GET",
-          credentials: "include",
-        });
-        console.log(res.ok);
-        if (!res.ok) {
-          throw new Error("[MyCompanyPage]レスポンスエラー(company)");
-        }
-        const data = await res.json();
-        setMyCompany(data);
-      } catch (err) {}
-    };
-
-    const fetchMyProduct = async () => {
-      try {
-        const res = await fetch("http://localhost:3001/api/myproducts", {
-          method: "GET",
-          credentials: "include", //cookieデータをつけて送る
-        });
-        if (!res.ok) {
-          throw new Error("[MyCompanyPage]レスポンスエラー(products)");
-        }
-        const data = await res.json();
-        // console.log("[MyCompanyPage]myCompanyデータ取得成功", data);
-        setMyProducts(data);
-      } catch (err) {
-        console.error("[MycompanyPage]myCompanyデータ取得エラー", err);
+  const fetchMyCompany = async () => {
+    try {
+      const res = await fetch("http://localhost:3001/api/mycompany", {
+        method: "GET",
+        credentials: "include",
+      });
+      console.log(res.ok);
+      if (!res.ok) {
+        throw new Error("[MyCompanyPage]レスポンスエラー(company)");
       }
-    };
-    fetchMyProduct();
-    fetchMyCompany();
-  }, []);
+      const data = await res.json();
+      setMyCompany(data);
+    } catch (err) {}
+  };
+
+  const fetchMyProduct = async () => {
+    try {
+      const res = await fetch("http://localhost:3001/api/myproducts", {
+        method: "GET",
+        credentials: "include", //cookieデータをつけて送る
+      });
+      if (!res.ok) {
+        throw new Error("[MyCompanyPage]レスポンスエラー(products)");
+      }
+      const data = await res.json();
+      // console.log("[MyCompanyPage]myCompanyデータ取得成功", data);
+      setMyProducts(data);
+    } catch (err) {
+      console.error("[MycompanyPage]myCompanyデータ取得エラー", err);
+    }
+  };
 
   const handleClickLogout = async () => {
     try {
@@ -79,7 +74,46 @@ export default function MyCompanyPage() {
     }
   };
 
-  const handleSubmitProduct = () => {};
+  const handleSubmitProduct = async (e: React.FormEvent) => {
+    e.preventDefault(); //今回の場合なくても動作はするが、環境によっては意図しないリロードやリダイレクトが起きるため必要。
+
+    //データ送付用にプロパティ名を変更
+    const company_id = myCompany?.id;
+    const model_number = modelNum;
+
+    try {
+      const req = await fetch("http://localhost:3001/api/addproduct", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          company_id,
+          model_number,
+          name,
+          price,
+          description,
+        }),
+      });
+
+      //登録後にデータinputに残らないように初期化
+      setName("");
+      setModelNum("");
+      setPrice(0);
+      setDescription("");
+
+      //登録したデータ含めて再度DBから取得
+      fetchMyProduct();
+    } catch (err) {
+      console.error("[MyCompanyPage]handleSubmitProduct:通信エラー", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchMyProduct();
+    fetchMyCompany();
+  }, []);
 
   return (
     <>
@@ -91,8 +125,8 @@ export default function MyCompanyPage() {
       <table>
         <thead>
           <tr>
-            <th>型番</th>
             <th>商品名</th>
+            <th>型番</th>
             <th>価格</th>
             <th>説明</th>
           </tr>
@@ -114,6 +148,18 @@ export default function MyCompanyPage() {
       {/* company_id, model_number, name, price, description */}
       <form onSubmit={handleSubmitProduct}>
         <div>
+          <label htmlFor="name">商品名</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={name}
+            placeholder="商品名"
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+        </div>
+        <div>
           <label htmlFor="modelNum">型番</label>
           <input
             type="text"
@@ -126,26 +172,14 @@ export default function MyCompanyPage() {
           />
         </div>
         <div>
-          <label htmlFor="modelNum">商品名</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={name}
-            placeholder="商品名"
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="modelNum">金額</label>
+          <label htmlFor="price">金額</label>
           <input
             type="number"
             id="price"
             name="price"
             value={price}
             placeholder="金額"
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => setPrice(Number(e.target.value))} //e.target.valueだけだとstring型で値を取得するため、number型に変換が必要
             required
           />
         </div>
@@ -161,6 +195,7 @@ export default function MyCompanyPage() {
             required
           />
         </div>
+        <button type="submit">登録</button>
       </form>
     </>
   );
