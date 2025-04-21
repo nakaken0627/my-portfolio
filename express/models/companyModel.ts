@@ -72,7 +72,9 @@ class CompanyModel {
     const client: PoolClient = await pool.connect();
     try {
       const result = await client.query(
-        "INSERT INTO products (company_id, model_number, name, price, description) VALUES ($1,$2,$3,$4,$5) RETURNING name,price ",
+        `INSERT INTO products (company_id, model_number, name, price, description)
+           VALUES ($1,$2,$3,$4,$5)
+           RETURNING name,price `,
         [company_id, model_number, name, price, description]
       );
       return result.rows[0];
