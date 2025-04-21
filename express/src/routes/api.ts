@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import findProdustsController from "../../controllers/findProductsControlling.js";
+import ProductController from "../../controllers/ProductControlling.js";
 
 //routerオブジェクトを設定
 const router = express.Router();
@@ -19,8 +19,8 @@ router.get("/mycompany", (req: Request, res: Response) => {
 });
 
 //フロントのリクエストにある企業IDから商品一覧を一括取得するAPI
-router.get("/myproducts", findProdustsController.findProducts);
+router.get("/myproducts", ProductController.findProducts);
 
-router.post("/addproduct", findProdustsController.addProduct);
+router.post("/addproduct", ProductController.addProduct);
 
 export default router;

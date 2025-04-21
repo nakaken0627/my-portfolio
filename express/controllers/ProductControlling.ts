@@ -19,7 +19,7 @@ class ProductController {
     const companyId = companyReq.user?.id; //認証後に予期せぬエラー(passportの設定ミスや不具合など)があった際にundefinedになる可能性があるため？は必要
 
     if (!companyId) {
-      console.log("[findProductControlling]companyID:", companyId);
+      console.log("[ProductControlling]companyID:", companyId);
       res.status(400).json({ message: "会社IDが見つかりません" });
       return; //return res ...とするとexpressのRequestHandlerとして型が認識されず、エラーとなる
     }
@@ -35,7 +35,7 @@ class ProductController {
 
   addProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     if (!req.body) {
-      console.log("[findProductsControlling]addProduct:データがありません");
+      console.log("[ProductControlling]addProduct:データがありません");
       return;
     }
     const { company_id, model_number, name, price, description } = req.body;
