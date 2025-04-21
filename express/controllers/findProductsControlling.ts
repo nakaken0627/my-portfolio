@@ -6,7 +6,7 @@ export interface AuthCompanyRequest extends Request {
   user?: Company;
 }
 
-class AuthController {
+class ProductController {
   findProducts = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     // console.log(req.isAuthenticated());
     if (!req.isAuthenticated()) {
@@ -49,4 +49,4 @@ class AuthController {
     }
   };
 }
-export default new AuthController();
+export default new ProductController();
