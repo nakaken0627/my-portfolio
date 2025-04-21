@@ -1,7 +1,5 @@
 set client_encoding = 'UTF8';
 
-DROP TABLE IF EXISTS companies;
-
 CREATE TABLE IF NOT EXISTS companies (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE,
@@ -10,11 +8,22 @@ CREATE TABLE IF NOT EXISTS companies (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE session (
+CREATE TABLE IF NOT EXISTS session (
     sid VARCHAR NOT NULL PRIMARY KEY,
     sess JSON NOT NULL,
     expire TIMESTAMP NOT NULL,
     type VARCHAR NOT NULL DEFAULT 'company'
+);
+
+CREATE TABLE IF NOT EXISTS products (
+    id SERIAL PRIMARY KEY,
+    company_id INTEGER NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+    model_number VARCHAR(100),
+    name VARCHAR(255) NOT NULL,
+    price NUMERIC(10, 2) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ユーザー用テーブル

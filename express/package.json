@@ -2,10 +2,10 @@
   "name": "express",
   "version": "1.0.0",
   "main": "index.js",
-  "type":"module",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-      "dev": "nodemon --watch src --ext ts --exec \"node --loader ts-node/esm\" src/index.ts",
+    "dev": "nodemon --watch src --ext ts --exec \"node --loader ts-node/esm\" src/index.ts",
     "eslint": "eslint src/**/*.ts",
     "eslint:fix": "eslint src/**/*.ts --fix",
     "format": "prettier --write 'src/**/*.{js,ts,json}'",

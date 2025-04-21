@@ -39,9 +39,9 @@ app.use(express.json());
 const sessionOptions = {
   store: new (connectPgSimple(session))({
     pool: pool,
-    tableName: sessionSecret,
+    tableName: "session",
   }),
-  secret: "mysecret", //署名付きcookieの秘密鍵
+  secret: sessionSecret, //署名付きcookieの秘密鍵
   resave: false, //セッションが変更されていない場合でも保存するかどうか
   saveUninitialized: false, //セッションが初期化されていない場合でも保存するかどうか
   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000, secure: false, httpOnly: true }, // secure: trueにするとhttpsでないとcookieが送信されない、httpOnly: trueにすると外部の悪質なJavaScriptからcookieがアクセスできなくなる
