@@ -13,7 +13,7 @@ class AuthController {
       const existingCompany = await companyModel.findByCompanyName(companyName);
       // console.log("existingCompany:", existingCompany);
       if (existingCompany) {
-        res.status(409).json({ message: "ユーザー名はすでに登録されています" });
+        res.status(409).json({ message: "企業名はすでに登録されています" });
         return;
       }
       //ユーザー登録

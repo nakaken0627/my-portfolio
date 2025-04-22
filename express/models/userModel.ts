@@ -4,17 +4,18 @@ import { PoolClient } from "pg";
 import pool from "../config/database.js";
 import bcrypt from "bcrypt";
 
-export interface User {
+export type User = {
   id: number;
-  username: string;
-}
+  name: string;
+  password: string;
+};
 
 class UserModel {
   //ユーザー名の重複がないか確認
-  async findByUsername(username: string): Promise<string | null> {
+  async findByUsername(username: string): Promise<User | null> {
     const client: PoolClient = await pool.connect();
     try {
-      const result = await client.query("SELECT * FROM users WHERE username=$1", [username]);
+      const result = await client.query("SELECT * FROM users WHERE name=$1", [username]);
 
       return result.rows[0] || null;
     } finally {
@@ -22,13 +23,13 @@ class UserModel {
     }
   }
 
-  //重複確認後にユーザー登録
-  async createUser(username: string, password: string): Promise<any> {
+  //ユーザー登録用
+  async createUser(username: string, password: string): Promise<User> {
     const client: PoolClient = await pool.connect();
     try {
       const hashedPassword = await bcrypt.hash(password, 12);
       const result = await client.query(
-        "INSERT INTO users(username,password) VALUES ($1,$2) RETURNING id,username,created_at,updated_at",
+        "INSERT INTO users(name,password) VALUES ($1,$2) RETURNING id,name,created_at,updated_at",
         [username, hashedPassword]
       );
       return result.rows[0];

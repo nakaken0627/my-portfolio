@@ -1,13 +1,13 @@
 //フロントエンドからのリクエストに対する処理を記載
 
 import { Request, Response, NextFunction } from "express";
-import userModel from "../models/userModel";
+import userModel from "../models/userModel.js";
 
-class AuthController {
+class AuthUserController {
   async signup(req: Request, res: Response, next: NextFunction) {
-    // console.log(req.body);
+    console.log(req.body);
     const { username, password } = req.body;
-    // console.log(username, password);
+    console.log(username, password);
     try {
       //ユーザーが存在しているかを確認
       const existingUser = await userModel.findByUsername(username);
@@ -18,7 +18,7 @@ class AuthController {
       }
       //ユーザー登録
       const newUser = await userModel.createUser(username, password);
-      // console.log(newUser);
+      console.log("[authUserControlling]newUser:", newUser);
 
       // サインアップ後に自動的にログインする
       req.login(newUser, (err) => {
@@ -26,16 +26,16 @@ class AuthController {
           return next(err);
         }
         res.status(201).json({
-          message: "登録成功",
-          user: { id: newUser.id },
-          username: newUser.username,
+          message: "ユーザー登録成功",
+          id: newUser.id,
+          username: newUser.name,
         });
       });
     } catch (error) {
-      console.log("サインアップ処理エラー", error);
-      res.status(500).json({ message: "サーバエラー" });
+      console.log("[authUserControlling]サインアップ処理エラー", error);
+      res.status(500).json({ message: "[authUserControlling]サーバエラー" });
     }
   }
 }
 
-export default new AuthController();
+export default new AuthUserController();

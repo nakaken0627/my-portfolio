@@ -5,10 +5,12 @@ import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
 import pool from "./database.js";
 
-passport.use(
-  new LocalStrategy(async (inputName: string, inputPassword: string, done: any) => {
+const passportUser = passport;
+
+passportUser.use(
+  new LocalStrategy(async (inputName: string, inputPassword: string, done) => {
     try {
-      const result = await pool.query("SELECT * FROM users WHERE user_name = $1", [inputName]);
+      const result = await pool.query("SELECT * FROM users WHERE name = $1", [inputName]);
       const user = result.rows[0];
 
       if (!user) {
@@ -27,14 +29,18 @@ passport.use(
 );
 
 //セッションへ保存する情報を定義
-passport.serializeUser((user: any, done) => {
-  done(null, user.use_id);
+passportUser.serializeUser((user, done) => {
+  const data = {
+    id: (user as AuthUser).id,
+    type: "user",
+  };
+  done(null, data);
 });
 
 //センションからユーザー情報を復元
-passport.deserializeUser(async (id: number, done) => {
+passportUser.deserializeUser(async (id: number, done) => {
   try {
-    const result = await pool.query("SELECT * FROM users WHERE user_id = $1", [id]);
+    const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
     const user = result.rows[0];
     if (user) {
       done(null, user);

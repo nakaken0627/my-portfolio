@@ -44,7 +44,7 @@ passportCompany.serializeUser((company: any, done) => {
 });
 
 //センションからユーザー情報を復元
-passport.deserializeUser(async (data: any, done) => {
+passportCompany.deserializeUser(async (data: any, done) => {
   // console.log(typeof data, data);
   if (typeof data === "string") {
     try {
