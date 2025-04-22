@@ -28,7 +28,7 @@ class ProductController {
       // console.log("[findProductControlling]products:", products);
       res.status(200).json(products);
     } catch (err) {
-      res.status(500).json({ message: "サーバエラー", err });
+      res.status(500).json({ message: "[ProductControlling]companyID:サーバエラー", err });
       next(err);
     }
   };
@@ -44,7 +44,26 @@ class ProductController {
       const result = await CompanyModel.addCompanyProduct(company_id, model_number, name, price, description);
       res.status(200).json(result);
     } catch (err) {
-      res.status(500).json({ message: "サーバエラー", err });
+      res.status(500).json({ message: "[ProductControlling]addProduct:サーバエラー", err });
+      next(err);
+    }
+  };
+
+  deleteProducts = async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.body) {
+      console.log("[ProductControlling]deleteProducts:データがありません");
+      return;
+    }
+
+    const { companyId, productsIds } = req.body;
+    // console.log(`ProductControlling:companyId:${companyId},productsIds:${productsIds}`);
+
+    try {
+      const result = await CompanyModel.deleteCompanyProducts(companyId, productsIds);
+      console.log("[ProductControlling]deleteProducts:", result);
+      res.status(200).json({ message: "[ProductControlling]deleteProducts:削除が成功しました", result });
+    } catch (err) {
+      res.status(500).json({ message: "[ProductControlling]deleteProducts:サーバーエラー", err });
       next(err);
     }
   };
