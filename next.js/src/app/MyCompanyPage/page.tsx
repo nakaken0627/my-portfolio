@@ -33,7 +33,7 @@ export default function MyCompanyPage() {
 
   const fetchMyCompany = async () => {
     try {
-      const res = await fetch("http://localhost:3001/api/mycompany", {
+      const res = await fetch("http://localhost:3001/api/company/mycompany", {
         method: "GET",
         credentials: "include",
       });
@@ -47,10 +47,13 @@ export default function MyCompanyPage() {
 
   const fetchMyProducts = async () => {
     try {
-      const res = await fetch("http://localhost:3001/api/myproducts", {
-        method: "GET",
-        credentials: "include", //cookieデータをつけて送る
-      });
+      const res = await fetch(
+        "http://localhost:3001/api/company/myproductlist",
+        {
+          method: "GET",
+          credentials: "include", //cookieデータをつけて送る
+        },
+      );
       if (!res.ok) {
         throw new Error("[MyCompanyPage]レスポンスエラー(products)");
       }
@@ -85,7 +88,7 @@ export default function MyCompanyPage() {
     const model_number = modelNum;
 
     try {
-      const req = await fetch("http://localhost:3001/api/addproduct", {
+      const req = await fetch("http://localhost:3001/api/company/addproduct", {
         method: "POST",
         credentials: "include",
         headers: {
@@ -125,17 +128,20 @@ export default function MyCompanyPage() {
   //データ削除用の関数
   const handleDeleteProducts = async () => {
     try {
-      const res = await fetch("http://localhost:3001/api/deleteproducts", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        "http://localhost:3001/api/company/deleteproducts",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            companyId: myCompany?.id,
+            productsIds: selectedIds,
+          }),
         },
-        body: JSON.stringify({
-          companyId: myCompany?.id,
-          productsIds: selectedIds,
-        }),
-      });
+      );
 
       const data = await res.json();
       console.log("削除結果データ", data);

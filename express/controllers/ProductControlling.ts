@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import CompanyModel from "../models/companyModel.js";
+import userModel from "../models/userModel.js";
 
 class ProductController {
-  findProducts = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  findProductsForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     // console.log(req.isAuthenticated());
     if (!req.isAuthenticated()) {
       res.status(401).json({ message: "認証に失敗しました" });
@@ -26,7 +27,7 @@ class ProductController {
     }
   };
 
-  addProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  addProductForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     if (!req.body) {
       console.log("[ProductControlling]addProduct:データがありません");
       return;
@@ -42,7 +43,7 @@ class ProductController {
     }
   };
 
-  deleteProducts = async (req: Request, res: Response, next: NextFunction) => {
+  deleteProductsForCompany = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.body) {
       console.log("[ProductControlling]deleteProducts:データがありません");
       return;
@@ -60,5 +61,15 @@ class ProductController {
       next(err);
     }
   };
+
+  async findProductsFromUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      const data = await userModel.findProducts();
+      res.status(200).json(data);
+    } catch (err) {
+      res.status(500).json({ message: "サーバエラーが発生しました", err });
+      return next(err);
+    }
+  }
 }
 export default new ProductController();

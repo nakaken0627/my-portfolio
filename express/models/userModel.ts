@@ -34,6 +34,17 @@ class UserModel {
       client.release();
     }
   }
+
+  async findProducts() {
+    const client: PoolClient = await pool.connect();
+    try {
+      const result = await client.query("SELECT * FROM products");
+      console.log(result);
+      return result.rows;
+    } finally {
+      client.release();
+    }
+  }
 }
 
 export default new UserModel();
