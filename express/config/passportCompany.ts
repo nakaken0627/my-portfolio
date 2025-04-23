@@ -35,9 +35,9 @@ passportCompany.use(
 );
 
 //セッションへ保存する情報を定義
-passportCompany.serializeUser((company: any, done) => {
+passportCompany.serializeUser((company, done) => {
   const data = {
-    id: company.id,
+    id: (company as AuthCompany).id, //companyにExpress.User型が適用されてしまうため、Company型を持つAuthCompanyにキャスト
     type: "company",
   };
   done(null, data);

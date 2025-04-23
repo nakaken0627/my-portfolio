@@ -1,5 +1,3 @@
-//DBへの操作など裏側の処理を記載
-
 import { PoolClient } from "pg";
 import pool from "../config/database.js";
 import bcrypt from "bcrypt";
@@ -11,12 +9,11 @@ export type User = {
 };
 
 class UserModel {
-  //ユーザー名の重複がないか確認
+  //ユーザー名の重複確認や基本情報取得のための関数
   async findByUsername(username: string): Promise<User | null> {
     const client: PoolClient = await pool.connect();
     try {
       const result = await client.query("SELECT * FROM users WHERE name=$1", [username]);
-
       return result.rows[0] || null;
     } finally {
       client.release();

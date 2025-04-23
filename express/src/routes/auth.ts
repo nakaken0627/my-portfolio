@@ -2,7 +2,6 @@ import express, { Request, Response, NextFunction } from "express";
 import AuthCompanyController from "../../controllers/authCompanyControlling.js";
 import passportCompany from "../../config/passportCompany.js";
 import AuthUserController from "../../controllers/authUserControlling.js";
-import passport from "../../config/passportUser.js";
 
 const router = express.Router();
 
@@ -55,30 +54,8 @@ router.get("/company/logout", (req: Request, res: Response, next: NextFunction) 
 
 router.post("/user/signup", AuthUserController.signup);
 
-router.post("/user/login", (req: Request, res: Response, next: NextFunction) => {
-  passport.authenticate("local", (error: Error, user: any, info: any) => {
-    if (error) {
-      return next(error);
-    }
-    if (!user) {
-      return res.status(401).json({
-        message: "認証に失敗しました",
-        error: info?.massage || "Invalid credentials",
-      });
-    }
-    req.logIn(user, (error) => {
-      if (error) {
-        return next(error);
-      }
-      return res.status(200).json({
-        massage: "ログイン成功",
-        user: {
-          id: user.id,
-          name: user.username,
-        },
-      });
-    });
-  })(req, res, next);
-});
+router.post("/user/login", AuthUserController.login);
+
+router.get("/user/logout", AuthUserController.logout);
 
 export default router;
