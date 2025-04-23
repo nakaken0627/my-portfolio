@@ -62,14 +62,14 @@ class ProductController {
     }
   };
 
-  async findProductsFromUser(req: Request, res: Response, next: NextFunction) {
+  findProductsFromUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const data = await userModel.findProducts();
+      const data = await userModel.findProductsForUser();
       res.status(200).json(data);
     } catch (err) {
       res.status(500).json({ message: "サーバエラーが発生しました", err });
       return next(err);
     }
-  }
+  };
 }
 export default new ProductController();

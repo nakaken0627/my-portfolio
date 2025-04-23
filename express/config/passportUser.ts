@@ -39,20 +39,20 @@ passportUser.use(
 
 //セッションへ保存する情報を定義
 passportUser.serializeUser((user, done) => {
-  const data = {
-    id: (user as AuthUser).id, //userにExpress.User型が適用されエラーが発生するため、User型を持つAuthUserにキャスト
-    type: "user",
-  };
-  done(null, data);
+  // const data = {
+  // id: (user as AuthUser).id, //userにExpress.User型が適用されエラーが発生するため、User型を持つAuthUserにキャスト
+  // type: "user",
+  // };
+  done(null, (user as { id: number }).id);
 });
 
 //センションからユーザー情報を復元
 passportUser.deserializeUser(async (id: number, done) => {
   try {
     const result = await pool.query("SELECT * FROM users WHERE id = $1", [id]);
-    const user = result.rows[0];
-    if (user) {
-      done(null, user);
+    const data = result.rows[0];
+    if (data) {
+      done(null, data);
     } else {
       done(null, false);
     }

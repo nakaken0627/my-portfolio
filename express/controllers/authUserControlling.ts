@@ -88,6 +88,13 @@ class AuthUserController {
       });
     });
   }
+
+  async getMyUser(req: Request, res: Response) {
+    if (!req.isAuthenticated()) {
+      res.status(401).json({ message: "認証に失敗しました" });
+    }
+    res.status(200).json(req.user);
+  }
 }
 
 export default new AuthUserController();

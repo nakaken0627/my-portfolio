@@ -8,6 +8,7 @@ export default function MyUserPage() {
       <h1>マイページ</h1>
       <GetUserInfo />
       <LogoutFunc />
+      <hr />
       <ProductsList />
     </>
   );

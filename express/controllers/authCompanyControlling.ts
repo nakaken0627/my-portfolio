@@ -38,6 +38,15 @@ class AuthController {
       res.status(500).json({ message: "サーバエラー" });
     }
   }
+
+  async getMyCompany(req: Request, res: Response) {
+    if (!req.isAuthenticated()) {
+      // console.log("[api]api/mycompany:", req.isAuthenticated());
+      res.status(401).json({ message: "認証に失敗しました" });
+    }
+    // console.log("[api]api/mycompany", req.user);
+    res.status(200).json(req.user);
+  }
 }
 
 export default new AuthController();

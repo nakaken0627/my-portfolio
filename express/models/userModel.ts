@@ -35,11 +35,23 @@ class UserModel {
     }
   }
 
-  async findProducts() {
+  async findProductsForUser() {
     const client: PoolClient = await pool.connect();
     try {
-      const result = await client.query("SELECT * FROM products");
-      console.log(result);
+      const result = await client.query(
+        `SELECT 
+          companies.name as company_name,
+          products.id,
+          model_number,
+          products.name as product_name, 
+          price, 
+          description
+          FROM products
+          INNER JOIN companies
+          ON companies.id = products.company_id
+          ORDER BY company_id`
+      );
+      // console.log(result);
       return result.rows;
     } finally {
       client.release();
