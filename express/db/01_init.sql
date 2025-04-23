@@ -34,8 +34,3 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
--- //ログイン機能の実装確認の際にadminユーザーを用意しておくために使用する予定
--- INSERT INTO users (username, password)
--- VALUES ('admin', '$2b$10$abc...hashed...')
--- ON CONFLICT (username) DO NOTHING;
