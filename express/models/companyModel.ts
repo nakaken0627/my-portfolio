@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 export type Company = {
   id: number;
   name: string;
+  type: "company";
 };
 
 export type Product = {

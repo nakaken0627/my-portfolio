@@ -3,7 +3,10 @@ import { User } from "../../models/userModel.js";
 
 declare global {
   namespace Express {
-    interface User {} //User型とCompany型が競合してしまうため、Express.User型を空にしている。
+    interface User {
+      id: number;
+      type: "company" | "user";
+    }
   }
   type AuthCompany = Company;
   type AuthUser = User;
