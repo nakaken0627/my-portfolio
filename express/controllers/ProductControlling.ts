@@ -9,7 +9,7 @@ class ProductController {
       return;
     }
 
-    const companyId = (req.user as AuthCompany).id; //Express.User型ではなくUser型を適用するためにキャスト
+    const companyId = req.user.id;
 
     if (!companyId) {
       console.log("[ProductControlling]companyID:", companyId);

@@ -47,7 +47,6 @@ const sessionOptions = {
   createTableIfMissing: true, //sessionテーブルが存在しない場合に自動作成するオプション
 };
 
-//CompanyとUserで競合が発生しないようpassportを分割しています
 app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session());

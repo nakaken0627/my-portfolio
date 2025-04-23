@@ -5,7 +5,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
 import pool from "./database.js";
 
-//companyログイン用
+//companyの認証のためローカル戦略を使って定義
 passport.use(
   "company-local",
   new LocalStrategy(async (username: string, password: string, done) => {
@@ -32,7 +32,7 @@ passport.use(
   })
 );
 
-//companyログイン用
+//userの認証のためローカル戦略を使って定義
 passport.use(
   "user-local",
   new LocalStrategy(async (username: string, password: string, done) => {
