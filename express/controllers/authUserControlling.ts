@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import userModel from "../models/userModel.js";
-import passportUser from "../config/passportUser.js";
+import passport from "../config/passport.js";
 
 class AuthUserController {
   async signup(req: Request, res: Response, next: NextFunction) {
@@ -37,7 +37,7 @@ class AuthUserController {
   }
 
   async login(req: Request, res: Response, next: NextFunction) {
-    passportUser.authenticate("local", (err: Error, getUser: any, info: any) => {
+    passport.authenticate("user-local", (err: Error, getUser: any, info: any) => {
       if (err) {
         return next(err);
       }

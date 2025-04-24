@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 export type User = {
   id: number;
   name: string;
-  password: string;
+  type: "user";
 };
 
 class UserModel {

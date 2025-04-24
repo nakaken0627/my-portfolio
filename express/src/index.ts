@@ -7,8 +7,7 @@ import apiRouter from "./routes/api.js";
 import authRouter from "./routes/auth.js";
 
 import session from "express-session";
-import passportCompany from "../config/passportCompany.js";
-import passportUser from "../config/passportUser.js";
+import passport from "../config/passport.js";
 import pool from "../config/database.js";
 import connectPgSimple from "connect-pg-simple";
 
@@ -48,12 +47,9 @@ const sessionOptions = {
   createTableIfMissing: true, //sessionテーブルが存在しない場合に自動作成するオプション
 };
 
-//CompanyとUserで競合が発生しないようpassportを分割しています
 app.use(session(sessionOptions));
-app.use(passportCompany.initialize());
-app.use(passportCompany.session());
-app.use(passportUser.initialize());
-app.use(passportUser.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 //ルートパスにリクエストがきた際の処理
 app.get("/", (req: Request, res: Response) => {
