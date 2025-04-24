@@ -41,7 +41,7 @@ class UserModel {
       const result = await client.query(
         `SELECT 
           companies.name as company_name,
-          products.id,
+          products.id as id,
           model_number,
           products.name as product_name, 
           price, 

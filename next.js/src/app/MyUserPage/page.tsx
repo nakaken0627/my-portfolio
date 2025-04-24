@@ -1,3 +1,4 @@
+import { UserLayout } from "../../../components/layout/UserLayout";
 import GetUserInfo from "./components/GetUserInfo";
 import LogoutFunc from "./components/LogoutFunc";
 import ProductsList from "./components/ProductsList";
@@ -5,6 +6,10 @@ import ProductsList from "./components/ProductsList";
 export default function MyUserPage() {
   return (
     <>
+      <UserLayout>
+        <>ヘッダー</>
+      </UserLayout>
+      <hr />
       <h1>マイページ</h1>
       <GetUserInfo />
       <LogoutFunc />

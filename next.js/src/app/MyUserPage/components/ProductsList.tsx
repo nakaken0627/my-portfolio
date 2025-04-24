@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 
+import { ProductCard } from "./ProductCard";
+
 type Product = {
   product_name: string;
   id: number;
@@ -11,7 +13,7 @@ type Product = {
   company_name: string;
 };
 
-export default function ProductsList() {
+export default function ProductsList2() {
   const [products, setProducts] = useState<Product[]>([]);
 
   const fetchProducts = async () => {
@@ -31,36 +33,27 @@ export default function ProductsList() {
   }, []);
 
   return (
-    <>
-      <h1>商品一覧</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>販売企業</th>
-            <th>商品名</th>
-            <th>型番</th>
-            <th>価格</th>
-            <th>説明</th>
-            <th>数量</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => {
-            return (
-              <tr key={product.id}>
-                <td>{product.company_name}</td>
-                <td>{product.product_name}</td>
-                <td>{product.model_number}</td>
-                <td>{Math.round(product.price)}</td>
-                <td>{product.description}</td>
-                <td>
-                  <input type="number" />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </>
+    <div className="bg-amber-50">
+      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+        <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+          商品一覧
+        </h2>
+
+        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          {products.map((product, index) => (
+            <ProductCard
+              key={product.id}
+              id={product.id} //propsの型定義にidが入っているため、idをプロップスで渡す必要がある
+              product_name={product.product_name}
+              description={product.description}
+              company_name={product.company_name}
+              price={product.price}
+              model_number={product.model_number}
+              priority={index === 0} //LCP改善のため1件目をプリロードの対象にする。（全件だとパフォーマンスが低下するため、1件目のみtrueとする）
+            />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
