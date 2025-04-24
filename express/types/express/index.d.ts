@@ -1,9 +1,8 @@
-import { Company } from "../../models/companyModel.js";
-
 declare global {
   namespace Express {
-    interface Request {
-      authCompany?: Company;
+    interface User {
+      id: number;
+      type: "company" | "user";
     }
   }
 }

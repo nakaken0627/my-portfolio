@@ -22,8 +22,8 @@ function SigninForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          companyName: inputCompanyName,
-          companyPassword: inputCompanyPassword,
+          username: inputCompanyName,
+          password: inputCompanyPassword,
         }),
       });
 

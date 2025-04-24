@@ -5,21 +5,54 @@ import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
 import pool from "./database.js";
 
+//companyの認証のためローカル戦略を使って定義
 passport.use(
-  new LocalStrategy(async (inputName: string, inputPassword: string, done: any) => {
+  "company-local",
+  new LocalStrategy(async (username: string, password: string, done) => {
     try {
-      const result = await pool.query("SELECT * FROM users WHERE user_name = $1", [inputName]);
-      const user = result.rows[0];
-
-      if (!user) {
+      //ユーザー名がDBの値と一致するか確認、不一致の場合はメッセージを返す
+      const result = await pool.query("SELECT * FROM companies WHERE name = $1", [username]);
+      const company = result.rows[0];
+      if (!company) {
         return done(null, false, { message: "ユーザー名が間違っています" });
       }
-      const isPasswordValid = await bcrypt.compare(inputPassword, user.password);
 
+      //bcryptのcompare関数を使って、入力した値とハッシュ化されたパスワードが一致するか確認
+      //不一致の場合はメッセージを返す
+      const isPasswordValid = await bcrypt.compare(password, company.password);
       if (!isPasswordValid) {
         return done(null, false, { message: "パスワードが間違っています" });
       }
-      return done(null, user);
+
+      //問題がなければDBで取得したユーザー情報を返す
+      return done(null, { ...company, type: "company" });
+    } catch (error) {
+      return done(error);
+    }
+  })
+);
+
+//userの認証のためローカル戦略を使って定義
+passport.use(
+  "user-local",
+  new LocalStrategy(async (username: string, password: string, done) => {
+    try {
+      //ユーザー名がDBの値と一致するか確認、不一致の場合はメッセージを返す
+      const result = await pool.query("SELECT * FROM users WHERE name = $1", [username]);
+      const user = result.rows[0];
+      if (!user) {
+        return done(null, false, { message: "ユーザー名が間違っています" });
+      }
+
+      //bcryptのcompare関数を使って、入力した値とハッシュ化されたパスワードが一致するか確認
+      //不一致の場合はメッセージを返す
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        return done(null, false, { message: "パスワードが間違っています" });
+      }
+
+      //問題がなければDBで取得したユーザー情報を返す
+      return done(null, { ...user, type: "user" });
     } catch (error) {
       return done(error);
     }
@@ -27,22 +60,24 @@ passport.use(
 );
 
 //セッションへ保存する情報を定義
-passport.serializeUser((user: any, done) => {
-  done(null, user.use_id);
+passport.serializeUser((user, done) => {
+  done(null, { id: user.id, type: user.type });
 });
 
 //センションからユーザー情報を復元
-passport.deserializeUser(async (id: number, done) => {
+passport.deserializeUser(async (data: Express.User, done) => {
   try {
-    const result = await pool.query("SELECT * FROM users WHERE user_id = $1", [id]);
-    const user = result.rows[0];
-    if (user) {
-      done(null, user);
+    if (data.type === "company") {
+      const result = await pool.query("SELECT * FROM companies WHERE id = $1", [data.id]);
+      return done(null, { ...result.rows[0], type: "company" });
+    } else if (data.type === "user") {
+      const result = await pool.query("SELECT * FROM users WHERE id = $1", [data.id]);
+      return done(null, { ...result.rows[0], type: "users" });
     } else {
-      done(null, false);
+      return done(null, false);
     }
   } catch (error) {
-    done(error);
+    return done(error);
   }
 });
 

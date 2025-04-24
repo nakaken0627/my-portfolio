@@ -4,18 +4,17 @@ import cors from "cors";
 import type { Express, Request, Response } from "express";
 
 import apiRouter from "./routes/api.js";
-import usersRouter from "./routes/users.js";
 import authRouter from "./routes/auth.js";
 
 import session from "express-session";
-import passportCompany from "../config/passportCompany.js"; //user用を作成する際に確認必須
+import passport from "../config/passport.js";
 import pool from "../config/database.js";
 import connectPgSimple from "connect-pg-simple";
 
 //expressのインスタンスを作成
 const app: Express = express();
 
-//環境変数を設定するdotenv(未設定)
+//環境変数を設定
 dotenv.config();
 const port = process.env.PORT || 3001;
 const sessionSecret = process.env.SESSION_SECRET;
@@ -48,15 +47,9 @@ const sessionOptions = {
   createTableIfMissing: true, //sessionテーブルが存在しない場合に自動作成するオプション
 };
 
-//現状のままだとセッション時にCompanyとUserで競合が発生するため注意
 app.use(session(sessionOptions));
-app.use(passportCompany.initialize());
-app.use(passportCompany.session());
-
-app.use((req, res, next) => {
-  // console.log("[index.ts]Session data:", req.session);
-  next();
-});
+app.use(passport.initialize());
+app.use(passport.session());
 
 //ルートパスにリクエストがきた際の処理
 app.get("/", (req: Request, res: Response) => {
@@ -68,9 +61,6 @@ app.use("/auth", authRouter);
 
 //情報取得用
 app.use("/api", apiRouter);
-
-//DBとの接続確認用
-app.use("/users", usersRouter);
 
 //エラーハンドラー
 app.use((req, res) => {

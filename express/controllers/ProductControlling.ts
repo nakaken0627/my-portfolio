@@ -1,10 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import CompanyModel, { Company } from "../models/companyModel.js";
-
-//companyに関連することを明示的にするためにRequestを拡張
-export interface AuthCompanyRequest extends Request {
-  user?: Company;
-}
+import CompanyModel from "../models/companyModel.js";
 
 class ProductController {
   findProducts = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -14,9 +9,7 @@ class ProductController {
       return;
     }
 
-    const companyReq = req as AuthCompanyRequest; //Request型に直接AuthCompanyRequestと指定するとエラーになるため、ここでAuthCompanyRequest型にキャスト
-
-    const companyId = companyReq.user?.id; //認証後に予期せぬエラー(passportの設定ミスや不具合など)があった際にundefinedになる可能性があるため？は必要
+    const companyId = req.user.id;
 
     if (!companyId) {
       console.log("[ProductControlling]companyID:", companyId);

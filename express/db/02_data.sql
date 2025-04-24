@@ -1,11 +1,16 @@
 set client_encoding = 'UTF8';
 
 INSERT INTO companies (name, password) VALUES
-('test','$2b$12$PxTKfG6oLgpMyCnsBAL1YuS1q/UltDnRPWsDiUVuWvKoLeCR3UQIO'),
-('a','$2b$12$Yff5Q9lzma7PnGk16K8xHu0XeR2zNVEfGXwqnSrOqw5g1Fi.rvQj6'),
-('b','$2b$12$noG404YnA8SovqIJ6oc5NeLoYm.NUVjSun.jaOmLjc93wC4L6uILW'),
-('c','$2b$12$lk3bnxUtj0y7dRrCWGz.v.20Tp98jOs5Z.UtZLQdCoozoqt88OXW6');
+('test','$2b$12$PxTKfG6oLgpMyCnsBAL1YuS1q/UltDnRPWsDiUVuWvKoLeCR3UQIO'), --ハッシュ化前のPW：test
+('a','$2b$12$Yff5Q9lzma7PnGk16K8xHu0XeR2zNVEfGXwqnSrOqw5g1Fi.rvQj6'), --ハッシュ化前のPW：12345
+('b','$2b$12$noG404YnA8SovqIJ6oc5NeLoYm.NUVjSun.jaOmLjc93wC4L6uILW'), --ハッシュ化前のPW：12345
+('c','$2b$12$lk3bnxUtj0y7dRrCWGz.v.20Tp98jOs5Z.UtZLQdCoozoqt88OXW6'); --ハッシュ化前のPW：12345
 
+INSERT INTO users (name, password) VALUES
+('test','$2b$12$/tcIMCgw.IgATlLlDD0bJ.ZRCW6KD1q1bvwRlBuPxVrWgDixnoh7K'), --ハッシュ化前のPW：test
+('a','$$2b$12$0KS/yIj7MS7pn889KZsgpOiFWxp//FSdYsZGKnHprUafq40fodX3e'), --ハッシュ化前のPW：12345
+('b','$2b$12$yTgbjAqRqNiA.vNZhd0W9OtunHHd5xt7U0FnAmRKNnoM5kpG34Zju'), --ハッシュ化前のPW：12345
+('c','$2b$12$fOXpjcaE2PgBWwifxjZbaeGB/dlXKiROiaEFb/F/YkSiP16l3eOvO'); --ハッシュ化前のPW：12345
 
 INSERT INTO products (company_id, model_number, name, price, description) VALUES
 (1, 'TW-1001', 'ルーター', 12800.00, '高速インターネット向けルーター'),
