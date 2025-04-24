@@ -11,7 +11,7 @@ type ProductProps = {
 };
 
 export const ProductCard: React.FC<ProductProps> = ({
-  id, //keyにはidでないとエラーになる
+  id,
   product_name,
   description,
   company_name,

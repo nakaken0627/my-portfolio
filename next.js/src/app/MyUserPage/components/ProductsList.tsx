@@ -42,8 +42,7 @@ export default function ProductsList2() {
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           {products.map((product, index) => (
             <ProductCard
-              key={product.id}
-              id={product.id} //propsの型定義にidが入っているため、idをプロップスで渡す必要がある
+              id={product.id}
               product_name={product.product_name}
               description={product.description}
               company_name={product.company_name}
