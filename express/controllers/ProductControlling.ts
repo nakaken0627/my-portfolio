@@ -1,6 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 import CompanyModel from "../models/companyModel.js";
 import userModel from "../models/userModel.js";
+import {
+  getCart,
+  createCart,
+  getCartALLProducts,
+  findCartProduct,
+  createCartProduct,
+  changeCartProduct,
+  deleteCartProduct,
+  deleteCartAllProducts,
+  checkoutCart,
+} from "../models/cartModel.js";
 
 class ProductController {
   findProductsForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -72,4 +83,87 @@ class ProductController {
     }
   };
 }
+
 export default new ProductController();
+
+export const getOrCreateCart = async (req: Request, res: Response, next: NextFunction) => {
+  const { user_id } = req.body;
+
+  try {
+    const data = await getCart(user_id);
+    if (!data) {
+      const newCart = await createCart(user_id);
+      res.status(200).json(newCart);
+      return;
+    }
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json({ message: "サーバでエラーが発生しました", err });
+    return next(err);
+  }
+};
+
+export const getUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
+  const { cart_id } = req.body;
+  try {
+    const data = await getCartALLProducts(cart_id);
+    if (!data) {
+      res.status(400).json({ message: "データが見つかりません" });
+      return;
+    }
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json({ message: "サーバエラーが発生しました", err });
+    next(err);
+  }
+};
+
+export const createOrChangeUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
+  const { cart_id, product_id, quantity } = req.body;
+  try {
+    const data = await findCartProduct(cart_id, product_id);
+    if (!data) {
+      const newData = await createCartProduct(cart_id, product_id, quantity);
+      res.status(200).json(newData);
+    } else {
+      const changeData = await changeCartProduct(cart_id, product_id, quantity);
+      res.status(200).json(changeData);
+    }
+  } catch (err) {
+    res.status(500).json({ message: "サーバエラーが発生しました", err });
+    return next(err);
+  }
+};
+
+export const deleteUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
+  const { cart_id, product_id } = req.body;
+  try {
+    const data = await deleteCartProduct(cart_id, product_id);
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json({ message: "サーバエラーが発生しました", err });
+    return next(err);
+  }
+};
+
+export const deleteUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
+  const { cart_id } = req.body;
+  try {
+    const data = await deleteCartAllProducts(cart_id);
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json({ message: "サーバエラーが発生しました", err });
+    return next(err);
+  }
+};
+
+export const checkoutUserCart = async (req: Request, res: Response, next: NextFunction) => {
+  const { cart_id } = req.body;
+  try {
+    const data = await checkoutCart(cart_id);
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json({ message: "サーバエラーが発生しました", err });
+    return next(err);
+  }
+};
