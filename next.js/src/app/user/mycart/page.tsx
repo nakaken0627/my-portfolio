@@ -1,4 +1,4 @@
-import { UserLayout } from "../../../components/layout/UserLayout";
+import { UserLayout } from "../UserLayout";
 
 export default function UserCart() {
   return (

@@ -29,7 +29,7 @@ router.get("/user/myuser", authUserController.getMyUser);
 router.get("/user/productlist", ProductController.findProductsFromUser);
 
 //カート機能
-router.post("/cart", getOrCreateCart);
+router.post("/cart/mycart", getOrCreateCart);
 router.post("/cart/getproducts", getUserCartALLProducts);
 router.post("/cart/registerproduct", createOrChangeUserCartProduct);
 router.post("/cart/deleteproduct", deleteUserCartProduct);

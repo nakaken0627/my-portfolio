@@ -1,4 +1,4 @@
-import { UserLayout } from "../../../components/layout/UserLayout";
+import { UserLayout } from "../UserLayout";
 import GetUserInfo from "./components/GetUserInfo";
 import LogoutFunc from "./components/LogoutFunc";
 import ProductsList from "./components/ProductsList";
