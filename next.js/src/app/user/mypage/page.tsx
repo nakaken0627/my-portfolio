@@ -5,7 +5,7 @@ import ProductsList from "./components/ProductsList";
 
 export default function MyUserPage() {
   return (
-    <>
+    <div>
       <UserLayout>
         <>ヘッダー</>
       </UserLayout>
@@ -15,6 +15,6 @@ export default function MyUserPage() {
       <LogoutFunc />
       <hr />
       <ProductsList />
-    </>
+    </div>
   );
 }
