@@ -10,7 +10,7 @@ type ProductProps = {
   priority: boolean;
 };
 
-export const ProductCard: React.FC<ProductProps> = ({
+export const ProductCard = ({
   id,
   product_name,
   description,
@@ -18,7 +18,7 @@ export const ProductCard: React.FC<ProductProps> = ({
   price,
   model_number,
   priority = false, //1件目のみtrueで受け取るためデフォルトはfalse
-}) => {
+}: ProductProps) => {
   return (
     <div key={id} className="group relative border border-b-amber-800">
       <Image

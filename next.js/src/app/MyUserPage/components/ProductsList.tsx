@@ -13,7 +13,7 @@ type Product = {
   company_name: string;
 };
 
-export default function ProductsList2() {
+export default function ProductsList() {
   const [products, setProducts] = useState<Product[]>([]);
 
   const fetchProducts = async () => {
