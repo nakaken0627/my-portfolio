@@ -9,8 +9,8 @@ import {
   createCartProduct,
   changeCartProduct,
   deleteCartProduct,
-  deleteCartAllProducts,
-  checkoutCart,
+  // deleteCartAllProducts,
+  // checkoutCart,
 } from "../models/cartModel.js";
 
 class ProductController {
@@ -26,20 +26,18 @@ class ProductController {
     if (!companyId) {
       console.log("[ProductControlling]companyID:", companyId);
       res.status(400).json({ message: "会社IDが見つかりません" });
-      return; //return res ...とするとexpressのRequestHandlerとして型が認識されず、エラーとなる
+      return;
     }
     try {
       const products = await CompanyModel.findCompanyProducts(companyId);
-      // console.log("[findProductControlling]products:", products);
       res.status(200).json(products);
     } catch (err) {
-      next(err);
+      return next(err);
     }
   };
 
   addProductForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     if (!req.body) {
-      console.log("[ProductControlling]addProduct:データがありません");
       return;
     }
     const { company_id, model_number, name, price, description } = req.body;
@@ -48,13 +46,12 @@ class ProductController {
       const result = await CompanyModel.addCompanyProduct(company_id, model_number, name, price, description);
       res.status(200).json(result);
     } catch (err) {
-      next(err);
+      return next(err);
     }
   };
 
   deleteProductsForCompany = async (req: Request, res: Response, next: NextFunction) => {
     if (!req.body) {
-      console.log("[ProductControlling]deleteProducts:データがありません");
       return;
     }
 
@@ -63,10 +60,9 @@ class ProductController {
 
     try {
       const result = await CompanyModel.deleteCompanyProducts(companyId, productsIds);
-      console.log("[ProductControlling]deleteProducts:", result);
       res.status(200).json({ message: "[ProductControlling]deleteProducts:削除が成功しました", result });
     } catch (err) {
-      next(err);
+      return next(err);
     }
   };
 
@@ -101,14 +97,13 @@ export const getUserCartALLProducts = async (req: Request, res: Response, next: 
   const cartId = req.body.cart_id;
   try {
     const data = await getCartALLProducts(cartId);
-    // console.log(data);
     if (!data) {
-      res.status(400).json({ message: "データが見つかりません" });
+      res.status(404).json({ message: "データが見つかりません" });
       return;
     }
     res.status(200).json(data);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -138,22 +133,22 @@ export const deleteUserCartProduct = async (req: Request, res: Response, next: N
   }
 };
 
-export const deleteUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
-  const { cart_id } = req.body;
-  try {
-    const data = await deleteCartAllProducts(cart_id);
-    res.status(200).json(data);
-  } catch (err) {
-    return next(err);
-  }
-};
+// export const deleteUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
+//   const { cart_id } = req.body;
+//   try {
+//     const data = await deleteCartAllProducts(cart_id);
+//     res.status(200).json(data);
+//   } catch (err) {
+//     return next(err);
+//   }
+// };
 
-export const checkoutUserCart = async (req: Request, res: Response, next: NextFunction) => {
-  const { cart_id } = req.body;
-  try {
-    const data = await checkoutCart(cart_id);
-    res.status(200).json(data);
-  } catch (err) {
-    return next(err);
-  }
-};
+// export const checkoutUserCart = async (req: Request, res: Response, next: NextFunction) => {
+//   const { cart_id } = req.body;
+//   try {
+//     const data = await checkoutCart(cart_id);
+//     res.status(200).json(data);
+//   } catch (err) {
+//     return next(err);
+//   }
+// };

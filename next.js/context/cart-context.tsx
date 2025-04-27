@@ -130,25 +130,6 @@ export const CartContextProvider = ({
     }
   };
 
-  useEffect(() => {
-    fetchMyUser();
-    fetchProducts();
-    getCartLatestData();
-  }, []);
-
-  useEffect(() => {
-    if (myUser) {
-      //確実にmyUserがある状態でないとバックエンド側でnot nullタイプなのにnullの可能性があるためエラーになる
-      fetchMyCart();
-    }
-  }, [myUser]); //myUserが貼ってからfetchMyCartを実行しないとエラーになる
-
-  useEffect(() => {
-    if (cartId) {
-      getCartLatestData();
-    }
-  }, [cartId]);
-
   const sendCartLatestData = async (productId: number, quantity: number) => {
     if (!cartId) return;
     try {
@@ -281,6 +262,24 @@ export const CartContextProvider = ({
     calcProductTotalAmount,
     calcCartTotalAmount,
   };
+
+  useEffect(() => {
+    fetchMyUser();
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    if (myUser) {
+      //確実にmyUserがある状態でないとバックエンド側でnot nullタイプなのにnullの可能性があるためエラーになる
+      fetchMyCart();
+    }
+  }, [myUser]); //myUserが貼ってからfetchMyCartを実行しないとエラーになる
+
+  useEffect(() => {
+    if (cartId) {
+      getCartLatestData();
+    }
+  }, [cartId]);
 
   return (
     <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>

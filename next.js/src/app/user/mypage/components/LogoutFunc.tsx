@@ -18,9 +18,5 @@ export default function LogoutFunc() {
     }
   };
 
-  return (
-    <>
-      <button onClick={handleClickLogout}>ログアウト</button>
-    </>
-  );
+  return <button onClick={handleClickLogout}>ログアウト</button>;
 }

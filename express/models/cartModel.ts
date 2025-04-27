@@ -112,33 +112,33 @@ export const deleteCartProduct = async (cart_id: number, product_id: number) => 
   }
 };
 
-export const deleteCartAllProducts = async (cart_id: number) => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `DELETE FROM cart_products
-        WHERE cart_id = $1
-        RETURNING id,cart_id,product_id,quantity,created_at,updated_at`,
-      [cart_id]
-    );
-    return result.rows;
-  } finally {
-    client.release();
-  }
-};
+// export const deleteCartAllProducts = async (cart_id: number) => {
+//   const client: PoolClient = await pool.connect();
+//   try {
+//     const result = await client.query(
+//       `DELETE FROM cart_products
+//         WHERE cart_id = $1
+//         RETURNING id,cart_id,product_id,quantity,created_at,updated_at`,
+//       [cart_id]
+//     );
+//     return result.rows;
+//   } finally {
+//     client.release();
+//   }
+// };
 
-export const checkoutCart = async (cart_id: number) => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `UPDATE carts
-        SET is_checkedout = true
-        WHERE id = $1
-        RETURNING id,user_id,is_checkedout,created_at,updated_at`,
-      [cart_id]
-    );
-    return result.rows[0];
-  } finally {
-    client.release();
-  }
-};
+// export const checkoutCart = async (cart_id: number) => {
+//   const client: PoolClient = await pool.connect();
+//   try {
+//     const result = await client.query(
+//       `UPDATE carts
+//         SET is_checkedout = true
+//         WHERE id = $1
+//         RETURNING id,user_id,is_checkedout,created_at,updated_at`,
+//       [cart_id]
+//     );
+//     return result.rows[0];
+//   } finally {
+//     client.release();
+//   }
+// };

@@ -12,9 +12,5 @@ export function GetUserInfo() {
 
   const { myUser } = cartContext;
 
-  return (
-    <>
-      <h1>ようこそ、{myUser?.name}様</h1>
-    </>
-  );
+  return <h1>ようこそ、{myUser?.name}様</h1>;
 }
