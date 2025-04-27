@@ -4,8 +4,8 @@ import ProductController, {
   getUserCartALLProducts,
   createOrChangeUserCartProduct,
   deleteUserCartProduct,
-  deleteUserCartALLProducts,
-  checkoutUserCart,
+  // deleteUserCartALLProducts,
+  // checkoutUserCart,
 } from "../../controllers/productControlling.js";
 import authCompanyController from "../../controllers/authCompanyControlling.js";
 import authUserController from "../../controllers/authUserControlling.js";
@@ -31,9 +31,9 @@ router.get("/user/productlist", ProductController.findProductsFromUser);
 //カート機能
 router.post("/cart/mycart", getOrCreateCart);
 router.post("/cart/getproducts", getUserCartALLProducts);
-router.post("/cart/registerproduct", createOrChangeUserCartProduct);
+router.post("/cart/updataproduct", createOrChangeUserCartProduct);
 router.post("/cart/deleteproduct", deleteUserCartProduct);
-router.post("/cart/deleteallproducts", deleteUserCartALLProducts);
-router.post("/cart/checkout", checkoutUserCart);
+// router.post("/cart/deleteallproducts", deleteUserCartALLProducts);
+// router.post("/cart/checkout", checkoutUserCart);
 
 export default router;

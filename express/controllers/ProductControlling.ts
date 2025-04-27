@@ -33,7 +33,6 @@ class ProductController {
       // console.log("[findProductControlling]products:", products);
       res.status(200).json(products);
     } catch (err) {
-      res.status(500).json({ message: "[ProductControlling]companyID:サーバエラー", err });
       next(err);
     }
   };
@@ -49,7 +48,6 @@ class ProductController {
       const result = await CompanyModel.addCompanyProduct(company_id, model_number, name, price, description);
       res.status(200).json(result);
     } catch (err) {
-      res.status(500).json({ message: "[ProductControlling]addProduct:サーバエラー", err });
       next(err);
     }
   };
@@ -68,7 +66,6 @@ class ProductController {
       console.log("[ProductControlling]deleteProducts:", result);
       res.status(200).json({ message: "[ProductControlling]deleteProducts:削除が成功しました", result });
     } catch (err) {
-      res.status(500).json({ message: "[ProductControlling]deleteProducts:サーバーエラー", err });
       next(err);
     }
   };
@@ -78,7 +75,6 @@ class ProductController {
       const data = await userModel.findProductsForUser();
       res.status(200).json(data);
     } catch (err) {
-      res.status(500).json({ message: "サーバエラーが発生しました", err });
       return next(err);
     }
   };
@@ -87,33 +83,31 @@ class ProductController {
 export default new ProductController();
 
 export const getOrCreateCart = async (req: Request, res: Response, next: NextFunction) => {
-  const { user_id } = req.body;
-
+  const userId = req.body.user_id;
   try {
-    const data = await getCart(user_id);
+    const data = await getCart(userId);
     if (!data) {
-      const newCart = await createCart(user_id);
+      const newCart = await createCart(userId);
       res.status(200).json(newCart);
       return;
     }
     res.status(200).json(data);
   } catch (err) {
-    res.status(500).json({ message: "サーバでエラーが発生しました", err });
     return next(err);
   }
 };
 
 export const getUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
-  const { cart_id } = req.body;
+  const cartId = req.body.cart_id;
   try {
-    const data = await getCartALLProducts(cart_id);
+    const data = await getCartALLProducts(cartId);
+    // console.log(data);
     if (!data) {
       res.status(400).json({ message: "データが見つかりません" });
       return;
     }
     res.status(200).json(data);
   } catch (err) {
-    res.status(500).json({ message: "サーバエラーが発生しました", err });
     next(err);
   }
 };
@@ -130,7 +124,6 @@ export const createOrChangeUserCartProduct = async (req: Request, res: Response,
       res.status(200).json(changeData);
     }
   } catch (err) {
-    res.status(500).json({ message: "サーバエラーが発生しました", err });
     return next(err);
   }
 };
@@ -141,7 +134,6 @@ export const deleteUserCartProduct = async (req: Request, res: Response, next: N
     const data = await deleteCartProduct(cart_id, product_id);
     res.status(200).json(data);
   } catch (err) {
-    res.status(500).json({ message: "サーバエラーが発生しました", err });
     return next(err);
   }
 };
@@ -152,7 +144,6 @@ export const deleteUserCartALLProducts = async (req: Request, res: Response, nex
     const data = await deleteCartAllProducts(cart_id);
     res.status(200).json(data);
   } catch (err) {
-    res.status(500).json({ message: "サーバエラーが発生しました", err });
     return next(err);
   }
 };
@@ -163,7 +154,6 @@ export const checkoutUserCart = async (req: Request, res: Response, next: NextFu
     const data = await checkoutCart(cart_id);
     res.status(200).json(data);
   } catch (err) {
-    res.status(500).json({ message: "サーバエラーが発生しました", err });
     return next(err);
   }
 };

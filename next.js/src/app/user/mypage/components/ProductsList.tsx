@@ -1,36 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { CartContext } from "@/context/cart-context";
 
 import { ProductCard } from "./ProductCard";
 
-type Product = {
-  product_name: string;
-  id: number;
-  model_number: string;
-  price: number;
-  description: string;
-  company_name: string;
-};
-
 export default function ProductsList() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const cartContext = useContext(CartContext);
 
-  const fetchProducts = async () => {
-    const response = await fetch("http://localhost:3001/api/user/productlist", {
-      method: "GET",
-      credentials: "include",
-    });
-    if (!response.ok) {
-      console.log("データを取得できませんでした");
-    }
-    const data = await response.json();
-    setProducts(data);
-  };
+  if (!cartContext) {
+    return;
+  }
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  const { productList } = cartContext;
 
   return (
     <div className="bg-amber-50">
@@ -40,7 +22,7 @@ export default function ProductsList() {
         </h2>
 
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {products.map((product, index) => (
+          {productList.map((product, index) => (
             <ProductCard
               key={product.id}
               id={product.id}

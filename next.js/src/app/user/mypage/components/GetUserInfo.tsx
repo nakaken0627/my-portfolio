@@ -1,35 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { CartContext } from "@/context/cart-context";
 
-export type User = {
-  id: number;
-  name: string;
-};
+export function GetUserInfo() {
+  const cartContext = useContext(CartContext);
 
-export default function GetUserInfo() {
-  const [myUser, setMyUser] = useState<User | null>(null);
+  if (!cartContext) {
+    return; //cartContextの戻り値があることを確実にするために必要
+  }
 
-  const fetchMyUser = async () => {
-    try {
-      const response = await fetch("http://localhost:3001/api/user/myuser", {
-        method: "GET",
-        credentials: "include",
-      });
-      if (!response.ok) {
-        console.log("[MyUserPage]getUserInfo:データ取得に失敗しました");
-        throw new Error("[[MyUserPage]getUserInfo:レスポンスエラー");
-      }
-      const data = await response.json();
-      setMyUser(data);
-    } catch (err) {
-      console.error("サーバエラーが発生しました", err);
-    }
-  };
-
-  useEffect(() => {
-    fetchMyUser();
-  }, []);
+  const { myUser } = cartContext;
 
   return (
     <>

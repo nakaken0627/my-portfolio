@@ -5,8 +5,8 @@ export const UserLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div>
       <CartContextProvider>
-        <main>{children}</main>
         <UserNav />
+        <main>{children}</main>
       </CartContextProvider>
     </div>
   );

@@ -5,7 +5,7 @@ export const getCart = async (user_id: number) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
-      `SELECT * 
+      `SELECT carts.id 
         FROM carts 
         WHERE is_checkedout = false 
         AND user_id = $1`,
@@ -36,7 +36,7 @@ export const getCartALLProducts = async (cart_id: number) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
-      `SELECT * 
+      `SELECT product_id,quantity
         FROM cart_products
         WHERE cart_id = $1
         ORDER BY id ASC `,
