@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import CompanyModel from "../models/companyModel.js";
 import userModel from "../models/userModel.js";
+import { createOrder, createOrderProduct } from "../models/orderModel.js";
 import {
   getCart,
   createCart,
@@ -9,8 +10,8 @@ import {
   createCartProduct,
   changeCartProduct,
   deleteCartProduct,
-  // deleteCartAllProducts,
-  // checkoutCart,
+  deleteCartAllProducts,
+  checkoutCart,
 } from "../models/cartModel.js";
 
 class ProductController {
@@ -133,22 +134,25 @@ export const deleteUserCartProduct = async (req: Request, res: Response, next: N
   }
 };
 
-// export const deleteUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
-//   const { cart_id } = req.body;
-//   try {
-//     const data = await deleteCartAllProducts(cart_id);
-//     res.status(200).json(data);
-//   } catch (err) {
-//     return next(err);
-//   }
-// };
+export const deleteUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
+  const { cart_id } = req.body;
+  try {
+    const data = await deleteCartAllProducts(cart_id);
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
 
-// export const checkoutUserCart = async (req: Request, res: Response, next: NextFunction) => {
-//   const { cart_id } = req.body;
-//   try {
-//     const data = await checkoutCart(cart_id);
-//     res.status(200).json(data);
-//   } catch (err) {
-//     return next(err);
-//   }
-// };
+export const checkoutUserCart = async (req: Request, res: Response, next: NextFunction) => {
+  const { user_id, cart_id, cartProducts } = req.body;
+  try {
+    const order = await createOrder(user_id);
+    const order_id = order.id;
+    await checkoutCart(order_id, cart_id);
+    await createOrderProduct(order_id, cartProducts);
+    res.status(200).json(order);
+  } catch (err) {
+    return next(err);
+  }
+};

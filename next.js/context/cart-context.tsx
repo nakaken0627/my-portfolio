@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
 export type User = {
   id: number;
@@ -26,6 +32,8 @@ type CartContentType = {
   cartId: { id: number } | null;
   productList: Product[];
   cartProducts: CartProduct[];
+  setCartProducts: Dispatch<SetStateAction<CartProduct[]>>;
+  getCartLatestData: () => Promise<void>;
   addProduct: (productId: number) => Promise<void>;
   reduceProduct: (productId: number) => Promise<void>;
   deleteProduct: (productId: number) => Promise<void>;
@@ -170,10 +178,14 @@ export const CartContextProvider = ({
   };
 
   const addProduct = async (addProductId: number) => {
+    let newQuantity = 1;
+
     setCartProducts((prev) => {
       const existingProduct = prev.find(
         (cartItem) => cartItem.product_id === addProductId,
       );
+      newQuantity = existingProduct ? existingProduct.quantity + 1 : 1;
+
       const updateCart = existingProduct
         ? prev.map((item) =>
             item.product_id === addProductId
@@ -185,10 +197,6 @@ export const CartContextProvider = ({
       return updateCart;
     });
 
-    const existingProduct = cartProducts.find(
-      (cartItem) => cartItem.product_id === addProductId,
-    );
-    const newQuantity = existingProduct ? existingProduct.quantity + 1 : 1;
     sendCartLatestData(addProductId, newQuantity);
   };
 
@@ -255,6 +263,8 @@ export const CartContextProvider = ({
     cartId,
     productList,
     cartProducts,
+    setCartProducts,
+    getCartLatestData,
     addProduct,
     reduceProduct,
     handleQuantityChange,
