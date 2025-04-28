@@ -51,7 +51,9 @@ export const ProductCard = ({
           <p className="mt-1 text-sm text-gray-500">{description}</p>
           <p className="mt-1 text-sm text-gray-500">{company_name}</p>
         </div>
-        <p className="text-sm font-medium text-gray-900">{Math.round(price)}</p>
+        <p className="text-sm font-medium text-gray-900">
+          ¥{Math.round(price).toLocaleString()}
+        </p>
         <button className="relative z-10" onClick={() => addProduct(id)}>
           カートに追加
         </button>

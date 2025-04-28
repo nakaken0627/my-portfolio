@@ -3,7 +3,7 @@
 import { useContext } from "react";
 import { CartContext } from "@/context/cart-context";
 
-export const AddedProducts = () => {
+export const CurrentCart = () => {
   const cartContext = useContext(CartContext);
 
   if (!cartContext) {
@@ -79,7 +79,9 @@ export const AddedProducts = () => {
                 className="mb-4 flex items-center justify-between border-b bg-blue-100 pb-4"
               >
                 <p className="text-lg">{product.product_name}</p>
-                <p className="text-lg">¥{product.price}</p>
+                <p className="text-lg">
+                  ¥{Math.round(product.price).toLocaleString()}
+                </p>
                 <div className="flex items-center">
                   <button
                     className="px-2 text-gray-700"
@@ -110,7 +112,10 @@ export const AddedProducts = () => {
                   </button>
                 </div>
                 <div className="text-lg">
-                  ¥{calcProductTotalAmount(cartProduct.product_id)}
+                  ¥
+                  {calcProductTotalAmount(
+                    cartProduct.product_id,
+                  ).toLocaleString()}
                 </div>
                 <button
                   className="text-red-500 hover:underline"
@@ -124,7 +129,7 @@ export const AddedProducts = () => {
         )}
         <div className="text-right">
           <p className="text-xl font-semibold">
-            合計: ¥{calcCartTotalAmount()}
+            合計: ¥{calcCartTotalAmount().toLocaleString()}
           </p>
 
           <button

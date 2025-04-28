@@ -6,6 +6,7 @@ import ProductController, {
   deleteUserCartProduct,
   deleteUserCartALLProducts,
   checkoutUserCart,
+  orderHistory,
 } from "../../controllers/productControlling.js";
 import authCompanyController from "../../controllers/authCompanyControlling.js";
 import authUserController from "../../controllers/authUserControlling.js";
@@ -27,6 +28,7 @@ router.post("/company/deleteproducts", ProductController.deleteProductsForCompan
 //発注者用API
 router.get("/user/myuser", authUserController.getMyUser);
 router.get("/user/productlist", ProductController.findProductsFromUser);
+router.post("/user/orderhistory", orderHistory);
 
 //カート機能
 router.post("/cart/mycart", getOrCreateCart);

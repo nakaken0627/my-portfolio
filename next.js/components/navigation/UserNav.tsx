@@ -6,6 +6,8 @@ export const UserNav = () => {
       <Link href="/user/mypage">Mypage</Link>
       {"   "}
       <Link href="/user/mycart">Cart</Link>
+      {"   "}
+      <Link href="/user/myorderhistory">OrderHistory</Link>
     </div>
   );
 };
