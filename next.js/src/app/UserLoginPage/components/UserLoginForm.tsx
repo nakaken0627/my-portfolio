@@ -32,7 +32,7 @@ export default function UserLoginFrom() {
 
       if (response.ok) {
         console.log("[UserLoginFrom]handleSubmit:ログイン成功");
-        router.push("/MyUserPage");
+        router.push("/user/mypage");
       } else {
         console.log("[UserLoginFrom]handleSubmit:ログイン失敗");
         setError(data.message || "ログインに失敗しました");

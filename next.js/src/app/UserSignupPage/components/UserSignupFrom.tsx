@@ -32,7 +32,7 @@ export default function UserSignupFrom() {
 
       if (response.ok) {
         console.log("[UserSignupPage]handleSubmit:", data);
-        router.push("/MyUserPage");
+        router.push("/user/mypage");
       } else {
         console.log("登録済みです");
         setError(data.message || "サインアップに失敗しました");

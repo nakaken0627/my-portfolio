@@ -1,5 +1,12 @@
 import express, { Request, Response } from "express";
-import ProductController from "../../controllers/productControlling.js";
+import ProductController, {
+  getOrCreateCart,
+  getUserCartALLProducts,
+  createOrChangeUserCartProduct,
+  deleteUserCartProduct,
+  // deleteUserCartALLProducts,
+  // checkoutUserCart,
+} from "../../controllers/productControlling.js";
 import authCompanyController from "../../controllers/authCompanyControlling.js";
 import authUserController from "../../controllers/authUserControlling.js";
 
@@ -20,5 +27,13 @@ router.post("/company/deleteproducts", ProductController.deleteProductsForCompan
 //発注者用API
 router.get("/user/myuser", authUserController.getMyUser);
 router.get("/user/productlist", ProductController.findProductsFromUser);
+
+//カート機能
+router.post("/cart/mycart", getOrCreateCart);
+router.post("/cart/getproducts", getUserCartALLProducts);
+router.post("/cart/updataproduct", createOrChangeUserCartProduct);
+router.post("/cart/deleteproduct", deleteUserCartProduct);
+// router.post("/cart/deleteallproducts", deleteUserCartALLProducts);
+// router.post("/cart/checkout", checkoutUserCart);
 
 export default router;
