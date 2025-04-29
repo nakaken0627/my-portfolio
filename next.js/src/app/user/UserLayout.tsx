@@ -3,11 +3,9 @@ import { CartContextProvider } from "../../../context/cart-context";
 
 export const UserLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
-      <CartContextProvider>
-        <UserNav />
-        <main>{children}</main>
-      </CartContextProvider>
-    </div>
+    <CartContextProvider>
+      <UserNav />
+      <main>{children}</main>
+    </CartContextProvider>
   );
 };

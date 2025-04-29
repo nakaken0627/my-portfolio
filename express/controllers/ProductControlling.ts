@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import CompanyModel from "../models/companyModel.js";
+import CompanyModel, { getMyOrderList } from "../models/companyModel.js";
 import userModel, { orderedProductList } from "../models/userModel.js";
 import { createOrder, createOrderProduct } from "../models/orderModel.js";
 import {
@@ -161,6 +161,16 @@ export const orderHistory = async (req: Request, res: Response, next: NextFuncti
   const { user_id } = req.body;
   try {
     const data = await orderedProductList(user_id);
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const orderListForCompany = async (req: Request, res: Response, next: NextFunction) => {
+  const { company_id } = req.body;
+  try {
+    const data = await getMyOrderList(company_id);
     res.status(200).json(data);
   } catch (err) {
     return next(err);

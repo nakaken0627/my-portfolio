@@ -7,6 +7,7 @@ import ProductController, {
   deleteUserCartALLProducts,
   checkoutUserCart,
   orderHistory,
+  orderListForCompany,
 } from "../../controllers/productControlling.js";
 import authCompanyController from "../../controllers/authCompanyControlling.js";
 import authUserController from "../../controllers/authUserControlling.js";
@@ -24,6 +25,7 @@ router.get("/company/mycompany", authCompanyController.getMyCompany);
 router.get("/company/myproductlist", ProductController.findProductsForCompany);
 router.post("/company/addproduct", ProductController.addProductForCompany);
 router.post("/company/deleteproducts", ProductController.deleteProductsForCompany);
+router.post("/company/getmyorderlist", orderListForCompany);
 
 //発注者用API
 router.get("/user/myuser", authUserController.getMyUser);

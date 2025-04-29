@@ -6,7 +6,7 @@ import { CartContext } from "@/context/cart-context";
 export const OrderHistory = () => {
   const cartContext = useContext(CartContext);
   if (!cartContext) return;
-  const { myUser, calcProductTotalAmount, calcCartTotalAmount } = cartContext;
+  const { myUser } = cartContext;
 
   type Order = {
     order_id: number;
@@ -39,7 +39,6 @@ export const OrderHistory = () => {
     });
 
     const data: Order[] = await res.json();
-    console.log(data);
 
     const groupedOrder = data.reduce((acc, item) => {
       if (!acc[item.order_id]) {
@@ -54,8 +53,8 @@ export const OrderHistory = () => {
 
   const orderTotalAmount = (order_id: number, data: Order[]) => {
     const orderData = data.filter((item) => item.order_id === order_id);
-    return orderData.reduce((total, products) => {
-      return total + products.price * products.quantity;
+    return orderData.reduce((total, product) => {
+      return total + product.price * product.quantity;
     }, 0);
   };
 

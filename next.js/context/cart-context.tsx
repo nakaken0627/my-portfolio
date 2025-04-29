@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 
-export type User = {
+type User = {
   id: number;
   name: string;
 };
@@ -27,7 +27,7 @@ type Product = {
   company_name: string;
 };
 
-type CartContentType = {
+type CartContent = {
   myUser: User | null;
   cartId: { id: number } | null;
   productList: Product[];
@@ -45,7 +45,7 @@ type CartContentType = {
   calcCartTotalAmount: () => number;
 };
 
-export const CartContext = createContext<CartContentType | null>(null);
+export const CartContext = createContext<CartContent | null>(null);
 
 export const CartContextProvider = ({
   children,

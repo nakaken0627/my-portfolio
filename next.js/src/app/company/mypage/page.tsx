@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
+import { CompanyLayout } from "../CompanyLayout";
 
 type Product = {
   company_name: string;
@@ -42,7 +44,9 @@ export default function MyCompanyPage() {
       }
       const data = await res.json();
       setMyCompany(data);
-    } catch (err) {}
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const fetchMyProducts = async () => {
@@ -162,10 +166,10 @@ export default function MyCompanyPage() {
   useEffect(() => {
     fetchMyProducts();
     fetchMyCompany();
-  }, []);
+  }, [myCompany]);
 
   return (
-    <>
+    <CompanyLayout>
       <h1>登録済み画面(販売企業様)</h1>
       <div>ようこそ、{myCompany?.name}様</div>
       <button onClick={handleClickLogout}>ログアウト</button>
@@ -255,6 +259,6 @@ export default function MyCompanyPage() {
         <button type="submit">登録</button>
         <hr />
       </form>
-    </>
+    </CompanyLayout>
   );
 }

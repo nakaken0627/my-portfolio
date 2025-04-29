@@ -32,7 +32,7 @@ function SigninForm() {
 
       if (response.ok) {
         console.log("ログイン成功", data);
-        router.push("/MyCompanyPage");
+        router.push("/company/mypage");
       } else {
         setError(data.message || "ログインに失敗しました");
       }
