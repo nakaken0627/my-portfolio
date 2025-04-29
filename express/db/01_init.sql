@@ -69,6 +69,6 @@ CREATE TABLE IF NOT EXISTS order_products (
   price NUMERIC(10, 2) NOT NULL, --注文時点の単価情報で確定するためpriceを登録
   is_confirmed BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (order_id, product_id)
 );

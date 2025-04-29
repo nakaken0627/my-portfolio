@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { CompanyLayout } from "../CompanyLayout";
@@ -22,7 +22,7 @@ type Company = {
 export default function MyCompanyPage() {
   const router = useRouter();
   const [myProducts, setMyProducts] = useState<Product[]>([]);
-  const [myCompany, setMyCompany] = useState<Company | null>(null); //バックエンド側からオブジェクトとして受け取る（配列ではない）
+  const [myCompany, setMyCompany] = useState<Company | null>(null);
 
   //product登録用
   const [modelNum, setModelNum] = useState("");

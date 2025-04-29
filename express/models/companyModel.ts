@@ -139,7 +139,7 @@ export const getMyOrderList = async (company_id: number) => {
   }
 };
 
-export const confirmedOrder = async (confirmedIds: number[]) => {
+export const confirmingOrder = async (confirmedIds: number[]) => {
   const client: PoolClient = await pool.connect();
   try {
     await client.query("BEGIN");
@@ -159,6 +159,40 @@ export const confirmedOrder = async (confirmedIds: number[]) => {
   } catch (err) {
     await client.query("ROLLBACK");
     throw err;
+  } finally {
+    client.release();
+  }
+};
+
+export const getConfirmedOrderList = async (company_id: number) => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      `
+      SELECT
+      	ORDER_PRODUCTS.ID AS ID,
+        COMPANY_ID,
+        ORDER_ID,
+      	USERS.NAME AS user_name,
+        MODEL_NUMBER,
+        PRODUCTS.ID AS PRODUCT_ID,
+        PRODUCTS.NAME AS PRODUCT_NAME,
+        QUANTITY,
+        ORDER_PRODUCTS.PRICE
+      FROM
+        ORDER_PRODUCTS
+        INNER JOIN ORDERS ON ORDER_PRODUCTS.ORDER_ID = ORDERS.ID
+        INNER JOIN USERS ON ORDERS.USER_ID = USERS.ID
+        INNER JOIN PRODUCTS ON ORDER_PRODUCTS.PRODUCT_ID = PRODUCTS.ID
+      WHERE
+        IS_CONFIRMED = TRUE
+        AND PRODUCTS.COMPANY_ID = $1
+      ORDER BY
+        ORDER_ID
+      `,
+      [company_id]
+    );
+    return result.rows;
   } finally {
     client.release();
   }

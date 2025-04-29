@@ -6,6 +6,8 @@ export const CompanyNav = () => {
       <Link href={"/company/mypage"}>Mypage</Link>
       {"   "}
       <Link href={"/company/orderlist"}>OrderList</Link>
+      {"   "}
+      <Link href={"/company/confirmedorderlist"}>ConfirmedOrderList</Link>
     </div>
   );
 };

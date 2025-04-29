@@ -25,6 +25,7 @@ type GroupedOrderList = {
 
 export const DisplayOrderList = () => {
   const [myCompany, setMyCompany] = useState<Company | null>(null);
+  const [orderList, setOrderList] = useState<OrderList[]>([]);
   const [groupedOrderList, setGroupedOrderList] = useState<GroupedOrderList>(
     {},
   );
@@ -64,6 +65,7 @@ export const DisplayOrderList = () => {
         },
       );
       const data: OrderList[] = await res.json();
+      setOrderList(data);
       const groupedOrders = data.reduce((acc, item) => {
         if (!acc[item.order_id]) {
           acc[item.order_id] = [];
@@ -85,7 +87,6 @@ export const DisplayOrderList = () => {
   };
 
   const handleCheckBoxStatus = (id: number) => {
-    console.log(confirmedIds);
     setConfirmedIds((prev: number[]): number[] => {
       return prev.includes(id)
         ? prev.filter((item) => item !== id)
@@ -93,8 +94,36 @@ export const DisplayOrderList = () => {
     });
   };
 
+  const handleClickChangeStatus = async (confirmedIds: number[]) => {
+    if (!confirmedIds) return;
+    try {
+      await fetch("http://localhost:3001/api/company/confirmorder", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          confirmedIds: confirmedIds,
+        }),
+      });
+      setConfirmedIds([]);
+      fetchMyOrderList();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handlePushAllIds = async (orderList: OrderList[]) => {
+    if (confirmedIds.length > 0) {
+      setConfirmedIds([]);
+    } else {
+      const idArray = orderList.map((item) => item.id);
+      setConfirmedIds(idArray);
+    }
+  };
+
   useEffect(() => {
-    console.log(confirmedIds);
     fetchMyCompany();
   }, []);
 
@@ -105,53 +134,68 @@ export const DisplayOrderList = () => {
   return (
     <div>
       <div>
-        <button>受注確定</button>
+        <button onClick={() => handleClickChangeStatus(confirmedIds)}>
+          受注確定
+        </button>
+        <button onClick={() => handlePushAllIds(orderList)}>一括選択</button>
       </div>
-      {Object.entries(groupedOrderList).map(([order_id, items]) => (
-        <div key={order_id} className="mb-8 rounded-lg border p-6 shadow">
-          <h2 className="mb-4 text-xl font-semibold">オーダーID: {order_id}</h2>
-          <h2 className="mb-4 text-xl font-semibold">
-            合計金額:¥
-            {orderTotalAmount(Number(order_id), items).toLocaleString()}
-          </h2>
-          <table className="w-full border-collapse text-left">
-            <thead>
-              <tr>
-                <th className="border-b p-2"></th>
-                <th className="border-b p-2">商品番号</th>
-                <th className="border-b p-2">商品名</th>
-                <th className="border-b p-2">価格</th>
-                <th className="border-b p-2">数量</th>
-                <th className="border-b p-2">金額</th>
-                <th className="border-b p-2">発注者</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item) => (
-                <tr key={item.order_id + "-" + item.product_id}>
-                  <td className="border-b p-2">
-                    <input
-                      type="checkbox"
-                      checked={confirmedIds.includes(item.id)}
-                      onChange={() => handleCheckBoxStatus(item.id)}
-                    />
-                  </td>
-                  <td className="border-b p-2">{item.model_number}</td>
-                  <td className="border-b p-2">{item.product_name}</td>
-                  <td className="border-b p-2">
-                    ¥{Math.round(item.price).toLocaleString()}
-                  </td>
-                  <td className="border-b p-2">{item.quantity}</td>
-                  <td className="border-b p-2">
-                    ¥{Math.round(item.price * item.quantity).toLocaleString()}
-                  </td>
-                  <td className="border-b p-2">{item.user_name}</td>
+      {Object.entries(groupedOrderList).map(([order_id, items]) => {
+        const totalAmount = orderTotalAmount(Number(order_id), items);
+        return (
+          <div
+            key={order_id}
+            className={
+              totalAmount >= 50000
+                ? "mb-8 rounded-lg border bg-red-500 p-6 shadow"
+                : "mb-8 rounded-lg border p-6 shadow"
+            }
+          >
+            <h2 className="mb-4 text-xl font-semibold">
+              オーダーID: {order_id}
+            </h2>
+            <h2 className="mb-4 text-xl font-semibold">
+              合計金額:¥
+              {totalAmount.toLocaleString()}
+            </h2>
+            <table className="w-full border-collapse text-left">
+              <thead>
+                <tr>
+                  <th className="border-b p-2"></th>
+                  <th className="border-b p-2">商品番号</th>
+                  <th className="border-b p-2">商品名</th>
+                  <th className="border-b p-2">価格</th>
+                  <th className="border-b p-2">数量</th>
+                  <th className="border-b p-2">金額</th>
+                  <th className="border-b p-2">発注者</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ))}
+              </thead>
+              <tbody>
+                {items.map((item) => (
+                  <tr key={item.order_id + "-" + item.product_id}>
+                    <td className="border-b p-2">
+                      <input
+                        type="checkbox"
+                        checked={confirmedIds.includes(item.id)}
+                        onChange={() => handleCheckBoxStatus(item.id)}
+                      />
+                    </td>
+                    <td className="border-b p-2">{item.model_number}</td>
+                    <td className="border-b p-2">{item.product_name}</td>
+                    <td className="border-b p-2">
+                      ¥{Math.round(item.price).toLocaleString()}
+                    </td>
+                    <td className="border-b p-2">{item.quantity}</td>
+                    <td className="border-b p-2">
+                      ¥{Math.round(item.price * item.quantity).toLocaleString()}
+                    </td>
+                    <td className="border-b p-2">{item.user_name}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+      })}
     </div>
   );
 };

@@ -8,6 +8,8 @@ import ProductController, {
   checkoutUserCart,
   orderHistory,
   orderListForCompany,
+  changStatusOfConfirm,
+  confirmedOrderList,
 } from "../../controllers/productControlling.js";
 import authCompanyController from "../../controllers/authCompanyControlling.js";
 import authUserController from "../../controllers/authUserControlling.js";
@@ -26,6 +28,8 @@ router.get("/company/myproductlist", ProductController.findProductsForCompany);
 router.post("/company/addproduct", ProductController.addProductForCompany);
 router.post("/company/deleteproducts", ProductController.deleteProductsForCompany);
 router.post("/company/getmyorderlist", orderListForCompany);
+router.post("/company/confirmorder", changStatusOfConfirm);
+router.post("/company/confirmedorder", confirmedOrderList);
 
 //発注者用API
 router.get("/user/myuser", authUserController.getMyUser);

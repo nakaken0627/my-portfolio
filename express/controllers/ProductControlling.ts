@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import CompanyModel, { getMyOrderList } from "../models/companyModel.js";
+import CompanyModel, { getMyOrderList, confirmingOrder, getConfirmedOrderList } from "../models/companyModel.js";
 import userModel, { orderedProductList } from "../models/userModel.js";
 import { createOrder, createOrderProduct } from "../models/orderModel.js";
 import {
@@ -171,6 +171,26 @@ export const orderListForCompany = async (req: Request, res: Response, next: Nex
   const { company_id } = req.body;
   try {
     const data = await getMyOrderList(company_id);
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const changStatusOfConfirm = async (req: Request, res: Response, next: NextFunction) => {
+  const { confirmedIds } = req.body;
+  try {
+    const data = await confirmingOrder(confirmedIds);
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const confirmedOrderList = async (req: Request, res: Response, next: NextFunction) => {
+  const { company_id } = req.body;
+  try {
+    const data = await getConfirmedOrderList(company_id);
     res.status(200).json(data);
   } catch (err) {
     return next(err);
