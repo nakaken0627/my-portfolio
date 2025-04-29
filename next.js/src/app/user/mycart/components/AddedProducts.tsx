@@ -40,21 +40,21 @@ export const AddedProducts = () => {
               <div className="flex items-center">
                 <button
                   className="px-2 text-gray-700"
-                  onClick={async () =>
-                    await reduceProduct(cartProduct.product_id)
-                  }
+                  onClick={() => reduceProduct(cartProduct.product_id)}
                 >
                   -
                 </button>
                 <input
                   type="text"
                   value={cartProduct.quantity}
-                  onChange={async () => await handleQuantityChange}
+                  onChange={(e) =>
+                    handleQuantityChange(product.id, Number(e.target.value))
+                  }
                   className="mx-2 w-12 rounded border text-center"
                 />
                 <button
                   className="px-2 text-gray-700"
-                  onClick={async () => await addProduct(cartProduct.product_id)}
+                  onClick={() => addProduct(cartProduct.product_id)}
                 >
                   +
                 </button>
@@ -64,7 +64,7 @@ export const AddedProducts = () => {
               </div>
               <button
                 className="text-red-500 hover:underline"
-                onClick={async () => deleteProduct(cartProduct.product_id)}
+                onClick={() => deleteProduct(cartProduct.product_id)}
               >
                 削除
               </button>
