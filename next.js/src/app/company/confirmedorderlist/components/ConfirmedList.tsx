@@ -1,11 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-type Company = {
-  id: number;
-  name: string;
-};
+import { useContext, useEffect, useState } from "react";
+import { CompanyContext } from "@/context/company-context";
 
 type ConfirmedList = {
   id: number;
@@ -24,25 +20,13 @@ type groupedList = {
 };
 
 export const ConfirmedList = () => {
-  const [myCompany, setMyCompany] = useState<Company | null>(null);
-  const [groupingList, setGroupingList] = useState<groupedList>({});
+  const companyContext = useContext(CompanyContext);
+  if (!companyContext) {
+    return <div>Loading...</div>;
+  }
 
-  const fetchMyCompany = async () => {
-    try {
-      const res = await fetch("http://localhost:3001/api/company/mycompany", {
-        method: "GET",
-        credentials: "include",
-      });
-      if (!res.ok) {
-        throw new Error("[MyCompanyPage]レスポンスエラー(company)");
-      }
-      const data = await res.json();
-      if (!data) return;
-      setMyCompany(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const { myCompany } = companyContext;
+  const [groupingList, setGroupingList] = useState<groupedList>({});
 
   const fetchConfirmedOrderList = async () => {
     try {
@@ -66,10 +50,6 @@ export const ConfirmedList = () => {
       console.error(err);
     }
   };
-
-  useEffect(() => {
-    fetchMyCompany();
-  }, []);
 
   useEffect(() => {
     fetchConfirmedOrderList();
