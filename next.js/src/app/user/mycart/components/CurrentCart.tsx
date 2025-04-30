@@ -47,7 +47,6 @@ export const CurrentCart = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          user_id: myUser.id,
           cart_id: cartId.id,
           cartProducts: cartProductWithPriceData,
         }),

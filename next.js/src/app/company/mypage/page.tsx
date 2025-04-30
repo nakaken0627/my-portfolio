@@ -92,14 +92,13 @@ export default function MyCompanyPage() {
     const model_number = modelNum;
 
     try {
-      const req = await fetch("http://localhost:3001/api/company/addproduct", {
+      await fetch("http://localhost:3001/api/company/addproduct", {
         method: "POST",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          company_id,
           model_number,
           name,
           price,
@@ -135,13 +134,12 @@ export default function MyCompanyPage() {
       const res = await fetch(
         "http://localhost:3001/api/company/deleteproducts",
         {
-          method: "POST",
+          method: "DELETE",
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            companyId: myCompany?.id,
             productsIds: selectedIds,
           }),
         },
@@ -155,7 +153,6 @@ export default function MyCompanyPage() {
           "[MyCompanyPage]handleDeleteProducts:レスポンスエラー(deleteproducts)",
         );
       }
-      // console.log("[MyCompanyPage]handleDeleteProducts:削除成功", res);
       setSelectedIds([]);
       fetchMyProducts();
     } catch (err) {

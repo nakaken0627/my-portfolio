@@ -74,17 +74,10 @@ export const CartContextProvider = ({
   };
 
   const fetchMyCart = async () => {
-    if (!myUser) return;
     try {
       const response = await fetch("http://localhost:3001/api/cart/mycart", {
-        method: "POST",
+        method: "GET",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_id: myUser.id,
-        }),
       });
       if (!response.ok) {
         throw new Error("[cart-context]fetchMyCartでエラー発生");
@@ -119,18 +112,12 @@ export const CartContextProvider = ({
     if (!cartId) return;
     try {
       const response = await fetch(
-        "http://localhost:3001/api/cart/getproducts",
+        `http://localhost:3001/api/cart/getproducts?cartId=${cartId.id}`,
         {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            cart_id: cartId.id,
-          }),
+          method: "GET",
         },
       );
+
       const data = await response.json();
       setCartProducts(data);
     } catch (err) {
@@ -141,15 +128,13 @@ export const CartContextProvider = ({
   const sendCartLatestData = async (productId: number, quantity: number) => {
     if (!cartId) return;
     try {
-      await fetch("http://localhost:3001/api/cart/updataproduct", {
-        method: "POST",
-        credentials: "include",
+      await fetch(`http://localhost:3001/api/cart/product/${productId}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           cart_id: cartId.id,
-          product_id: productId,
           quantity: quantity,
         }),
       });
@@ -162,8 +147,7 @@ export const CartContextProvider = ({
     if (!cartId) return;
     try {
       await fetch("http://localhost:3001/api/cart/deleteproduct", {
-        method: "POST",
-        credentials: "include",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
@@ -276,14 +260,8 @@ export const CartContextProvider = ({
   useEffect(() => {
     fetchMyUser();
     fetchProducts();
+    fetchMyCart();
   }, []);
-
-  useEffect(() => {
-    if (myUser) {
-      //確実にmyUserがある状態でないとバックエンド側でnot nullタイプなのにnullの可能性があるためエラーになる
-      fetchMyCart();
-    }
-  }, [myUser]); //myUserが貼ってからfetchMyCartを実行しないとエラーになる
 
   useEffect(() => {
     if (cartId) {

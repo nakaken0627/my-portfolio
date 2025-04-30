@@ -49,19 +49,12 @@ export const DisplayOrderList = () => {
   };
 
   const fetchMyOrderList = async () => {
-    if (!myCompany) return;
     try {
       const res = await fetch(
         "http://localhost:3001/api/company/getmyorderlist",
         {
-          method: "POST",
+          method: "GET",
           credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            company_id: myCompany.id,
-          }),
         },
       );
       const data: OrderList[] = await res.json();
@@ -98,8 +91,7 @@ export const DisplayOrderList = () => {
     if (!confirmedIds) return;
     try {
       await fetch("http://localhost:3001/api/company/confirmorder", {
-        method: "POST",
-        credentials: "include",
+        method: "PATCH",
         headers: {
           "Content-type": "application/json",
         },

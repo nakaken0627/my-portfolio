@@ -45,19 +45,12 @@ export const ConfirmedList = () => {
   };
 
   const fetchConfirmedOrderList = async () => {
-    if (!myCompany) return;
     try {
       const res = await fetch(
         "http://localhost:3001/api/company/confirmedorder",
         {
-          method: "POST",
+          method: "GET",
           credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            company_id: myCompany.id,
-          }),
         },
       );
       const data: ConfirmedList[] = await res.json();

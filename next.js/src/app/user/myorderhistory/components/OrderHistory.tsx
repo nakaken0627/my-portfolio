@@ -26,16 +26,9 @@ export const OrderHistory = () => {
   const [orders, setOrders] = useState<GroupedOrder>({});
 
   const fetchOrder = async () => {
-    if (!myUser) return;
     const res = await fetch("http://localhost:3001/api/user/orderhistory", {
-      method: "POST",
+      method: "GET",
       credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_id: myUser.id,
-      }),
     });
 
     const data: Order[] = await res.json();
