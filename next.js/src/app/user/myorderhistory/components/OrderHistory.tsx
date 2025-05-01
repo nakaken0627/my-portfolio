@@ -2,10 +2,22 @@
 
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/context/cart-context";
+import {
+  Box,
+  Container,
+  Divider,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 
 export const OrderHistory = () => {
   const cartContext = useContext(CartContext);
-  if (!cartContext) return;
+  if (!cartContext) return null;
   const { myUser } = cartContext;
 
   type Order = {
@@ -26,22 +38,25 @@ export const OrderHistory = () => {
   const [orders, setOrders] = useState<GroupedOrder>({});
 
   const fetchOrder = async () => {
-    const res = await fetch("http://localhost:3001/api/user/orderhistory", {
-      method: "GET",
-      credentials: "include",
-    });
+    try {
+      const res = await fetch("http://localhost:3001/api/user/orderhistory", {
+        method: "GET",
+        credentials: "include",
+      });
+      const data: Order[] = await res.json();
 
-    const data: Order[] = await res.json();
+      const groupedOrder = data.reduce((acc, item) => {
+        if (!acc[item.order_id]) {
+          acc[item.order_id] = [];
+        }
+        acc[item.order_id].push(item);
+        return acc;
+      }, {} as GroupedOrder);
 
-    const groupedOrder = data.reduce((acc, item) => {
-      if (!acc[item.order_id]) {
-        acc[item.order_id] = [];
-      }
-      acc[item.order_id].push(item);
-      return acc;
-    }, {} as GroupedOrder);
-
-    setOrders(groupedOrder);
+      setOrders(groupedOrder);
+    } catch (err) {
+      console.error("注文履歴の取得に失敗しました", err);
+    }
   };
 
   const orderTotalAmount = (order_id: number, data: Order[]) => {
@@ -56,46 +71,53 @@ export const OrderHistory = () => {
   }, [myUser]);
 
   return (
-    <div className="p-8">
-      <h1 className="mb-6 text-2xl font-bold">注文履歴</h1>
+    <Container maxWidth="md" sx={{ py: 6 }}>
+      <Typography variant="h4" gutterBottom>
+        注文履歴
+      </Typography>
 
       {Object.entries(orders).map(([orderId, items]) => (
-        <div key={orderId} className="mb-8 rounded-lg border p-6 shadow">
-          <h2 className="mb-4 text-xl font-semibold">注文ID: {orderId}</h2>
-          <h2 className="mb-4 text-xl font-semibold">
-            合計金額:¥
-            {orderTotalAmount(Number(orderId), items).toLocaleString()}
-          </h2>
-          <table className="w-full border-collapse text-left">
-            <thead>
-              <tr>
-                <th className="border-b p-2">商品番号</th>
-                <th className="border-b p-2">商品名</th>
-                <th className="border-b p-2">価格</th>
-                <th className="border-b p-2">数量</th>
-                <th className="border-b p-2">金額</th>
-                <th className="border-b p-2">発注先</th>
-              </tr>
-            </thead>
-            <tbody>
+        <Paper key={orderId} elevation={3} sx={{ p: 3, mb: 4 }}>
+          <Box mb={2}>
+            <Typography variant="h6">注文ID: {orderId}</Typography>
+            <Typography variant="h6" color="primary">
+              合計金額: ¥
+              {orderTotalAmount(Number(orderId), items).toLocaleString()}
+            </Typography>
+          </Box>
+
+          <Divider sx={{ mb: 2 }} />
+
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>商品番号</TableCell>
+                <TableCell>商品名</TableCell>
+                <TableCell>価格</TableCell>
+                <TableCell>数量</TableCell>
+                <TableCell>金額</TableCell>
+                <TableCell>発注先</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {items.map((item) => (
-                <tr key={item.cart_id + "-" + item.model_number}>
-                  <td className="border-b p-2">{item.model_number}</td>
-                  <td className="border-b p-2">{item.product_name}</td>
-                  <td className="border-b p-2">
+                <TableRow key={`${item.cart_id}-${item.model_number}`} hover>
+                  <TableCell>{item.model_number}</TableCell>
+                  <TableCell>{item.product_name}</TableCell>
+                  <TableCell>
                     ¥{Math.round(item.price).toLocaleString()}
-                  </td>
-                  <td className="border-b p-2">{item.quantity}</td>
-                  <td className="border-b p-2">
+                  </TableCell>
+                  <TableCell>{item.quantity}</TableCell>
+                  <TableCell>
                     ¥{Math.round(item.price * item.quantity).toLocaleString()}
-                  </td>
-                  <td className="border-b p-2">{item.company_name}</td>
-                </tr>
+                  </TableCell>
+                  <TableCell>{item.company_name}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </Paper>
       ))}
-    </div>
+    </Container>
   );
 };

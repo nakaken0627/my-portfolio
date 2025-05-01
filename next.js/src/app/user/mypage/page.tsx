@@ -1,14 +1,14 @@
+import { Box } from "@mui/material";
+
 import { UserLayout } from "../UserLayout";
 import ProductsList from "./components/ProductsList";
 
 export default function MyUserPage() {
   return (
-    <div>
-      <UserLayout>
-        <>ヘッダー</>
-        <hr />
+    <UserLayout>
+      <Box sx={{ p: 2 }}>
         <ProductsList />
-      </UserLayout>
-    </div>
+      </Box>
+    </UserLayout>
   );
 }

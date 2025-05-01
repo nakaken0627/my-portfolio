@@ -29,7 +29,7 @@ const navLinks = [
 
 export const UserNav = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.up("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -48,27 +48,20 @@ export const UserNav = () => {
                 gap: 2,
               }}
             >
-              <IconButton>
-                <MenuIcon onClick={toggleDrawer} />
+              <IconButton
+                color="inherit"
+                edge="start"
+                onClick={toggleDrawer}
+                sx={{ mr: 2 }}
+              >
+                <MenuIcon />
               </IconButton>
               <Typography variant="h6" sx={{ mr: 2, cursor: "pointer" }}>
                 <Link href="/user/mypage">User Panel</Link>
               </Typography>
               <GetUserInfo />
             </Box>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              {navLinks.map((link) => (
-                <Button
-                  key={link.href}
-                  component={Link}
-                  href={link.href}
-                  color="inherit"
-                >
-                  {link.label}
-                </Button>
-              ))}
-              <SignoutFunc />
-            </Box>
+            <SignoutFunc />
           </Toolbar>
         ) : (
           <Toolbar>
