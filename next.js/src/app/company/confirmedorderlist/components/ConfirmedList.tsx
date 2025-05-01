@@ -2,6 +2,20 @@
 
 import { useContext, useEffect, useState } from "react";
 import { CompanyContext } from "@/context/company-context";
+import {
+  Box,
+  Card,
+  CardContent,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableFooter,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 
 type ConfirmedList = {
   id: number;
@@ -56,60 +70,97 @@ export const ConfirmedList = () => {
   }, [myCompany]);
 
   return (
-    <div>
+    <Box sx={{ px: { xs: 1, sm: 2 }, py: 2 }}>
       {Object.entries(groupingList).map(([order_id, items]) => {
         const total = items.reduce(
           (sum, item) => sum + item.price * item.quantity,
           0,
         );
+
         return (
-          <div
+          <Card
             key={order_id}
-            className="mb-8 rounded-xl border bg-white shadow-sm"
+            variant="outlined"
+            sx={{
+              mb: 4,
+              boxShadow: 3,
+              borderRadius: 2,
+              overflowX: "auto",
+            }}
           >
-            <div className="flex justify-between border-b p-4">
-              <span className="font-semibold">注文ID: {order_id}</span>
-              <span className="text-sm text-gray-600">
-                顧客: {items[0].user_name}
-              </span>
-            </div>
-            <table className="w-full text-left text-sm">
-              <thead className="bg-gray-100 text-gray-700">
-                <tr>
-                  <th className="px-4 py-2">商品名</th>
-                  <th className="px-4 py-2">型番</th>
-                  <th className="px-4 py-2">数量</th>
-                  <th className="px-4 py-2">単価</th>
-                  <th className="px-4 py-2">小計</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item) => (
-                  <tr key={item.id} className="border-t">
-                    <td className="px-4 py-2">{item.product_name}</td>
-                    <td className="px-4 py-2">{item.model_number}</td>
-                    <td className="px-4 py-2">{item.quantity}</td>
-                    <td className="px-4 py-2">
-                      ¥{item.price.toLocaleString()}
-                    </td>
-                    <td className="px-4 py-2">
-                      ¥{(item.price * item.quantity).toLocaleString()}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <tr className="bg-gray-50 font-semibold">
-                  <td colSpan={4} className="px-4 py-2 text-right">
-                    合計
-                  </td>
-                  <td className="px-4 py-2">¥{total.toLocaleString()}</td>
-                </tr>
-              </tfoot>
-            </table>
-          </div>
+            <CardContent>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  mb: 2,
+                }}
+              >
+                <Typography variant="subtitle1" fontWeight="bold">
+                  注文ID: {order_id}
+                </Typography>
+                <Typography variant="subtitle2" color="text.secondary">
+                  顧客: {items[0].user_name}
+                </Typography>
+              </Box>
+
+              <TableContainer component={Paper} variant="outlined">
+                <Table size="small">
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                      <TableCell>商品名</TableCell>
+                      <TableCell>型番</TableCell>
+                      <TableCell>数量</TableCell>
+                      <TableCell>単価</TableCell>
+                      <TableCell>小計</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {items.map((item, index) => (
+                      <TableRow
+                        key={item.id}
+                        sx={{
+                          backgroundColor:
+                            index % 2 === 0 ? "#fafafa" : "white",
+                        }}
+                      >
+                        <TableCell>{item.product_name}</TableCell>
+                        <TableCell>{item.model_number}</TableCell>
+                        <TableCell>{item.quantity}</TableCell>
+                        <TableCell>¥{item.price.toLocaleString()}</TableCell>
+                        <TableCell sx={{ fontWeight: "bold", color: "green" }}>
+                          ¥{(item.price * item.quantity).toLocaleString()}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TableCell
+                        colSpan={4}
+                        align="right"
+                        sx={{ fontWeight: "bold", backgroundColor: "#f0f0f0" }}
+                      >
+                        合計
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          fontWeight: "bold",
+                          color: "#d32f2f",
+                          backgroundColor: "#f0f0f0",
+                        }}
+                      >
+                        ¥{total.toLocaleString()}
+                      </TableCell>
+                    </TableRow>
+                  </TableFooter>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Card>
         );
       })}
-    </div>
+    </Box>
   );
 };

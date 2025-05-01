@@ -2,7 +2,12 @@
 
 import { useContext } from "react";
 import { CompanyContext } from "@/context/company-context";
-import { Typography } from "@mui/material";
+import {
+  ListItemText,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 
 export const GetCompanyInfo = () => {
   const companyContext = useContext(CompanyContext);
@@ -12,7 +17,7 @@ export const GetCompanyInfo = () => {
   if (!myCompany) return null;
 
   return (
-    <Typography variant="h6" sx={{ mb: 2 }}>
+    <Typography variant="body1" sx={{ mx: 2 }}>
       ようこそ、{myCompany.name}様
     </Typography>
   );

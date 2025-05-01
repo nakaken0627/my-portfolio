@@ -2,6 +2,22 @@
 
 import { useContext, useEffect, useState } from "react";
 import { CompanyContext } from "@/context/company-context";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Checkbox,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 
 type OrderList = {
   id: number;
@@ -21,9 +37,7 @@ type GroupedOrderList = {
 
 export const DisplayOrderList = () => {
   const companyContext = useContext(CompanyContext);
-  if (!companyContext) {
-    return <div>Loading...</div>;
-  }
+  if (!companyContext) return <Typography>Loading...</Typography>;
 
   const { myCompany } = companyContext;
   const [orderList, setOrderList] = useState<OrderList[]>([]);
@@ -43,10 +57,9 @@ export const DisplayOrderList = () => {
       );
       const data: OrderList[] = await res.json();
       setOrderList(data);
+
       const groupedOrders = data.reduce((acc, item) => {
-        if (!acc[item.order_id]) {
-          acc[item.order_id] = [];
-        }
+        if (!acc[item.order_id]) acc[item.order_id] = [];
         acc[item.order_id].push(item);
         return acc;
       }, {} as GroupedOrderList);
@@ -56,19 +69,15 @@ export const DisplayOrderList = () => {
     }
   };
 
-  const orderTotalAmount = (order_id: number, items: OrderList[]) => {
-    const orderData = items.filter((item) => item.order_id === order_id);
-    return orderData.reduce((total, product) => {
-      return total + product.price * product.quantity;
-    }, 0);
-  };
+  const orderTotalAmount = (order_id: number, items: OrderList[]) =>
+    items
+      .filter((item) => item.order_id === order_id)
+      .reduce((total, product) => total + product.price * product.quantity, 0);
 
   const handleCheckBoxStatus = (id: number) => {
-    setConfirmedIds((prev: number[]): number[] => {
-      return prev.includes(id)
-        ? prev.filter((item) => item !== id)
-        : [...prev, id];
-    });
+    setConfirmedIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
+    );
   };
 
   const handleClickChangeStatus = async (confirmedIds: number[]) => {
@@ -76,12 +85,8 @@ export const DisplayOrderList = () => {
     try {
       await fetch("http://localhost:3001/api/company/confirmorder", {
         method: "PATCH",
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          confirmedIds: confirmedIds,
-        }),
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({ confirmedIds }),
       });
       setConfirmedIds([]);
       fetchMyOrderList();
@@ -90,7 +95,7 @@ export const DisplayOrderList = () => {
     }
   };
 
-  const handlePushAllIds = async (orderList: OrderList[]) => {
+  const handlePushAllIds = () => {
     if (confirmedIds.length > 0) {
       setConfirmedIds([]);
     } else {
@@ -104,70 +109,87 @@ export const DisplayOrderList = () => {
   }, [myCompany]);
 
   return (
-    <div>
-      <div>
-        <button onClick={() => handleClickChangeStatus(confirmedIds)}>
-          受注確定
-        </button>
-        <button onClick={() => handlePushAllIds(orderList)}>一括選択</button>
-      </div>
+    <Box sx={{ p: 2 }}>
+      <Grid container spacing={2} sx={{ mb: 3 }}>
+        <Grid>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => handleClickChangeStatus(confirmedIds)}
+          >
+            受注確定
+          </Button>
+        </Grid>
+        <Grid>
+          <Button variant="outlined" onClick={() => handlePushAllIds()}>
+            一括選択
+          </Button>
+        </Grid>
+      </Grid>
+
       {Object.entries(groupedOrderList).map(([order_id, items]) => {
         const totalAmount = orderTotalAmount(Number(order_id), items);
+
         return (
-          <div
+          <Card
             key={order_id}
-            className={
-              totalAmount >= 50000
-                ? "mb-8 rounded-lg border bg-red-500 p-6 shadow"
-                : "mb-8 rounded-lg border p-6 shadow"
-            }
+            sx={{
+              mb: 4,
+              border: totalAmount >= 50000 ? "2px solid red" : "1px solid #ccc",
+              backgroundColor: totalAmount >= 50000 ? "#fff5f5" : "white",
+            }}
           >
-            <h2 className="mb-4 text-xl font-semibold">
-              オーダーID: {order_id}
-            </h2>
-            <h2 className="mb-4 text-xl font-semibold">
-              合計金額:¥
-              {totalAmount.toLocaleString()}
-            </h2>
-            <table className="w-full border-collapse text-left">
-              <thead>
-                <tr>
-                  <th className="border-b p-2"></th>
-                  <th className="border-b p-2">商品番号</th>
-                  <th className="border-b p-2">商品名</th>
-                  <th className="border-b p-2">価格</th>
-                  <th className="border-b p-2">数量</th>
-                  <th className="border-b p-2">金額</th>
-                  <th className="border-b p-2">発注者</th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item) => (
-                  <tr key={item.order_id + "-" + item.product_id}>
-                    <td className="border-b p-2">
-                      <input
-                        type="checkbox"
-                        checked={confirmedIds.includes(item.id)}
-                        onChange={() => handleCheckBoxStatus(item.id)}
-                      />
-                    </td>
-                    <td className="border-b p-2">{item.model_number}</td>
-                    <td className="border-b p-2">{item.product_name}</td>
-                    <td className="border-b p-2">
-                      ¥{Math.round(item.price).toLocaleString()}
-                    </td>
-                    <td className="border-b p-2">{item.quantity}</td>
-                    <td className="border-b p-2">
-                      ¥{Math.round(item.price * item.quantity).toLocaleString()}
-                    </td>
-                    <td className="border-b p-2">{item.user_name}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                オーダーID: {order_id}
+              </Typography>
+              <Typography variant="subtitle1" gutterBottom>
+                合計金額: ¥{totalAmount.toLocaleString()}
+              </Typography>
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell />
+                      <TableCell>商品番号</TableCell>
+                      <TableCell>商品名</TableCell>
+                      <TableCell>価格</TableCell>
+                      <TableCell>数量</TableCell>
+                      <TableCell>金額</TableCell>
+                      <TableCell>発注者</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {items.map((item) => (
+                      <TableRow key={`${item.order_id}-${item.product_id}`}>
+                        <TableCell>
+                          <Checkbox
+                            checked={confirmedIds.includes(item.id)}
+                            onChange={() => handleCheckBoxStatus(item.id)}
+                          />
+                        </TableCell>
+                        <TableCell>{item.model_number}</TableCell>
+                        <TableCell>{item.product_name}</TableCell>
+                        <TableCell>
+                          ¥{Math.round(item.price).toLocaleString()}
+                        </TableCell>
+                        <TableCell>{item.quantity}</TableCell>
+                        <TableCell>
+                          ¥
+                          {Math.round(
+                            item.price * item.quantity,
+                          ).toLocaleString()}
+                        </TableCell>
+                        <TableCell>{item.user_name}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Card>
         );
       })}
-    </div>
+    </Box>
   );
 };

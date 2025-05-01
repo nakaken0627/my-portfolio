@@ -2,41 +2,42 @@
 
 import { useContext, useState } from "react";
 import { CompanyContext } from "@/context/company-context";
+import {
+  Button,
+  Checkbox,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 
 export const ProductList = () => {
   const companyContext = useContext(CompanyContext);
-  if (!companyContext) return <div>Loading...</div>;
+  if (!companyContext) return <Typography>Loading...</Typography>;
 
   const { myProducts, fetchMyProducts } = companyContext;
-
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
-  const handleCheckBoxStatus = (ProductId: number) => {
+  const handleCheckBoxStatus = (productId: number) => {
     setSelectedIds((prev) =>
-      prev.includes(ProductId)
-        ? prev.filter((item) => item !== ProductId)
-        : [...prev, ProductId],
+      prev.includes(productId)
+        ? prev.filter((id) => id !== productId)
+        : [...prev, productId],
     );
   };
 
   const handleDeleteProducts = async () => {
     try {
-      const res = await fetch(
-        "http://localhost:3001/api/company/deleteproducts",
-        {
-          method: "DELETE",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            productsIds: selectedIds,
-          }),
-        },
-      );
-
-      const data = await res.json();
-      if (!data) throw new Error();
+      await fetch("http://localhost:3001/api/company/deleteproducts", {
+        method: "DELETE",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productsIds: selectedIds }),
+      });
 
       setSelectedIds([]);
       fetchMyProducts();
@@ -46,38 +47,47 @@ export const ProductList = () => {
   };
 
   return (
-    <div>
-      <h2>【商品一覧】</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>商品名</th>
-            <th>型番</th>
-            <th>価格</th>
-            <th>説明</th>
-          </tr>
-        </thead>
-        <tbody>
-          {myProducts.map((product) => {
-            return (
-              <tr key={product.id}>
-                <td>
-                  <input
-                    type="checkbox"
+    <>
+      <Typography variant="h6" gutterBottom>
+        商品一覧
+      </Typography>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>選択</TableCell>
+              <TableCell>商品名</TableCell>
+              <TableCell>型番</TableCell>
+              <TableCell>価格</TableCell>
+              <TableCell>説明</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {myProducts.map((product) => (
+              <TableRow key={product.id}>
+                <TableCell>
+                  <Checkbox
                     checked={selectedIds.includes(product.id)}
                     onChange={() => handleCheckBoxStatus(product.id)}
                   />
-                </td>
-                <td>{product.name}</td>
-                <td>{product.model_number}</td>
-                <td>{Math.round(product.price)}</td>
-                <td>{product.description}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <button onClick={handleDeleteProducts}>削除ボタン</button>
-    </div>
+                </TableCell>
+                <TableCell>{product.name}</TableCell>
+                <TableCell>{product.model_number}</TableCell>
+                <TableCell>{Math.round(product.price)}</TableCell>
+                <TableCell>{product.description}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Button
+        variant="contained"
+        color="error"
+        onClick={handleDeleteProducts}
+        sx={{ mt: 2 }}
+      >
+        選択商品を削除
+      </Button>
+    </>
   );
 };

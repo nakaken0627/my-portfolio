@@ -12,7 +12,7 @@ export default function LogoutFunc() {
         credentials: "include",
       });
       console.log("[LogoutFunc]ログアウトに成功しました", response);
-      router.push("/UserLoginPage");
+      router.push("/user/login");
     } catch (err) {
       console.error("サーバエラー", err);
     }

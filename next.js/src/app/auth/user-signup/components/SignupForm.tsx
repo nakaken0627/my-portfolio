@@ -1,9 +1,19 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {
+  Alert,
+  Box,
+  Button,
+  Container,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 
-export default function UserSignupFrom() {
+export const SignupForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmedPassword, setConfirmedPassword] = useState("");
@@ -18,6 +28,7 @@ export default function UserSignupFrom() {
     if (password !== confirmedPassword) {
       return setError("パスワードが一致しません");
     }
+
     try {
       const response = await fetch("http://localhost:3001/auth/user/signup", {
         method: "POST",
@@ -31,14 +42,11 @@ export default function UserSignupFrom() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log("[UserSignupPage]handleSubmit:", data);
         router.push("/user/mypage");
       } else {
-        console.log("登録済みです");
         setError(data.message || "サインアップに失敗しました");
       }
     } catch (err) {
-      console.error("サインアップエラー:", err);
       setError("ネットワークエラー");
     }
 
@@ -48,47 +56,68 @@ export default function UserSignupFrom() {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        {error && <a style={{ color: "red" }}>{error}</a>}
-        <div>
-          <label htmlFor="username">ユーザーID</label>
-          <input
-            type="text"
+    <Container maxWidth="sm">
+      <Paper elevation={4} sx={{ padding: 4, marginTop: 8 }}>
+        <Typography variant="h5" component="h1" gutterBottom align="center">
+          ユーザー新規登録
+        </Typography>
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
+
+        <Box component="form" onSubmit={handleSubmit} noValidate>
+          <TextField
+            margin="normal"
+            fullWidth
+            required
             id="username"
-            name="username"
+            label="ユーザーID"
             value={username}
-            placeholder="ユーザーID"
             onChange={(e) => setUsername(e.target.value)}
-            required
           />
-        </div>
-        <div>
-          <label htmlFor="password">パスワード</label>
-          <input
-            type="text"
+          <TextField
+            margin="normal"
+            fullWidth
+            required
             id="password"
-            name="password"
+            label="パスワード"
+            type="password"
             value={password}
-            placeholder="パスワード"
             onChange={(e) => setPassword(e.target.value)}
-            required
           />
-        </div>
-        <div>
-          <label htmlFor="confirmedPassword">確認用パスワード</label>
-          <input
-            type="text"
+          <TextField
+            margin="normal"
+            fullWidth
+            required
             id="confirmedPassword"
-            name="confirmedPassword"
+            label="パスワード（確認用）"
+            type="password"
             value={confirmedPassword}
-            placeholder="確認用パスワード"
             onChange={(e) => setConfirmedPassword(e.target.value)}
-            required
           />
-        </div>
-        <button type="submit">登録</button>
-      </form>
-    </>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            登録
+          </Button>
+        </Box>
+
+        <Typography variant="body2" align="center">
+          すでにアカウントをお持ちの方は{" "}
+          <Link
+            href="/auth/user-signin"
+            style={{ color: "#1976d2", textDecoration: "none" }}
+          >
+            ログインはこちら
+          </Link>
+        </Typography>
+      </Paper>
+    </Container>
   );
-}
+};
