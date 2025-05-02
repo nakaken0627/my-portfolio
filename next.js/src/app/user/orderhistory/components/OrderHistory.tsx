@@ -71,7 +71,7 @@ export const OrderHistory = () => {
   }, [myUser]);
 
   return (
-    <Container maxWidth="md" sx={{ py: 6 }}>
+    <Container maxWidth="md" sx={{ py: 1 }}>
       <Typography variant="h4" gutterBottom>
         注文履歴
       </Typography>

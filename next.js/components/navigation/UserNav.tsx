@@ -37,7 +37,7 @@ export const UserNav = () => {
 
   return (
     <>
-      <AppBar sx={{ backgroundColor: "#5cd81d" }}>
+      <AppBar position="sticky" sx={{ backgroundColor: "#5cd81d" }}>
         {isMobile ? (
           <Toolbar>
             <Box

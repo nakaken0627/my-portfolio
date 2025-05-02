@@ -32,9 +32,9 @@ export const CompanyNav = () => {
   };
 
   const navLinks = [
-    { href: "/company/mypage", label: "Mypage" },
-    { href: "/company/orderlist", label: "Order List" },
+    { href: "/company/orderlist", label: "Mypage" },
     { href: "/company/confirmedorderlist", label: "Confirmed Orders" },
+    { href: "/company/productlist", label: "Product List" },
   ];
 
   return (

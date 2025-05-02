@@ -67,9 +67,9 @@ export const CurrentCart = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 6 }}>
+    <Container maxWidth="md" sx={{ py: 1 }}>
       <Typography variant="h4" gutterBottom>
-        ショッピングカート
+        カート
       </Typography>
       <Paper elevation={3} sx={{ p: 3 }}>
         {cartProducts.length === 0 ? (

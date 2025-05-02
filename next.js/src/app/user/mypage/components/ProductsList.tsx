@@ -14,7 +14,7 @@ export default function ProductsList() {
   const { productList } = cartContext;
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 8, py: 6 }}>
+    <Container maxWidth="lg" sx={{ py: 1 }}>
       <Typography variant="h4" gutterBottom>
         商品一覧
       </Typography>

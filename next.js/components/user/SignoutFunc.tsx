@@ -14,7 +14,7 @@ export const SignoutFunc = () => {
       });
       if (!res.ok) throw new Error("ログアウト失敗");
 
-      router.push("/user/login");
+      router.push("/auth/user-signin");
     } catch (err) {
       console.error(err);
     }
