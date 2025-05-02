@@ -38,7 +38,7 @@ export const CompanyNav = () => {
   ];
 
   return (
-    <>
+    <div>
       {/* FragmentにするとAppBarのpositionが適用されるようになる */}
       <AppBar>
         {isMobile ? (
@@ -132,6 +132,6 @@ export const CompanyNav = () => {
           </List>
         </Box>
       </Drawer>
-    </>
+    </div>
   );
 };
