@@ -24,7 +24,7 @@ import { SignoutFunc } from "components/user/SignoutFunc";
 const navLinks = [
   { href: "/user/mypage", label: "Mypage" },
   { href: "/user/mycart", label: "Mycart" },
-  { href: "/user/myorderhistory", label: "Myorderhistory" },
+  { href: "/user/orderhistory", label: "Myorderhistory" },
 ];
 
 export const UserNav = () => {

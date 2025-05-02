@@ -89,7 +89,7 @@ export const CurrentCart = () => {
                   spacing={2}
                   sx={{ backgroundColor: "#E3F2FD", p: 2, borderRadius: 2 }}
                 >
-                  <Grid size={{ xs: 12, sm: 4 }}>
+                  <Grid size={{ xs: 12, sm: 3 }}>
                     <Typography>{product.product_name}</Typography>
                   </Grid>
                   <Grid size={{ xs: 12, sm: 2 }}>
@@ -97,7 +97,7 @@ export const CurrentCart = () => {
                       ¥{Math.round(product.price).toLocaleString()}
                     </Typography>
                   </Grid>
-                  <Grid size={{ xs: 12, sm: 3 }}>
+                  <Grid size={{ xs: 12, sm: 4 }}>
                     <Box display="flex" alignItems="center">
                       <Button onClick={() => reduceProduct(product.id)}>
                         -
@@ -112,13 +112,25 @@ export const CurrentCart = () => {
                         }
                         type="number"
                         size="small"
-                        sx={{ mx: 1, width: 60 }}
-                        inputProps={{ min: 1 }}
+                        sx={{
+                          width: 60,
+                          "& input[type=number]": {
+                            MozAppearance: "textfield",
+                          },
+                          "& input[type=number]::-webkit-inner-spin-button": {
+                            WebkitAppearance: "none",
+                            margin: 0,
+                          },
+                          "& input[type=number]::-webkit-outer-spin-button": {
+                            WebkitAppearance: "none",
+                            margin: 0,
+                          },
+                        }}
                       />
                       <Button onClick={() => addProduct(product.id)}>+</Button>
                     </Box>
                   </Grid>
-                  <Grid size={{ xs: 12, sm: 3 }}>
+                  <Grid size={{ xs: 12, sm: 2 }}>
                     <Typography>
                       ¥{calcProductTotalAmount(product.id).toLocaleString()}
                     </Typography>

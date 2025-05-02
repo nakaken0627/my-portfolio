@@ -76,48 +76,50 @@ export const OrderHistory = () => {
         注文履歴
       </Typography>
 
-      {Object.entries(orders).map(([orderId, items]) => (
-        <Paper key={orderId} elevation={3} sx={{ p: 3, mb: 4 }}>
-          <Box mb={2}>
-            <Typography variant="h6">注文ID: {orderId}</Typography>
-            <Typography variant="h6" color="primary">
-              合計金額: ¥
-              {orderTotalAmount(Number(orderId), items).toLocaleString()}
-            </Typography>
-          </Box>
+      {Object.entries(orders)
+        .sort((a, b) => Number(b[0]) - Number(a[0]))
+        .map(([orderId, items]) => (
+          <Paper key={orderId} elevation={3} sx={{ p: 3, mb: 4 }}>
+            <Box mb={2}>
+              <Typography variant="h6">注文ID: {orderId}</Typography>
+              <Typography variant="h6" color="primary">
+                合計金額: ¥
+                {orderTotalAmount(Number(orderId), items).toLocaleString()}
+              </Typography>
+            </Box>
 
-          <Divider sx={{ mb: 2 }} />
+            <Divider sx={{ mb: 2 }} />
 
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>商品番号</TableCell>
-                <TableCell>商品名</TableCell>
-                <TableCell>価格</TableCell>
-                <TableCell>数量</TableCell>
-                <TableCell>金額</TableCell>
-                <TableCell>発注先</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {items.map((item) => (
-                <TableRow key={`${item.cart_id}-${item.model_number}`} hover>
-                  <TableCell>{item.model_number}</TableCell>
-                  <TableCell>{item.product_name}</TableCell>
-                  <TableCell>
-                    ¥{Math.round(item.price).toLocaleString()}
-                  </TableCell>
-                  <TableCell>{item.quantity}</TableCell>
-                  <TableCell>
-                    ¥{Math.round(item.price * item.quantity).toLocaleString()}
-                  </TableCell>
-                  <TableCell>{item.company_name}</TableCell>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>商品番号</TableCell>
+                  <TableCell>商品名</TableCell>
+                  <TableCell>価格</TableCell>
+                  <TableCell>数量</TableCell>
+                  <TableCell>金額</TableCell>
+                  <TableCell>発注先</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Paper>
-      ))}
+              </TableHead>
+              <TableBody>
+                {items.map((item) => (
+                  <TableRow key={`${item.cart_id}-${item.model_number}`} hover>
+                    <TableCell>{item.model_number}</TableCell>
+                    <TableCell>{item.product_name}</TableCell>
+                    <TableCell>
+                      ¥{Math.round(item.price).toLocaleString()}
+                    </TableCell>
+                    <TableCell>{item.quantity}</TableCell>
+                    <TableCell>
+                      ¥{Math.round(item.price * item.quantity).toLocaleString()}
+                    </TableCell>
+                    <TableCell>{item.company_name}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        ))}
     </Container>
   );
 };
