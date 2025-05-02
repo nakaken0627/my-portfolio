@@ -8,6 +8,7 @@ import {
   Card,
   CardContent,
   Checkbox,
+  Container,
   Grid,
   Paper,
   Table,
@@ -109,7 +110,10 @@ export const DisplayOrderList = () => {
   }, [myCompany]);
 
   return (
-    <Box sx={{ p: 2 }}>
+    <Container maxWidth="lg" sx={{ py: 1 }}>
+      <Typography variant="h4" gutterBottom>
+        注文一覧
+      </Typography>
       <Grid container spacing={2} sx={{ mb: 3 }}>
         <Grid>
           <Button
@@ -190,6 +194,6 @@ export const DisplayOrderList = () => {
           </Card>
         );
       })}
-    </Box>
+    </Container>
   );
 };

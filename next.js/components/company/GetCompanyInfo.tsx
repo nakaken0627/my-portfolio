@@ -17,7 +17,7 @@ export const GetCompanyInfo = () => {
   if (!myCompany) return null;
 
   return (
-    <Typography variant="body1" sx={{ mx: 2 }}>
+    <Typography variant="body1" sx={{ mx: 2, borderBottom: "1px solid" }}>
       ようこそ、{myCompany.name}様
     </Typography>
   );

@@ -19,9 +19,9 @@ import {
 import { ListItemButton } from "node_modules/@mui/material";
 
 const navLinks = [
-  { href: "/", label: "TopPage" },
-  { href: "/auth/user-signin", label: "UserPage" },
-  { href: "/auth/company-signin", label: "CompanyPage" },
+  { href: "/", label: "TOP" },
+  { href: "/auth/user-signin", label: "ユーザー様用" },
+  { href: "/auth/company-signin", label: "販売企業様" },
 ];
 
 export const TopNav = () => {

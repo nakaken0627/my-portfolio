@@ -32,14 +32,13 @@ export const CompanyNav = () => {
   };
 
   const navLinks = [
-    { href: "/company/orderlist", label: "Mypage" },
+    { href: "/company/mypage", label: "Mypage" },
     { href: "/company/confirmedorderlist", label: "Confirmed Orders" },
     { href: "/company/productlist", label: "Product List" },
   ];
 
   return (
-    <div>
-      {/* FragmentにするとAppBarのpositionが適用されるようになる */}
+    <Box>
       <AppBar>
         {isMobile ? (
           <Toolbar
@@ -132,6 +131,6 @@ export const CompanyNav = () => {
           </List>
         </Box>
       </Drawer>
-    </div>
+    </Box>
   );
 };

@@ -1,4 +1,5 @@
 import { CompanyContextProvider } from "@/context/company-context";
+import { Toolbar } from "@mui/material";
 import { CompanyNav } from "components/navigation/CompanyNav";
 
 export const CompanyLayout = ({ children }: { children: React.ReactNode }) => {
@@ -6,7 +7,7 @@ export const CompanyLayout = ({ children }: { children: React.ReactNode }) => {
     <div>
       <CompanyContextProvider>
         <CompanyNav />
-        <hr />
+        <Toolbar />
         <main>{children}</main>
       </CompanyContextProvider>
     </div>

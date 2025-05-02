@@ -89,15 +89,20 @@ export const CurrentCart = () => {
                   spacing={2}
                   sx={{ backgroundColor: "#E3F2FD", p: 2, borderRadius: 2 }}
                 >
+                  <Grid size={{ xs: 12, sm: 2 }}>
+                    <Typography sx={{ ml: 2 }}>
+                      {product.model_number}
+                    </Typography>
+                  </Grid>
                   <Grid size={{ xs: 12, sm: 3 }}>
                     <Typography>{product.product_name}</Typography>
                   </Grid>
-                  <Grid size={{ xs: 12, sm: 2 }}>
+                  <Grid size={{ xs: 12, sm: 1 }}>
                     <Typography>
                       ¥{Math.round(product.price).toLocaleString()}
                     </Typography>
                   </Grid>
-                  <Grid size={{ xs: 12, sm: 4 }}>
+                  <Grid size={{ xs: 12, sm: 3 }}>
                     <Box display="flex" alignItems="center">
                       <Button onClick={() => reduceProduct(product.id)}>
                         -
@@ -113,7 +118,11 @@ export const CurrentCart = () => {
                         type="number"
                         size="small"
                         sx={{
-                          width: 60,
+                          width: 80,
+                          "& input": {
+                            textAlign: "center",
+                            padding: 0,
+                          },
                           "& input[type=number]": {
                             MozAppearance: "textfield",
                           },
@@ -124,6 +133,15 @@ export const CurrentCart = () => {
                           "& input[type=number]::-webkit-outer-spin-button": {
                             WebkitAppearance: "none",
                             margin: 0,
+                          },
+                        }}
+                        slotProps={{
+                          input: {
+                            style: {
+                              height: "30px",
+                              padding: 0,
+                              lineHeight: "30px",
+                            },
                           },
                         }}
                       />
@@ -138,6 +156,7 @@ export const CurrentCart = () => {
                   <Grid size={{ xs: 12, sm: 1 }}>
                     <Button
                       color="error"
+                      sx={{ mr: 2 }}
                       onClick={() => deleteProduct(product.id)}
                     >
                       削除

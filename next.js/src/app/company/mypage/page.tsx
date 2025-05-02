@@ -1,10 +1,14 @@
+import { Box } from "@mui/material";
+
 import { CompanyLayout } from "../CompanyLayout";
 import { DisplayOrderList } from "./components/DisplayOrderList";
 
 export const OrderList = () => {
   return (
     <CompanyLayout>
-      <DisplayOrderList />
+      <Box sx={{ p: 2 }}>
+        <DisplayOrderList />
+      </Box>
     </CompanyLayout>
   );
 };

@@ -3,8 +3,10 @@
 import { useContext, useState } from "react";
 import { CompanyContext } from "@/context/company-context";
 import {
+  Box,
   Button,
   Checkbox,
+  Container,
   Paper,
   Table,
   TableBody,
@@ -47,8 +49,8 @@ export const ProductList = () => {
   };
 
   return (
-    <>
-      <Typography variant="h6" gutterBottom>
+    <Container maxWidth="lg" sx={{ py: 1 }}>
+      <Typography variant="h4" gutterBottom>
         商品一覧
       </Typography>
       <TableContainer component={Paper}>
@@ -88,6 +90,6 @@ export const ProductList = () => {
       >
         選択商品を削除
       </Button>
-    </>
+    </Container>
   );
 };

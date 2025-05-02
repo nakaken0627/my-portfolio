@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import {
   AppBar,
   Box,
@@ -36,8 +37,8 @@ export const UserNav = () => {
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
 
   return (
-    <>
-      <AppBar position="sticky" sx={{ backgroundColor: "#5cd81d" }}>
+    <Box>
+      <AppBar sx={{ backgroundColor: "#5cd81d" }}>
         {isMobile ? (
           <Toolbar>
             <Box
@@ -61,6 +62,14 @@ export const UserNav = () => {
               </Typography>
               <GetUserInfo />
             </Box>
+            <IconButton
+              color="inherit"
+              edge="start"
+              href="/user/mycart"
+              sx={{ mr: 2 }}
+            >
+              <ShoppingCartIcon />
+            </IconButton>
             <SignoutFunc />
           </Toolbar>
         ) : (
@@ -108,6 +117,6 @@ export const UserNav = () => {
           </List>
         </Box>
       </Drawer>
-    </>
+    </Box>
   );
 };
