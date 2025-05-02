@@ -5,8 +5,6 @@ import { ThemeRegistry } from "../../components/ThemeRegistry";
 
 import "./globals.css";
 
-// import ScrollReset from "components/ScrollReset";
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -32,7 +30,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-amber-50 antialiased`}
       >
-        {/* <ScrollReset /> */}
         <ThemeRegistry>{children}</ThemeRegistry>
       </body>
     </html>

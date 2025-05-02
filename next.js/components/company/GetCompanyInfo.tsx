@@ -2,12 +2,7 @@
 
 import { useContext } from "react";
 import { CompanyContext } from "@/context/company-context";
-import {
-  ListItemText,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Typography } from "@mui/material";
 
 export const GetCompanyInfo = () => {
   const companyContext = useContext(CompanyContext);

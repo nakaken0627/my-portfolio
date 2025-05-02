@@ -3,7 +3,6 @@
 import { useContext, useState } from "react";
 import { CompanyContext } from "@/context/company-context";
 import {
-  Box,
   Button,
   Checkbox,
   Container,
