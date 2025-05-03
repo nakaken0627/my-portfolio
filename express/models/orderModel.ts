@@ -28,16 +28,20 @@ export const createOrderProduct = async (order_id: number, orderProducts: OrderP
   try {
     await client.query("BEGIN");
 
-    for (const product of orderProducts) {
-      if (product.quantity > 0) {
-        await client.query(
-          `INSERT INTO order_products (order_id,product_id,quantity,price)
-          VALUES ($1,$2,$3,$4)
-          RETURNING id,order_id,product_id,quantity,price,created_at,updated_at`,
-          [order_id, product.product_id, product.quantity, product.price]
-        );
-      }
-    }
+    await Promise.all(
+      orderProducts
+        .filter((product) => product.quantity > 0)
+        .map((product) =>
+          client.query(
+            `INSERT INTO order_products (order_id,product_id,quantity,price)
+            VALUES ($1,$2,$3,$4)
+            RETURNING id,order_id,product_id,quantity,price,created_at,updated_at`,
+            [order_id, product.product_id, product.quantity, product.price]
+          )
+        )
+    );
+
+    // }
     await client.query("COMMIT");
   } catch (err) {
     await client.query("ROLLBACK");
