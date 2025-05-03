@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import CompanyModel from "../models/companyModel.js";
-import userModel from "../models/userModel.js";
+import CompanyModel, { getMyOrderList, confirmingOrder, getConfirmedOrderList } from "../models/companyModel.js";
+import userModel, { orderedProductList } from "../models/userModel.js";
+import { createOrder, createOrderProduct } from "../models/orderModel.js";
 import {
   getCart,
   createCart,
@@ -9,8 +10,8 @@ import {
   createCartProduct,
   changeCartProduct,
   deleteCartProduct,
-  // deleteCartAllProducts,
-  // checkoutCart,
+  deleteCartAllProducts,
+  checkoutCart,
 } from "../models/cartModel.js";
 
 class ProductController {
@@ -24,7 +25,6 @@ class ProductController {
     const companyId = req.user.id;
 
     if (!companyId) {
-      console.log("[ProductControlling]companyID:", companyId);
       res.status(400).json({ message: "会社IDが見つかりません" });
       return;
     }
@@ -37,10 +37,10 @@ class ProductController {
   };
 
   addProductForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    if (!req.body) {
-      return;
-    }
-    const { company_id, model_number, name, price, description } = req.body;
+    if (!req.body || !req.user) return;
+
+    const company_id = String(req.user.id); //string型にしないとエラー、addCompanyProductの引数の型と合わずエラー発生
+    const { model_number, name, price, description } = req.body;
 
     try {
       const result = await CompanyModel.addCompanyProduct(company_id, model_number, name, price, description);
@@ -51,12 +51,10 @@ class ProductController {
   };
 
   deleteProductsForCompany = async (req: Request, res: Response, next: NextFunction) => {
-    if (!req.body) {
-      return;
-    }
+    if (!req.body || !req.user) return;
 
-    const { companyId, productsIds } = req.body;
-    // console.log(`ProductControlling:companyId:${companyId},productsIds:${productsIds}`);
+    const companyId = req.user.id;
+    const { productsIds } = req.body;
 
     try {
       const result = await CompanyModel.deleteCompanyProducts(companyId, productsIds);
@@ -79,7 +77,8 @@ class ProductController {
 export default new ProductController();
 
 export const getOrCreateCart = async (req: Request, res: Response, next: NextFunction) => {
-  const userId = req.body.user_id;
+  if (!req.user) return;
+  const userId = req.user.id;
   try {
     const data = await getCart(userId);
     if (!data) {
@@ -94,7 +93,7 @@ export const getOrCreateCart = async (req: Request, res: Response, next: NextFun
 };
 
 export const getUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
-  const cartId = req.body.cart_id;
+  const cartId = Number(req.query.cartId);
   try {
     const data = await getCartALLProducts(cartId);
     if (!data) {
@@ -108,7 +107,8 @@ export const getUserCartALLProducts = async (req: Request, res: Response, next: 
 };
 
 export const createOrChangeUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
-  const { cart_id, product_id, quantity } = req.body;
+  const product_id = Number(req.params.productId);
+  const { cart_id, quantity } = req.body;
   try {
     const data = await findCartProduct(cart_id, product_id);
     if (!data) {
@@ -133,22 +133,70 @@ export const deleteUserCartProduct = async (req: Request, res: Response, next: N
   }
 };
 
-// export const deleteUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
-//   const { cart_id } = req.body;
-//   try {
-//     const data = await deleteCartAllProducts(cart_id);
-//     res.status(200).json(data);
-//   } catch (err) {
-//     return next(err);
-//   }
-// };
+export const deleteUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
+  const { cart_id } = req.body;
+  try {
+    const data = await deleteCartAllProducts(cart_id);
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
 
-// export const checkoutUserCart = async (req: Request, res: Response, next: NextFunction) => {
-//   const { cart_id } = req.body;
-//   try {
-//     const data = await checkoutCart(cart_id);
-//     res.status(200).json(data);
-//   } catch (err) {
-//     return next(err);
-//   }
-// };
+export const checkoutUserCart = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) return;
+  const user_id = req.user.id;
+  const { cart_id, cartProducts } = req.body;
+  try {
+    const order = await createOrder(user_id);
+    const order_id = order.id;
+    await checkoutCart(order_id, cart_id);
+    await createOrderProduct(order_id, cartProducts);
+    res.status(200).json(order);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const orderHistory = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) return;
+  const user_id = req.user.id;
+  try {
+    const data = await orderedProductList(user_id);
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const orderListForCompany = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) return;
+  const company_id = req.user.id;
+  try {
+    const data = await getMyOrderList(company_id);
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const changStatusOfConfirm = async (req: Request, res: Response, next: NextFunction) => {
+  const { confirmedIds } = req.body;
+  try {
+    const data = await confirmingOrder(confirmedIds);
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const confirmedOrderList = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) return;
+  const company_id = req.user.id;
+  try {
+    const data = await getConfirmedOrderList(company_id);
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};

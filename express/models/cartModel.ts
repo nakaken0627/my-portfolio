@@ -68,8 +68,11 @@ export const createCartProduct = async (cart_id: number, product_id: number, qua
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
+      //新規登録ボタンを連続でクリックした際に登録の重複があったため、ON CONFLICTでエラーを回避
       `INSERT INTO cart_products (cart_id,product_id,quantity)
         VALUES ($1,$2,$3)
+        ON CONFLICT (cart_id,product_id)  
+        DO UPDATE SET quantity = EXCLUDED.quantity
         RETURNING id,cart_id,product_id,quantity,created_at,updated_at`,
       [cart_id, product_id, quantity]
     );
@@ -112,33 +115,33 @@ export const deleteCartProduct = async (cart_id: number, product_id: number) => 
   }
 };
 
-// export const deleteCartAllProducts = async (cart_id: number) => {
-//   const client: PoolClient = await pool.connect();
-//   try {
-//     const result = await client.query(
-//       `DELETE FROM cart_products
-//         WHERE cart_id = $1
-//         RETURNING id,cart_id,product_id,quantity,created_at,updated_at`,
-//       [cart_id]
-//     );
-//     return result.rows;
-//   } finally {
-//     client.release();
-//   }
-// };
+export const deleteCartAllProducts = async (cart_id: number) => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      `DELETE FROM cart_products
+        WHERE cart_id = $1
+        RETURNING id,cart_id,product_id,quantity,created_at,updated_at`,
+      [cart_id]
+    );
+    return result.rows;
+  } finally {
+    client.release();
+  }
+};
 
-// export const checkoutCart = async (cart_id: number) => {
-//   const client: PoolClient = await pool.connect();
-//   try {
-//     const result = await client.query(
-//       `UPDATE carts
-//         SET is_checkedout = true
-//         WHERE id = $1
-//         RETURNING id,user_id,is_checkedout,created_at,updated_at`,
-//       [cart_id]
-//     );
-//     return result.rows[0];
-//   } finally {
-//     client.release();
-//   }
-// };
+export const checkoutCart = async (order_id: number, cart_id: number) => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      `UPDATE carts
+        SET is_checkedout = true,order_id =$1
+        WHERE id = $2
+        RETURNING id,user_id,is_checkedout,order_id,created_at,updated_at`,
+      [order_id, cart_id]
+    );
+    return result.rows[0];
+  } finally {
+    client.release();
+  }
+};

@@ -1,8 +1,14 @@
 "use client";
 
-import { createContext, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
-export type User = {
+type User = {
   id: number;
   name: string;
 };
@@ -21,11 +27,13 @@ type Product = {
   company_name: string;
 };
 
-type CartContentType = {
+type CartContent = {
   myUser: User | null;
   cartId: { id: number } | null;
   productList: Product[];
   cartProducts: CartProduct[];
+  setCartProducts: Dispatch<SetStateAction<CartProduct[]>>;
+  getCartLatestData: () => Promise<void>;
   addProduct: (productId: number) => Promise<void>;
   reduceProduct: (productId: number) => Promise<void>;
   deleteProduct: (productId: number) => Promise<void>;
@@ -37,7 +45,7 @@ type CartContentType = {
   calcCartTotalAmount: () => number;
 };
 
-export const CartContext = createContext<CartContentType | null>(null);
+export const CartContext = createContext<CartContent | null>(null);
 
 export const CartContextProvider = ({
   children,
@@ -66,17 +74,10 @@ export const CartContextProvider = ({
   };
 
   const fetchMyCart = async () => {
-    if (!myUser) return;
     try {
       const response = await fetch("http://localhost:3001/api/cart/mycart", {
-        method: "POST",
+        method: "GET",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_id: myUser.id,
-        }),
       });
       if (!response.ok) {
         throw new Error("[cart-context]fetchMyCartでエラー発生");
@@ -111,18 +112,12 @@ export const CartContextProvider = ({
     if (!cartId) return;
     try {
       const response = await fetch(
-        "http://localhost:3001/api/cart/getproducts",
+        `http://localhost:3001/api/cart/getproducts?cartId=${cartId.id}`,
         {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            cart_id: cartId.id,
-          }),
+          method: "GET",
         },
       );
+
       const data = await response.json();
       setCartProducts(data);
     } catch (err) {
@@ -133,15 +128,13 @@ export const CartContextProvider = ({
   const sendCartLatestData = async (productId: number, quantity: number) => {
     if (!cartId) return;
     try {
-      await fetch("http://localhost:3001/api/cart/updataproduct", {
-        method: "POST",
-        credentials: "include",
+      await fetch(`http://localhost:3001/api/cart/product/${productId}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           cart_id: cartId.id,
-          product_id: productId,
           quantity: quantity,
         }),
       });
@@ -154,8 +147,7 @@ export const CartContextProvider = ({
     if (!cartId) return;
     try {
       await fetch("http://localhost:3001/api/cart/deleteproduct", {
-        method: "POST",
-        credentials: "include",
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
@@ -170,10 +162,14 @@ export const CartContextProvider = ({
   };
 
   const addProduct = async (addProductId: number) => {
+    let newQuantity = 1;
+
     setCartProducts((prev) => {
       const existingProduct = prev.find(
         (cartItem) => cartItem.product_id === addProductId,
       );
+      newQuantity = existingProduct ? existingProduct.quantity + 1 : 1;
+
       const updateCart = existingProduct
         ? prev.map((item) =>
             item.product_id === addProductId
@@ -185,10 +181,6 @@ export const CartContextProvider = ({
       return updateCart;
     });
 
-    const existingProduct = cartProducts.find(
-      (cartItem) => cartItem.product_id === addProductId,
-    );
-    const newQuantity = existingProduct ? existingProduct.quantity + 1 : 1;
     sendCartLatestData(addProductId, newQuantity);
   };
 
@@ -255,6 +247,8 @@ export const CartContextProvider = ({
     cartId,
     productList,
     cartProducts,
+    setCartProducts,
+    getCartLatestData,
     addProduct,
     reduceProduct,
     handleQuantityChange,
@@ -266,14 +260,8 @@ export const CartContextProvider = ({
   useEffect(() => {
     fetchMyUser();
     fetchProducts();
+    fetchMyCart();
   }, []);
-
-  useEffect(() => {
-    if (myUser) {
-      //確実にmyUserがある状態でないとバックエンド側でnot nullタイプなのにnullの可能性があるためエラーになる
-      fetchMyCart();
-    }
-  }, [myUser]); //myUserが貼ってからfetchMyCartを実行しないとエラーになる
 
   useEffect(() => {
     if (cartId) {

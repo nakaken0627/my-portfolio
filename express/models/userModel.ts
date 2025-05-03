@@ -60,3 +60,37 @@ class UserModel {
 }
 
 export default new UserModel();
+
+export const orderedProductList = async (user_id: number) => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      `
+      SELECT
+        ORDER_ID,
+        CARTS.ID as cart_id,
+        CART_PRODUCTS.PRODUCT_ID,
+        MODEL_NUMBER,
+        PRODUCTS.NAME as product_name,
+        PRICE,
+        QUANTITY,
+        COMPANIES.NAME as company_name
+      FROM
+        CARTS
+        INNER JOIN USERS ON USERS.ID = CARTS.USER_ID
+        INNER JOIN CART_PRODUCTS ON CART_PRODUCTS.CART_ID = CARTS.ID
+        INNER JOIN PRODUCTS ON CART_PRODUCTS.PRODUCT_ID = PRODUCTS.ID
+        INNER JOIN COMPANIES ON PRODUCTS.COMPANY_ID= COMPANIES.ID
+      WHERE
+        USER_ID = $1
+        AND IS_CHECKEDOUT = TRUE
+      ORDER BY
+        ORDER_ID DESC,
+        CART_PRODUCTS.PRODUCT_ID ASC`,
+      [user_id]
+    );
+    return result.rows;
+  } finally {
+    client.release();
+  }
+};
