@@ -18,9 +18,15 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { GetCompanyInfo } from "components/company/GetCompanyInfo";
+import { CompanyInfo } from "components/company/CompanyInfo";
 
 import { SignoutFunc } from "../company/SignoutFunc";
+
+const navLinks = [
+  { href: "/company/mypage", label: "Mypage" },
+  { href: "/company/confirmedorderlist", label: "Confirmed Orders" },
+  { href: "/company/productlist", label: "Product List" },
+];
 
 export const CompanyNav = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -30,12 +36,6 @@ export const CompanyNav = () => {
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
-
-  const navLinks = [
-    { href: "/company/mypage", label: "Mypage" },
-    { href: "/company/confirmedorderlist", label: "Confirmed Orders" },
-    { href: "/company/productlist", label: "Product List" },
-  ];
 
   return (
     <Box>
@@ -66,7 +66,7 @@ export const CompanyNav = () => {
               </IconButton>
 
               <Typography variant="h6">Company Panel</Typography>
-              <GetCompanyInfo />
+              <CompanyInfo />
             </Box>
             <Box
               sx={{
@@ -98,7 +98,7 @@ export const CompanyNav = () => {
               <Typography variant="h6" sx={{ mr: 2 }}>
                 Company Panel
               </Typography>
-              <GetCompanyInfo />
+              <CompanyInfo />
             </Box>
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               {navLinks.map((link) => (

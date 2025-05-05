@@ -10,24 +10,18 @@ import {
 } from "@mui/material";
 
 type ProductProps = {
-  product_name: string;
-  id: number;
-  model_number: string;
-  price: number;
-  description: string;
-  company_name: string;
+  product: {
+    product_name: string;
+    id: number;
+    model_number: string;
+    price: number;
+    description: string;
+    company_name: string;
+  };
   priority: boolean;
 };
 
-export const ProductCard = ({
-  id,
-  product_name,
-  model_number,
-  price,
-  description,
-  company_name,
-  priority = false,
-}: ProductProps) => {
+export const ProductCard = ({ product, priority }: ProductProps) => {
   const cartContext = useContext(CartContext);
 
   if (!cartContext) return null;
@@ -37,7 +31,7 @@ export const ProductCard = ({
   return (
     <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <Image
-        alt={product_name}
+        alt={product.product_name}
         src="/images/sample.jpg"
         width={400}
         height={300}
@@ -45,22 +39,26 @@ export const ProductCard = ({
         style={{ width: "100%", height: "auto", objectFit: "cover" }}
       />
       <CardContent>
-        <Typography variant="h6">{product_name}</Typography>
+        <Typography variant="h6">{product.product_name}</Typography>
         <Typography variant="body2" color="text.secondary">
-          型番: {model_number}
+          型番: {product.model_number}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          説明: {description}
+          説明: {product.description}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          企業: {company_name}
+          企業: {product.company_name}
         </Typography>
         <Typography variant="subtitle1" sx={{ mt: 1 }}>
-          ¥{Math.round(price).toLocaleString()}
+          ¥{Math.round(product.price).toLocaleString()}
         </Typography>
       </CardContent>
       <CardActions sx={{ mt: "auto" }}>
-        <Button variant="contained" fullWidth onClick={() => addProduct(id)}>
+        <Button
+          variant="contained"
+          fullWidth
+          onClick={() => addProduct(product.id)}
+        >
           カートに追加
         </Button>
       </CardActions>

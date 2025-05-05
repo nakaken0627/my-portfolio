@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { CompanyContext } from "@/context/company-context";
 import { Typography } from "@mui/material";
 
-export const GetCompanyInfo = () => {
+export const CompanyInfo = () => {
   const companyContext = useContext(CompanyContext);
   if (!companyContext) return <Typography>Loading...</Typography>;
 

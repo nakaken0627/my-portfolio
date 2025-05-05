@@ -76,6 +76,8 @@ export const OrderHistory = () => {
         注文履歴
       </Typography>
 
+      {/* バックエンド側で並び順を変えても、reduceを使用した際にorder_idの昇順になってしまうため
+      こちらで.sort()を使って並び替えをすることにしております。 */}
       {Object.entries(orders)
         .sort((a, b) => Number(b[0]) - Number(a[0]))
         .map(([orderId, items]) => (

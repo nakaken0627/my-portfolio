@@ -21,7 +21,7 @@ export default function ProductsList() {
       <Grid container spacing={4}>
         {productList.map((product, index) => (
           <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={product.id}>
-            <ProductCard {...product} priority={index === 0} />
+            <ProductCard product={product} priority={index === 0} />
           </Grid>
         ))}
       </Grid>
