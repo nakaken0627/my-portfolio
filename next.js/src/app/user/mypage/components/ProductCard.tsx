@@ -1,63 +1,67 @@
 import { useContext } from "react";
 import Image from "next/image";
 import { CartContext } from "@/context/cart-context";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+} from "@mui/material";
 
 type ProductProps = {
-  product_name: string;
-  id: number;
-  model_number: string;
-  price: number;
-  description: string;
-  company_name: string;
+  product: {
+    product_name: string;
+    id: number;
+    model_number: string;
+    price: number;
+    description: string;
+    company_name: string;
+  };
   priority: boolean;
 };
 
-export const ProductCard = ({
-  id,
-  product_name,
-  description,
-  company_name,
-  price,
-  model_number,
-  priority = false, //1件目のみtrueで受け取るためデフォルトはfalse
-}: ProductProps) => {
+export const ProductCard = ({ product, priority }: ProductProps) => {
   const cartContext = useContext(CartContext);
 
-  if (!cartContext) {
-    return;
-  }
+  if (!cartContext) return null;
 
   const { addProduct } = cartContext;
 
   return (
-    <div key={id} className="group relative border border-b-amber-800">
+    <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <Image
-        alt="product"
+        alt={product.product_name}
         src="/images/sample.jpg"
         width={400}
-        height={400}
+        height={300}
         priority={priority}
-        className="aspect-square w-full rounded-md bg-blue-50 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
+        style={{ width: "100%", height: "auto", objectFit: "cover" }}
       />
-      <div className="mt-4 flex justify-between">
-        <div>
-          <h3 className="text-sm text-gray-700">
-            <div>
-              <span aria-hidden="true" className="absolute inset-0" />
-              {product_name}
-            </div>
-          </h3>
-          <p className="mt-1 text-sm text-gray-500">{model_number}</p>
-          <p className="mt-1 text-sm text-gray-500">{description}</p>
-          <p className="mt-1 text-sm text-gray-500">{company_name}</p>
-        </div>
-        <p className="text-sm font-medium text-gray-900">
-          ¥{Math.round(price).toLocaleString()}
-        </p>
-        <button className="relative z-10" onClick={() => addProduct(id)}>
+      <CardContent>
+        <Typography variant="h6">{product.product_name}</Typography>
+        <Typography variant="body2" color="text.secondary">
+          型番: {product.model_number}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          説明: {product.description}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          企業: {product.company_name}
+        </Typography>
+        <Typography variant="subtitle1" sx={{ mt: 1 }}>
+          ¥{Math.round(product.price).toLocaleString()}
+        </Typography>
+      </CardContent>
+      <CardActions sx={{ mt: "auto" }}>
+        <Button
+          variant="contained"
+          fullWidth
+          onClick={() => addProduct(product.id)}
+        >
           カートに追加
-        </button>
-      </div>
-    </div>
+        </Button>
+      </CardActions>
+    </Card>
   );
 };

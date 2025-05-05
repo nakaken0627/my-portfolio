@@ -1,11 +1,14 @@
+import { Box } from "@mui/material";
+
 import { CompanyLayout } from "../CompanyLayout";
 import { ConfirmedList } from "./components/ConfirmedList";
 
 export const ConfirmedOrderList = () => {
   return (
     <CompanyLayout>
-      <h1>test</h1>
-      <ConfirmedList />
+      <Box sx={{ p: 2 }}>
+        <ConfirmedList />
+      </Box>
     </CompanyLayout>
   );
 };

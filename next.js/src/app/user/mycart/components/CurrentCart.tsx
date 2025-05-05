@@ -2,12 +2,22 @@
 
 import { useContext } from "react";
 import { CartContext } from "@/context/cart-context";
+import {
+  Box,
+  Button,
+  Container,
+  Divider,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 export const CurrentCart = () => {
   const cartContext = useContext(CartContext);
 
   if (!cartContext) {
-    return <div>Loading...</div>;
+    return <Typography>Loading...</Typography>;
   }
 
   const {
@@ -43,9 +53,7 @@ export const CurrentCart = () => {
       const data = await fetch("http://localhost:3001/api/cart/checkout", {
         method: "POST",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           cart_id: cartId.id,
           cartProducts: cartProductWithPriceData,
@@ -59,86 +67,123 @@ export const CurrentCart = () => {
   };
 
   return (
-    <section className="container mx-auto py-12">
-      <h2 className="mb-6 text-3xl font-bold">ショッピングカート</h2>
-      <div className="rounded-lg bg-white p-6 shadow-lg">
+    <Container maxWidth="md" sx={{ py: 1 }}>
+      <Typography variant="h4" gutterBottom>
+        カート
+      </Typography>
+      <Paper elevation={3} sx={{ p: 3 }}>
         {cartProducts.length === 0 ? (
-          <div>カートが空です</div>
+          <Typography>カートが空です</Typography>
         ) : (
           cartProducts.map((cartProduct) => {
             const product = productList.find(
               (item) => item.id === cartProduct.product_id,
             );
-            if (!product) {
-              return null;
-            }
+            if (!product) return null;
+
             return (
-              <div
-                key={cartProduct.product_id}
-                className="mb-4 flex items-center justify-between border-b bg-blue-100 pb-4"
-              >
-                <p className="text-lg">{product.product_name}</p>
-                <p className="text-lg">
-                  ¥{Math.round(product.price).toLocaleString()}
-                </p>
-                <div className="flex items-center">
-                  <button
-                    className="px-2 text-gray-700"
-                    onClick={async () =>
-                      await reduceProduct(cartProduct.product_id)
-                    }
-                  >
-                    -
-                  </button>
-                  <input
-                    type="text"
-                    value={cartProduct.quantity}
-                    onChange={async (e) =>
-                      await handleQuantityChange(
-                        cartProduct.product_id,
-                        Number(e.target.value),
-                      )
-                    }
-                    className="mx-2 w-12 rounded border text-center"
-                  />
-                  <button
-                    className="px-2 text-gray-700"
-                    onClick={async () =>
-                      await addProduct(cartProduct.product_id)
-                    }
-                  >
-                    +
-                  </button>
-                </div>
-                <div className="text-lg">
-                  ¥
-                  {calcProductTotalAmount(
-                    cartProduct.product_id,
-                  ).toLocaleString()}
-                </div>
-                <button
-                  className="text-red-500 hover:underline"
-                  onClick={async () => deleteProduct(cartProduct.product_id)}
+              <Box key={cartProduct.product_id} sx={{ mb: 3 }}>
+                <Grid
+                  container
+                  alignItems="center"
+                  spacing={2}
+                  sx={{ backgroundColor: "#E3F2FD", p: 2, borderRadius: 2 }}
                 >
-                  削除
-                </button>
-              </div>
+                  <Grid size={{ xs: 12, sm: 2 }}>
+                    <Typography sx={{ ml: 2 }}>
+                      {product.model_number}
+                    </Typography>
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 3 }}>
+                    <Typography>{product.product_name}</Typography>
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 1 }}>
+                    <Typography>
+                      ¥{Math.round(product.price).toLocaleString()}
+                    </Typography>
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 3 }}>
+                    <Box display="flex" alignItems="center">
+                      <Button onClick={() => reduceProduct(product.id)}>
+                        -
+                      </Button>
+                      <TextField
+                        value={cartProduct.quantity}
+                        onChange={(e) =>
+                          handleQuantityChange(
+                            product.id,
+                            Number(e.target.value),
+                          )
+                        }
+                        type="number"
+                        size="small"
+                        sx={{
+                          width: 80,
+                          "& input": {
+                            textAlign: "center",
+                            padding: 0,
+                          },
+                          "& input[type=number]": {
+                            MozAppearance: "textfield",
+                          },
+                          "& input[type=number]::-webkit-inner-spin-button": {
+                            WebkitAppearance: "none",
+                            margin: 0,
+                          },
+                          "& input[type=number]::-webkit-outer-spin-button": {
+                            WebkitAppearance: "none",
+                            margin: 0,
+                          },
+                        }}
+                        slotProps={{
+                          input: {
+                            style: {
+                              height: "30px",
+                              padding: 0,
+                              lineHeight: "30px",
+                            },
+                          },
+                        }}
+                      />
+                      <Button onClick={() => addProduct(product.id)}>+</Button>
+                    </Box>
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 2 }}>
+                    <Typography>
+                      ¥{calcProductTotalAmount(product.id).toLocaleString()}
+                    </Typography>
+                  </Grid>
+                  <Grid size={{ xs: 12, sm: 1 }}>
+                    <Button
+                      color="error"
+                      sx={{ mr: 2 }}
+                      onClick={() => deleteProduct(product.id)}
+                    >
+                      削除
+                    </Button>
+                  </Grid>
+                </Grid>
+              </Box>
             );
           })
         )}
-        <div className="text-right">
-          <p className="text-xl font-semibold">
+        <Divider sx={{ my: 4 }} />
+        <Box display="flex" justifyContent="flex-end">
+          <Typography variant="h6">
             合計: ¥{calcCartTotalAmount().toLocaleString()}
-          </p>
-
-          <button
-            className="mt-4 inline-block rounded bg-blue-500 px-6 py-3 text-white transition duration-200 hover:bg-blue-600"
+          </Typography>
+        </Box>
+        <Box display="flex" justifyContent="flex-end" mt={2}>
+          <Button
+            variant="contained"
+            color="primary"
             onClick={handleCheckout}
+            sx={{ px: 4, py: 1.5 }}
           >
             チェックアウト
-          </button>
-        </div>
-      </div>
-    </section>
+          </Button>
+        </Box>
+      </Paper>
+    </Container>
   );
 };

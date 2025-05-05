@@ -1,9 +1,82 @@
+import Link from "next/link";
+import { Box, Button, Toolbar, Typography } from "@mui/material";
+import { TopNav } from "components/navigation/TopNav";
+
 export default function Home() {
   return (
-    <div className="grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20">
-      <main className="row-start-2 flex flex-col items-center gap-[32px] sm:items-start">
-        Hello,Next,js
-      </main>
+    <div>
+      <TopNav />
+      <Toolbar />
+      <Box sx={{ display: "flex" }}>
+        <Box
+          sx={{
+            m: 2,
+            p: 2,
+            width: "80%",
+            height: "50vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            bgcolor: "background.paper",
+            boxShadow: 1,
+            borderRadius: 2,
+            border: "1px solid grey",
+          }}
+        >
+          <Button
+            component={Link}
+            href="/auth/user-signin"
+            sx={{
+              m: 2,
+              p: 2,
+              width: "80%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: "background.paper",
+              boxShadow: 1,
+              borderRadius: 2,
+              border: "1px solid grey",
+            }}
+          >
+            <Typography>ユーザー様</Typography>
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            m: 2,
+            p: 2,
+            width: "80%",
+            height: "50vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            bgcolor: "background.paper",
+            boxShadow: 1,
+            borderRadius: 2,
+            border: "1px solid grey",
+          }}
+        >
+          <Button
+            component={Link}
+            href="/auth/company-signin"
+            sx={{
+              m: 2,
+              p: 2,
+              width: "80%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: "background.paper",
+              boxShadow: 1,
+              borderRadius: 2,
+              border: "1px solid grey",
+            }}
+          >
+            <Typography>販売企業様</Typography>
+          </Button>
+        </Box>
+      </Box>
     </div>
   );
 }

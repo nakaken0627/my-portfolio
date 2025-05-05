@@ -1,13 +1,13 @@
 import { Box } from "@mui/material";
 
 import { UserLayout } from "../UserLayout";
-import { CurrentCart } from "./components/CurrentCart";
+import { OrderHistory } from "./components/OrderHistory";
 
 export default function UserCart() {
   return (
     <UserLayout>
       <Box sx={{ p: 2 }}>
-        <CurrentCart />
+        <OrderHistory />
       </Box>
     </UserLayout>
   );

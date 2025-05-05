@@ -1,19 +1,16 @@
-import { CompanyLayout } from "../CompanyLayout";
-import { GetCompanyInfo } from "./components/GetCompanyInfo";
-import { LogoutFunc } from "./components/LogoutFunc";
-import { ProductList } from "./components/ProductList";
-import { RegisterFunc } from "./components/RegisterFunc";
+import { Box } from "@mui/material";
 
-export default function MyCompanyPage() {
+import { CompanyLayout } from "../CompanyLayout";
+import { DisplayOrderList } from "./components/DisplayOrderList";
+
+export const OrderList = () => {
   return (
     <CompanyLayout>
-      <h1>登録済み画面(販売企業様)</h1>
-      <GetCompanyInfo />
-      <LogoutFunc />
-      <hr />
-      <ProductList />
-      <hr />
-      <RegisterFunc />
+      <Box sx={{ p: 2 }}>
+        <DisplayOrderList />
+      </Box>
     </CompanyLayout>
   );
-}
+};
+
+export default OrderList;

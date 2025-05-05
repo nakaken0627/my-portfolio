@@ -41,7 +41,6 @@ export const createOrderProduct = async (order_id: number, orderProducts: OrderP
         )
     );
 
-    // }
     await client.query("COMMIT");
   } catch (err) {
     await client.query("ROLLBACK");
