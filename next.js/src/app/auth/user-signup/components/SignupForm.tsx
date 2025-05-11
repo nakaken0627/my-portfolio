@@ -1,8 +1,5 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   Alert,
   Box,
@@ -12,6 +9,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
 
 export const SignupForm = () => {
   const [username, setUsername] = useState("");
@@ -26,7 +26,7 @@ export const SignupForm = () => {
     setError(null);
 
     if (password !== confirmedPassword) {
-      return setError("パスワードが一致しません");
+      setError("パスワードが一致しません"); return;
     }
 
     try {
@@ -39,7 +39,7 @@ export const SignupForm = () => {
         body: JSON.stringify({ username, password }),
       });
 
-      const data = await response.json();
+      const data :{message:string} = await response.json();
 
       if (response.ok) {
         router.push("/user/mypage");
@@ -48,6 +48,7 @@ export const SignupForm = () => {
       }
     } catch (err) {
       setError("ネットワークエラー");
+      console.error(err)
     }
 
     setUsername("");
@@ -76,7 +77,7 @@ export const SignupForm = () => {
             id="username"
             label="ユーザーID"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            onChange={(e) => { setUsername(e.target.value); }}
           />
           <TextField
             margin="normal"
@@ -86,7 +87,7 @@ export const SignupForm = () => {
             label="パスワード"
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => { setPassword(e.target.value); }}
           />
           <TextField
             margin="normal"
@@ -96,7 +97,7 @@ export const SignupForm = () => {
             label="パスワード（確認用）"
             type="password"
             value={confirmedPassword}
-            onChange={(e) => setConfirmedPassword(e.target.value)}
+            onChange={(e) => { setConfirmedPassword(e.target.value); }}
           />
           <Button
             type="submit"

@@ -1,8 +1,8 @@
 "use client";
 
+import { Typography } from "@mui/material";
 import { useContext } from "react";
 import { CartContext } from "@/context/cart-context";
-import { Typography } from "@mui/material";
 
 export const GetUserInfo = () => {
   const cartContext = useContext(CartContext);

@@ -1,8 +1,5 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import {
   Alert,
   Box,
@@ -12,6 +9,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
 
 export const SigninForm = () => {
   const [inputUsername, setInputUsername] = useState("");
@@ -37,7 +37,7 @@ export const SigninForm = () => {
         }),
       });
 
-      const data = await response.json();
+      const data:{message:string} = await response.json();
 
       if (response.ok) {
         router.push("/user/mypage");
@@ -46,6 +46,7 @@ export const SigninForm = () => {
       }
     } catch (err) {
       setError("ネットワークエラーが発生しました");
+      console.error(err)
     }
   };
 
@@ -70,7 +71,7 @@ export const SigninForm = () => {
             id="username"
             label="ユーザー名"
             value={inputUsername}
-            onChange={(e) => setInputUsername(e.target.value)}
+            onChange={(e) => { setInputUsername(e.target.value); }}
           />
           <TextField
             margin="normal"
@@ -80,7 +81,7 @@ export const SigninForm = () => {
             label="パスワード"
             type="password"
             value={inputPassword}
-            onChange={(e) => setInputPassword(e.target.value)}
+            onChange={(e) => { setInputPassword(e.target.value); }}
           />
           <Button
             type="submit"

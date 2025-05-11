@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar,
@@ -16,7 +14,9 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import Link from "next/link";
 import { ListItemButton } from "node_modules/@mui/material";
+import { useState } from "react";
 
 const navLinks = [
   { href: "/", label: "TOP" },
@@ -30,7 +30,7 @@ export const TopNav = () => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const toggleDrawer = () => setDrawerOpen(!drawerOpen);
+  const toggleDrawer = () => { setDrawerOpen(!drawerOpen); };
 
   return (
     <>

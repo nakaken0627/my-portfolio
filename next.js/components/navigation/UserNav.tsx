@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import {
@@ -19,6 +17,8 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import Link from "next/link";
+import { useState } from "react";
 import { GetUserInfo } from "components/user/GetUserInfo";
 import { SignoutFunc } from "components/user/SignoutFunc";
 
@@ -34,7 +34,7 @@ export const UserNav = () => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const toggleDrawer = () => setDrawerOpen(!drawerOpen);
+  const toggleDrawer = () => { setDrawerOpen(!drawerOpen); };
 
   return (
     <Box>

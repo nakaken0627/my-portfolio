@@ -30,18 +30,13 @@ type ConfirmedList = {
   price: number;
 };
 
-type groupedList = {
-  [order_id: number]: ConfirmedList[];
-};
+type groupedList = Record<number, ConfirmedList[]>;
 
 export const ConfirmedList = () => {
   const companyContext = useContext(CompanyContext);
-  if (!companyContext) {
-    return <div>Loading...</div>;
-  }
-
-  const { myCompany } = companyContext;
   const [groupingList, setGroupingList] = useState<groupedList>({});
+
+  const { myCompany } = companyContext ?? {};
 
   const fetchConfirmedOrderList = async () => {
     try {
@@ -53,13 +48,11 @@ export const ConfirmedList = () => {
         },
       );
       const data: ConfirmedList[] = await res.json();
-      const groupedList = data.reduce((acc, item) => {
-        if (!acc[item.order_id]) {
-          acc[item.order_id] = [];
-        }
+      const groupedList = data.reduce<groupedList>((acc, item) => {
+        acc[item.order_id] ??= [];
         acc[item.order_id].push(item);
         return acc;
-      }, {} as groupedList);
+      }, {});
       setGroupingList(groupedList);
     } catch (err) {
       console.error(err);
@@ -67,8 +60,13 @@ export const ConfirmedList = () => {
   };
 
   useEffect(() => {
-    fetchConfirmedOrderList();
+    if (!myCompany) return;
+    void fetchConfirmedOrderList();
   }, [myCompany]);
+
+  if (!companyContext) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Container maxWidth="lg" sx={{ py: 1 }}>

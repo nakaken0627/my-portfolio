@@ -6,14 +6,15 @@ import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 
 export const RegisterFunc = () => {
   const companyContext = useContext(CompanyContext);
-  if (!companyContext) return <Typography>Loading...</Typography>;
-
-  const { fetchMyProducts } = companyContext;
 
   const [modelNum, setModelNum] = useState("");
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState<number>(0);
   const [description, setDescription] = useState("");
+
+  if (!companyContext) return <Typography>Loading...</Typography>;
+
+  const { fetchMyProducts } = companyContext;
 
   const handleSubmitProduct = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +35,7 @@ export const RegisterFunc = () => {
       setModelNum("");
       setPrice(0);
       setDescription("");
-      fetchMyProducts();
+      await fetchMyProducts();
     } catch (err) {
       console.error("[MyCompanyPage]handleSubmitProduct:通信エラー", err);
     }
@@ -50,26 +51,34 @@ export const RegisterFunc = () => {
           <TextField
             label="商品名"
             value={productName}
-            onChange={(e) => setProductName(e.target.value)}
+            onChange={(e) => {
+              setProductName(e.target.value);
+            }}
             required
           />
           <TextField
             label="型番"
             value={modelNum}
-            onChange={(e) => setModelNum(e.target.value)}
+            onChange={(e) => {
+              setModelNum(e.target.value);
+            }}
             required
           />
           <TextField
             label="金額"
             type="number"
             value={price}
-            onChange={(e) => setPrice(Number(e.target.value))}
+            onChange={(e) => {
+              setPrice(Number(e.target.value));
+            }}
             required
           />
           <TextField
             label="説明"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
             required
           />
           <Button type="submit" variant="contained" color="primary">

@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { Button } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 export const SignoutFunc = () => {
   const router = useRouter();

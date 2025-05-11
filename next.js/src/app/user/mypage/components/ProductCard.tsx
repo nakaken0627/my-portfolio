@@ -1,6 +1,3 @@
-import { useContext } from "react";
-import Image from "next/image";
-import { CartContext } from "@/context/cart-context";
 import {
   Button,
   Card,
@@ -8,6 +5,9 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
+import Image from "next/image";
+import { useContext } from "react";
+import { CartContext } from "@/context/cart-context";
 
 type ProductProps = {
   product: {

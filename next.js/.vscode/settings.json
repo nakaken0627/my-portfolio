@@ -6,8 +6,13 @@
     "lint:fix": "next lint --fix"
   },
   "editor.formatOnSave": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "always"
-  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+    "typescriptreact",
+    "javascriptreact"
+  ],
+  "eslint.alwaysShowStatus": true,
   "cSpell.words": ["ianvs", "lintstagedrc", "turbopack", "vercel"]
 }

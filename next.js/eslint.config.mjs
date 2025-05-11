@@ -1,83 +1,98 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { FlatCompat } from "@eslint/eslintrc";
-import typescript from "@typescript-eslint/eslint-plugin";
-import typescriptParser from "@typescript-eslint/parser";
+import eslint from "@eslint/js";
+import eslintConfigPrettier from "eslint-config-prettier";
 import importPlugin from "eslint-plugin-import";
-import unicorn from "eslint-plugin-unicorn";
+import tailwind from "eslint-plugin-tailwindcss";
+import unusedImports from "eslint-plugin-unused-imports";
+import tseslint from "typescript-eslint";
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.dirname(__filename);
+const compat = new FlatCompat({ baseDirectory: __dirname });
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+export default tseslint.config(
   {
-    files: ["**/*.ts", "**/*.tsx"],
-    plugins: {
-      "@typescript-eslint": typescript,
-      unicorn: unicorn,
-      import: importPlugin,
+    // グローバルで読み込むファイルの拡張子
+    files: ["*.js", "*.jsx", "*.ts", "*.tsx"],
+  },
+  {
+    // グローバルで無視するファイル
+    ignores: ["**/.next/**/*", "*.config.*", "**/.prettierrc.mjs"],
+  },
+  eslint.configs.recommended,
+  tseslint.configs.strictTypeChecked,
+  tseslint.configs.stylisticTypeChecked,
+  ...compat.extends("next/core-web-vitals"),
+  ...tailwind.configs["flat/recommended"],
+  {
+    // tailwindcssに関する設定
+    settings: {
+      tailwindcss: {
+        whitelist: ["hidden-scrollbar", "-webkit-scrollbar"],
+      },
     },
+  },
+  {
+    // @typescript-eslintに関する設定
     languageOptions: {
-      parser: typescriptParser,
+      parser: tseslint.parser,
       parserOptions: {
         project: true,
+        tsconfigRootDir: __dirname,
       },
     },
     rules: {
-      ...(typescript.configs?.["recommended-type-checked"]?.rules ?? {}),
-      ...(typescript.configs?.["stylistic-type-checked"]?.rules ?? {}),
-      "@typescript-eslint/array-type": "off",
       "@typescript-eslint/consistent-type-definitions": ["error", "type"],
-      "@typescript-eslint/consistent-type-imports": [
-        "warn",
-        {
-          prefer: "type-imports",
-          fixStyle: "inline-type-imports",
-        },
-      ],
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        { argsIgnorePattern: "^_" },
-      ],
-      "@typescript-eslint/require-await": "off",
-      "@typescript-eslint/no-misused-promises": [
-        "error",
-        {
-          checksVoidReturn: { attributes: false },
-        },
-      ],
-      "unicorn/filename-case": [
-        "error",
-        {
-          case: "kebabCase",
-        },
-      ],
-      "func-style": ["error", "declaration", { allowArrowFunctions: false }],
-      "prefer-arrow-callback": ["error", { allowNamedFunctions: false }],
-      "import/no-default-export": "error",
+      "@typescript-eslint/no-unsafe-assignment": "off",
+      "@typescript-eslint/no-misused-promises": "off",
     },
   },
   {
-    files: [
-      "**/page.tsx",
-      "**/layout.tsx",
-      "next.config.ts",
-      "postcss.config.mjs",
-      "tailwind.config.ts",
-    ],
+    // eslint-plugin-importに関する設定
+    plugins: {
+      import: importPlugin,
+    },
     rules: {
-      "import/no-default-export": "off",
-      "import/prefer-default-export": "error",
+      // "import/order": [
+      //   "error",
+      //   {
+      //     groups: ["builtin", "external", "internal"],
+
+      //     "newlines-between": "always",
+      //     alphabetize: { order: "asc", caseInsensitive: true },
+      //   },
+      // ],
+      "import/newline-after-import": "error",
+      "import/no-duplicates": "error",
     },
   },
   {
-    ignores: ["src/components/ui/*", "*.md"],
+    // eslint-plugin-unused-importsに関する設定
+    plugins: {
+      "unused-imports": unusedImports,
+    },
+    rules: {
+      "unused-imports/no-unused-imports": "error",
+    },
   },
-];
-
-export default eslintConfig;
+  {
+    // その他設定
+    files: ["src/**/*.{js,jsx,ts,tsx}"],
+    linterOptions: {
+      reportUnusedDisableDirectives: "error",
+    },
+    languageOptions: {
+      globals: {
+        React: "readonly",
+      },
+    },
+    rules: {
+      "react/jsx-boolean-value": "error", // JSXの中でのbooleanの使用
+      "react/jsx-curly-brace-presence": "error", // JSXの中での余分な{}の使用
+    },
+  },
+  // prettierとの競合を防ぐためにeslint-config-prettierを読み込む
+  eslintConfigPrettier,
+);

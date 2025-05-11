@@ -37,15 +37,16 @@ export const SigninForm = () => {
         }),
       });
 
-      const data = await response.json();
+      const data: { message: string } = await response.json();
 
       if (response.ok) {
         router.push("/company/mypage");
       } else {
         setError(data.message || "ログインに失敗しました");
       }
-    } catch (error) {
+    } catch (err) {
       setError("ネットワークエラーが発生しました");
+      console.error(err);
     }
   };
 
@@ -68,7 +69,9 @@ export const SigninForm = () => {
             id="companyName"
             label="企業ID"
             value={inputCompanyName}
-            onChange={(e) => setInputCompanyName(e.target.value)}
+            onChange={(e) => {
+              setInputCompanyName(e.target.value);
+            }}
           />
           <TextField
             margin="normal"
@@ -78,7 +81,9 @@ export const SigninForm = () => {
             label="パスワード"
             type="password"
             value={inputCompanyPassword}
-            onChange={(e) => setInputCompanyPassword(e.target.value)}
+            onChange={(e) => {
+              setInputCompanyPassword(e.target.value);
+            }}
           />
           <Button
             type="submit"

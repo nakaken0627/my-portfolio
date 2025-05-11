@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar,
@@ -18,6 +16,8 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import Link from "next/link";
+import { useState } from "react";
 import { CompanyInfo } from "components/company/CompanyInfo";
 
 import { SignoutFunc } from "../company/SignoutFunc";
