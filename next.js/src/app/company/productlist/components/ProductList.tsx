@@ -43,7 +43,7 @@ export const ProductList = () => {
       setSelectedIds([]);
       await fetchMyProducts();
     } catch (err) {
-      console.error("[MyCompanyPage]handleDeleteProducts:通信エラー", err);
+      console.error(err);
     }
   };
 

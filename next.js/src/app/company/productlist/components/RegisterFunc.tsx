@@ -37,7 +37,7 @@ export const RegisterFunc = () => {
       setDescription("");
       await fetchMyProducts();
     } catch (err) {
-      console.error("[MyCompanyPage]handleSubmitProduct:通信エラー", err);
+      console.error(err);
     }
   };
 

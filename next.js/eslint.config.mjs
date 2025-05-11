@@ -24,7 +24,12 @@ export default tseslint.config(
   eslint.configs.recommended,
   tseslint.configs.strictTypeChecked,
   tseslint.configs.stylisticTypeChecked,
-  ...compat.extends("next/core-web-vitals"),
+  ...compat.extends(
+    "next",
+    "next/core-web-vitals",
+    "next/typescript",
+    "prettier",
+  ),
   ...tailwind.configs["flat/recommended"],
   {
     // tailwindcssに関する設定
@@ -55,15 +60,6 @@ export default tseslint.config(
       import: importPlugin,
     },
     rules: {
-      // "import/order": [
-      //   "error",
-      //   {
-      //     groups: ["builtin", "external", "internal"],
-
-      //     "newlines-between": "always",
-      //     alphabetize: { order: "asc", caseInsensitive: true },
-      //   },
-      // ],
       "import/newline-after-import": "error",
       "import/no-duplicates": "error",
     },
@@ -91,6 +87,11 @@ export default tseslint.config(
     rules: {
       "react/jsx-boolean-value": "error", // JSXの中でのbooleanの使用
       "react/jsx-curly-brace-presence": "error", // JSXの中での余分な{}の使用
+    },
+  },
+  {
+    rules: {
+      "no-console": ["error", { allow: ["warn", "error"] }],
     },
   },
   // prettierとの競合を防ぐためにeslint-config-prettierを読み込む

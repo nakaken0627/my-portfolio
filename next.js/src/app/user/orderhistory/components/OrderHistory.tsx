@@ -61,7 +61,7 @@ export const OrderHistory = () => {
 
         setOrders(groupedOrder);
       } catch (err) {
-        console.error("注文履歴の取得に失敗しました", err);
+        console.error(err);
       }
     };
 
