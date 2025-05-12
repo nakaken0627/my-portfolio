@@ -1,15 +1,14 @@
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
 import type { Express, Request, Response } from "express";
+import connectPgSimple from "connect-pg-simple";
+import cors from "cors";
+import dotenv from "dotenv";
+import express from "express";
+import session from "express-session";
 
+import pool from "../config/database.js";
+import passport from "../config/passport.js";
 import apiRouter from "./routes/api.js";
 import authRouter from "./routes/auth.js";
-
-import session from "express-session";
-import passport from "../config/passport.js";
-import pool from "../config/database.js";
-import connectPgSimple from "connect-pg-simple";
 
 //expressのインスタンスを作成
 const app: Express = express();
@@ -19,7 +18,9 @@ dotenv.config();
 const port = process.env.PORT || 3001;
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
-  throw new Error("SESSION_SECRET is not defined in the environment variables.");
+  throw new Error(
+    "SESSION_SECRET is not defined in the environment variables.",
+  );
 }
 
 //特定のサーバからのアクセスを許可するcors設定
@@ -68,6 +69,4 @@ app.use((req, res) => {
 });
 
 //サーバを起動
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+app.listen(port, () => {});

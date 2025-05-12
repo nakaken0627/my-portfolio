@@ -1,34 +1,39 @@
 import express from "express";
-import ProductController, {
+
+import { getMyCompany } from "../../controllers/authCompanyControlling.js";
+import { getMyUser } from "../../controllers/authUserControlling.js";
+import {
+  addProductForCompany,
+  changStatusOfConfirm,
+  checkoutUserCart,
+  confirmedOrderList,
+  createOrChangeUserCartProduct,
+  deleteProductsForCompany,
+  deleteUserCartALLProducts,
+  deleteUserCartProduct,
+  findProductsForCompany,
+  findProductsFromUser,
   getOrCreateCart,
   getUserCartALLProducts,
-  createOrChangeUserCartProduct,
-  deleteUserCartProduct,
-  deleteUserCartALLProducts,
-  checkoutUserCart,
   orderHistory,
   orderListForCompany,
-  changStatusOfConfirm,
-  confirmedOrderList,
 } from "../../controllers/productControlling.js";
-import authCompanyController from "../../controllers/authCompanyControlling.js";
-import authUserController from "../../controllers/authUserControlling.js";
 
 //routerオブジェクトを設定
 const router = express.Router();
 
 //問屋用のAPI
-router.get("/company/mycompany", authCompanyController.getMyCompany);
-router.get("/company/myproductlist", ProductController.findProductsForCompany);
+router.get("/company/mycompany", getMyCompany);
+router.get("/company/myproductlist", findProductsForCompany);
 router.get("/company/getmyorderlist", orderListForCompany);
 router.get("/company/confirmedorder", confirmedOrderList);
-router.post("/company/addproduct", ProductController.addProductForCompany);
+router.post("/company/addproduct", addProductForCompany);
 router.patch("/company/confirmorder", changStatusOfConfirm);
-router.delete("/company/deleteproducts", ProductController.deleteProductsForCompany);
+router.delete("/company/deleteproducts", deleteProductsForCompany);
 
 //発注者用API
-router.get("/user/myuser", authUserController.getMyUser);
-router.get("/user/productlist", ProductController.findProductsFromUser);
+router.get("/user/myuser", getMyUser);
+router.get("/user/productlist", findProductsFromUser);
 router.get("/user/orderhistory", orderHistory);
 
 //カート機能

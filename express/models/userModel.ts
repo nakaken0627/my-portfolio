@@ -1,6 +1,7 @@
-import { PoolClient } from "pg";
-import pool from "../config/database.js";
 import bcrypt from "bcrypt";
+import { PoolClient } from "pg";
+
+import pool from "../config/database.js";
 
 export type User = {
   id: number;
@@ -13,7 +14,9 @@ class UserModel {
   async findByUsername(username: string): Promise<User | null> {
     const client: PoolClient = await pool.connect();
     try {
-      const result = await client.query("SELECT * FROM users WHERE name=$1", [username]);
+      const result = await client.query("SELECT * FROM users WHERE name=$1", [
+        username,
+      ]);
       return result.rows[0] || null;
     } finally {
       client.release();
@@ -23,11 +26,12 @@ class UserModel {
   //ユーザー登録用
   async createUser(username: string, password: string): Promise<User> {
     const client: PoolClient = await pool.connect();
+
     try {
       const hashedPassword = await bcrypt.hash(password, 12);
       const result = await client.query(
         "INSERT INTO users(name,password) VALUES ($1,$2) RETURNING id,name,created_at,updated_at",
-        [username, hashedPassword]
+        [username, hashedPassword],
       );
       return result.rows[0];
     } finally {
@@ -49,9 +53,8 @@ class UserModel {
           FROM products
           INNER JOIN companies
           ON companies.id = products.company_id
-          ORDER BY company_id`
+          ORDER BY company_id`,
       );
-      // console.log(result);
       return result.rows;
     } finally {
       client.release();
@@ -87,7 +90,7 @@ export const orderedProductList = async (user_id: number) => {
       ORDER BY
         ORDER_ID DESC,
         CART_PRODUCTS.PRODUCT_ID ASC`,
-      [user_id]
+      [user_id],
     );
     return result.rows;
   } finally {

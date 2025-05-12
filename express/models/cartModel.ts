@@ -1,4 +1,5 @@
 import { PoolClient } from "pg";
+
 import pool from "../config/database.js";
 
 export const getCart = async (user_id: number) => {
@@ -9,7 +10,7 @@ export const getCart = async (user_id: number) => {
         FROM carts 
         WHERE is_checkedout = false 
         AND user_id = $1`,
-      [user_id]
+      [user_id],
     );
     return result.rows[0];
   } finally {
@@ -24,7 +25,7 @@ export const createCart = async (user_id: number) => {
       `INSERT INTO carts (user_id) 
         VALUES ($1)
         RETURNING id,user_id,is_checkedout,created_at,updated_at`,
-      [user_id]
+      [user_id],
     );
     return result.rows[0];
   } finally {
@@ -40,7 +41,7 @@ export const getCartALLProducts = async (cart_id: number) => {
         FROM cart_products
         WHERE cart_id = $1
         ORDER BY id ASC `,
-      [cart_id]
+      [cart_id],
     );
     return result.rows;
   } finally {
@@ -56,7 +57,7 @@ export const findCartProduct = async (cart_id: number, product_id: number) => {
         FROM cart_products
         WHERE cart_id = $1
         AND product_id = $2 `,
-      [cart_id, product_id]
+      [cart_id, product_id],
     );
     return result.rows[0];
   } finally {
@@ -64,7 +65,11 @@ export const findCartProduct = async (cart_id: number, product_id: number) => {
   }
 };
 
-export const createCartProduct = async (cart_id: number, product_id: number, quantity: number) => {
+export const createCartProduct = async (
+  cart_id: number,
+  product_id: number,
+  quantity: number,
+) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
@@ -74,7 +79,7 @@ export const createCartProduct = async (cart_id: number, product_id: number, qua
         ON CONFLICT (cart_id,product_id)  
         DO UPDATE SET quantity = EXCLUDED.quantity
         RETURNING id,cart_id,product_id,quantity,created_at,updated_at`,
-      [cart_id, product_id, quantity]
+      [cart_id, product_id, quantity],
     );
     return result.rows[0];
   } finally {
@@ -82,7 +87,11 @@ export const createCartProduct = async (cart_id: number, product_id: number, qua
   }
 };
 
-export const changeCartProduct = async (cart_id: number, product_id: number, quantity: number) => {
+export const changeCartProduct = async (
+  cart_id: number,
+  product_id: number,
+  quantity: number,
+) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
@@ -91,7 +100,7 @@ export const changeCartProduct = async (cart_id: number, product_id: number, qua
         WHERE cart_id = $2
         AND product_id = $3
         RETURNING id,cart_id,product_id,quantity,created_at,updated_at`,
-      [quantity, cart_id, product_id]
+      [quantity, cart_id, product_id],
     );
     return result.rows[0];
   } finally {
@@ -99,7 +108,10 @@ export const changeCartProduct = async (cart_id: number, product_id: number, qua
   }
 };
 
-export const deleteCartProduct = async (cart_id: number, product_id: number) => {
+export const deleteCartProduct = async (
+  cart_id: number,
+  product_id: number,
+) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
@@ -107,7 +119,7 @@ export const deleteCartProduct = async (cart_id: number, product_id: number) => 
         WHERE cart_id = $1
         AND product_id = $2
         RETURNING id,cart_id,product_id,quantity,created_at,updated_at`,
-      [cart_id, product_id]
+      [cart_id, product_id],
     );
     return result.rows[0];
   } finally {
@@ -122,7 +134,7 @@ export const deleteCartAllProducts = async (cart_id: number) => {
       `DELETE FROM cart_products
         WHERE cart_id = $1
         RETURNING id,cart_id,product_id,quantity,created_at,updated_at`,
-      [cart_id]
+      [cart_id],
     );
     return result.rows;
   } finally {
@@ -138,7 +150,7 @@ export const checkoutCart = async (order_id: number, cart_id: number) => {
         SET is_checkedout = true,order_id =$1
         WHERE id = $2
         RETURNING id,user_id,is_checkedout,order_id,created_at,updated_at`,
-      [order_id, cart_id]
+      [order_id, cart_id],
     );
     return result.rows[0];
   } finally {

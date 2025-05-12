@@ -1,8 +1,9 @@
 //DBへの操作など裏側の処理を記載
 
-import { PoolClient } from "pg";
-import pool from "../config/database.js";
 import bcrypt from "bcrypt";
+import { PoolClient } from "pg";
+
+import pool from "../config/database.js";
 
 export type Company = {
   id: number;
@@ -16,14 +17,16 @@ export type Product = {
   model_number: string;
   price: number;
   description: string;
-  findCompanyProducts(companyId: number): Promise<any[]>;
 };
 
 class CompanyModel {
   async findByCompanyName(companyName: string): Promise<Company | null> {
     const client: PoolClient = await pool.connect();
     try {
-      const result = await client.query("SELECT * FROM companies WHERE name = $1", [companyName]);
+      const result = await client.query(
+        "SELECT * FROM companies WHERE name = $1",
+        [companyName],
+      );
       return result.rows[0];
     } finally {
       client.release();
@@ -31,13 +34,16 @@ class CompanyModel {
   }
 
   //重複確認後にユーザー登録
-  async createCompany(companyName: string, companyPassword: string): Promise<Company> {
+  async createCompany(
+    companyName: string,
+    companyPassword: string,
+  ): Promise<Company> {
     const client: PoolClient = await pool.connect();
     try {
       const hashedPassword = await bcrypt.hash(companyPassword, 12);
       const result = await client.query(
         "INSERT INTO companies(name,password) VALUES ($1,$2) RETURNING id,name,created_at,updated_at",
-        [companyName, hashedPassword]
+        [companyName, hashedPassword],
       );
       return result.rows[0];
     } finally {
@@ -60,7 +66,7 @@ class CompanyModel {
           FROM products 
           INNER JOIN companies ON companies.id = products.company_id 
           WHERE company_id = $1`,
-        [companyId]
+        [companyId],
       );
 
       return result.rows;
@@ -69,14 +75,20 @@ class CompanyModel {
     }
   }
 
-  async addCompanyProduct(company_id: string, model_number: string, name: string, price: number, description: string) {
+  async addCompanyProduct(
+    company_id: string,
+    model_number: string,
+    name: string,
+    price: number,
+    description: string,
+  ) {
     const client: PoolClient = await pool.connect();
     try {
       const result = await client.query(
         `INSERT INTO products (company_id, model_number, name, price, description)
            VALUES ($1,$2,$3,$4,$5)
            RETURNING name,price `,
-        [company_id, model_number, name, price, description]
+        [company_id, model_number, name, price, description],
       );
       return result.rows[0];
     } finally {
@@ -84,8 +96,10 @@ class CompanyModel {
     }
   }
 
-  async deleteCompanyProducts(companyId: number, productsIds: number[]): Promise<number[]> {
-    // console.log("[companyModel]deleteCompanyProducts:", companyId, productsIds);
+  async deleteCompanyProducts(
+    companyId: number,
+    productsIds: number[],
+  ): Promise<number[]> {
     const client: PoolClient = await pool.connect();
     try {
       const result = await client.query(
@@ -93,9 +107,8 @@ class CompanyModel {
         WHERE company_id = $1 
         AND id =ANY($2::int[])
         RETURNING *`,
-        [companyId, productsIds]
+        [companyId, productsIds],
       );
-      // console.log("[companyModel]deleteCompanyProducts:", result);
       return result.rows;
     } finally {
       client.release();
@@ -131,7 +144,7 @@ export const getMyOrderList = async (company_id: number) => {
       ORDER BY
         ORDER_ID
       `,
-      [company_id]
+      [company_id],
     );
     return result.rows;
   } finally {
@@ -152,7 +165,7 @@ export const confirmingOrder = async (confirmedIds: number[]) => {
       WHERE ID = $1
       RETURNING ID,IS_CONFIRMED  
         `,
-        [id]
+        [id],
       );
     }
     await client.query("COMMIT");
@@ -190,7 +203,7 @@ export const getConfirmedOrderList = async (company_id: number) => {
       ORDER BY
         ORDER_ID
       `,
-      [company_id]
+      [company_id],
     );
     return result.rows;
   } finally {

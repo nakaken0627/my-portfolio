@@ -1,8 +1,9 @@
 //認証方法の定義、セッションへの保存
 
+import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import bcrypt from "bcrypt";
+
 import pool from "./database.js";
 
 //companyの認証のためローカル戦略を使って定義
@@ -11,7 +12,10 @@ passport.use(
   new LocalStrategy(async (username: string, password: string, done) => {
     try {
       //ユーザー名がDBの値と一致するか確認、不一致の場合はメッセージを返す
-      const result = await pool.query("SELECT * FROM companies WHERE name = $1", [username]);
+      const result = await pool.query(
+        "SELECT * FROM companies WHERE name = $1",
+        [username],
+      );
       const company = result.rows[0];
       if (!company) {
         return done(null, false, { message: "ユーザー名が間違っています" });
@@ -29,7 +33,7 @@ passport.use(
     } catch (error) {
       return done(error);
     }
-  })
+  }),
 );
 
 //userの認証のためローカル戦略を使って定義
@@ -38,7 +42,9 @@ passport.use(
   new LocalStrategy(async (username: string, password: string, done) => {
     try {
       //ユーザー名がDBの値と一致するか確認、不一致の場合はメッセージを返す
-      const result = await pool.query("SELECT * FROM users WHERE name = $1", [username]);
+      const result = await pool.query("SELECT * FROM users WHERE name = $1", [
+        username,
+      ]);
       const user = result.rows[0];
       if (!user) {
         return done(null, false, { message: "ユーザー名が間違っています" });
@@ -56,7 +62,7 @@ passport.use(
     } catch (error) {
       return done(error);
     }
-  })
+  }),
 );
 
 //セッションへ保存する情報を定義
@@ -68,10 +74,14 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (data: Express.User, done) => {
   try {
     if (data.type === "company") {
-      const result = await pool.query("SELECT * FROM companies WHERE id = $1", [data.id]);
+      const result = await pool.query("SELECT * FROM companies WHERE id = $1", [
+        data.id,
+      ]);
       return done(null, { ...result.rows[0], type: "company" });
     } else if (data.type === "user") {
-      const result = await pool.query("SELECT * FROM users WHERE id = $1", [data.id]);
+      const result = await pool.query("SELECT * FROM users WHERE id = $1", [
+        data.id,
+      ]);
       return done(null, { ...result.rows[0], type: "users" });
     } else {
       return done(null, false);

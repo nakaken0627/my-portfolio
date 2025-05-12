@@ -1,7 +1,7 @@
 // PostgreSQLデータベースへの接続設定
 
-import pg from "pg"; // PostgreSQLのクライアントライブラリをインポート
 import dotenv from "dotenv"; // dotenvをインポートして環境変数を読み込む
+import pg from "pg"; // PostgreSQLのクライアントライブラリをインポート
 
 const { Pool } = pg;
 
@@ -16,9 +16,7 @@ const pool = new Pool({
 });
 
 //接続状況確認用
-pool.on("connect", () => {
-  console.log("PostgreSQLに接続しました");
-});
+pool.on("connect", () => {});
 pool.on("error", (err) => {
   console.error("PostgreSQL接続エラー:", err);
 });
