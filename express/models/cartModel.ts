@@ -65,11 +65,7 @@ export const findCartProduct = async (cart_id: number, product_id: number) => {
   }
 };
 
-export const createCartProduct = async (
-  cart_id: number,
-  product_id: number,
-  quantity: number,
-) => {
+export const createCartProduct = async (cart_id: number, product_id: number, quantity: number) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
@@ -87,11 +83,7 @@ export const createCartProduct = async (
   }
 };
 
-export const changeCartProduct = async (
-  cart_id: number,
-  product_id: number,
-  quantity: number,
-) => {
+export const changeCartProduct = async (cart_id: number, product_id: number, quantity: number) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
@@ -108,10 +100,7 @@ export const changeCartProduct = async (
   }
 };
 
-export const deleteCartProduct = async (
-  cart_id: number,
-  product_id: number,
-) => {
+export const deleteCartProduct = async (cart_id: number, product_id: number) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(

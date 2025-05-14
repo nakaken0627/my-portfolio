@@ -1,27 +1,20 @@
 import { NextFunction, Request, Response } from "express";
 
 import passport from "../config/passport.js";
-import companyModel from "../models/companyModel.js";
+import { createCompany, findByCompanyName } from "../models/companyModel.js";
 
-export const signup = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const signup = async (req: Request, res: Response, next: NextFunction) => {
   const { companyName, companyPassword } = req.body;
 
   try {
     //ユーザーが存在しているかを確認
-    const existingCompany = await companyModel.findByCompanyName(companyName);
+    const existingCompany = await findByCompanyName(companyName);
     if (existingCompany) {
       res.status(409).json({ message: "企業名はすでに登録されています" });
       return;
     }
     //ユーザー登録
-    const newCompany = await companyModel.createCompany(
-      companyName,
-      companyPassword,
-    );
+    const newCompany = await createCompany(companyName, companyPassword);
 
     // サインアップ後に自動的にログインする
     req.login(newCompany, (err) => {
@@ -42,44 +35,33 @@ export const signup = async (
   }
 };
 
-export const login = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  passport.authenticate(
-    "company-local",
-    (error: Error, getCompany: any, info: any) => {
+export const login = async (req: Request, res: Response, next: NextFunction) => {
+  passport.authenticate("company-local", (error: Error, getCompany: any, info: any) => {
+    if (error) {
+      return next(error);
+    }
+    if (!getCompany) {
+      return res.status(401).json({
+        message: "認証に失敗しました",
+        error: info?.massage || "認証が無効です",
+      });
+    }
+    req.logIn(getCompany, (error) => {
       if (error) {
         return next(error);
       }
-      if (!getCompany) {
-        return res.status(401).json({
-          message: "認証に失敗しました",
-          error: info?.massage || "認証が無効です",
-        });
-      }
-      req.logIn(getCompany, (error) => {
-        if (error) {
-          return next(error);
-        }
-        return res.status(200).json({
-          massage: "ログインに成功しました",
-          company: {
-            id: getCompany.id,
-            name: getCompany.name,
-          },
-        });
+      return res.status(200).json({
+        massage: "ログインに成功しました",
+        company: {
+          id: getCompany.id,
+          name: getCompany.name,
+        },
       });
-    },
-  )(req, res, next);
+    });
+  })(req, res, next);
 };
 
-export const logout = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const logout = async (req: Request, res: Response, next: NextFunction) => {
   req.logout((err) => {
     if (err) {
       return next(err);

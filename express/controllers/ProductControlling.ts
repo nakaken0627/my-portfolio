@@ -11,19 +11,18 @@ import {
   getCart,
   getCartALLProducts,
 } from "../models/cartModel.js";
-import CompanyModel, {
+import {
+  addCompanyProduct,
   confirmingOrder,
+  deleteCompanyProducts,
+  findCompanyProducts,
   getConfirmedOrderList,
   getMyOrderList,
 } from "../models/companyModel.js";
 import { createOrder, createOrderProduct } from "../models/orderModel.js";
-import userModel, { orderedProductList } from "../models/userModel.js";
+import { findProductsForUser, orderedProductList } from "../models/userModel.js";
 
-export const findProductsForCompany = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
+export const findProductsForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   if (!req.isAuthenticated()) {
     res.status(401).json({ message: "認証に失敗しました" });
     return;
@@ -36,52 +35,35 @@ export const findProductsForCompany = async (
     return;
   }
   try {
-    const products = await CompanyModel.findCompanyProducts(companyId);
+    const products = await findCompanyProducts(companyId);
     res.status(200).json(products);
   } catch (err) {
     return next(err);
   }
 };
 
-export const addProductForCompany = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> => {
+export const addProductForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   if (!req.body || !req.user) return;
 
   const company_id = String(req.user.id); //string型にしないとエラー、addCompanyProductの引数の型と合わずエラー発生
   const { model_number, name, price, description } = req.body;
 
   try {
-    const result = await CompanyModel.addCompanyProduct(
-      company_id,
-      model_number,
-      name,
-      price,
-      description,
-    );
+    const result = await addCompanyProduct(company_id, model_number, name, price, description);
     res.status(200).json(result);
   } catch (err) {
     return next(err);
   }
 };
 
-export const deleteProductsForCompany = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const deleteProductsForCompany = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.body || !req.user) return;
 
   const companyId = req.user.id;
   const { productsIds } = req.body;
 
   try {
-    const result = await CompanyModel.deleteCompanyProducts(
-      companyId,
-      productsIds,
-    );
+    const result = await deleteCompanyProducts(companyId, productsIds);
     res.status(200).json({
       message: "削除が成功しました",
       result,
@@ -91,24 +73,16 @@ export const deleteProductsForCompany = async (
   }
 };
 
-export const findProductsFromUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const findProductsFromUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const data = await userModel.findProductsForUser();
+    const data = await findProductsForUser();
     res.status(200).json(data);
   } catch (err) {
     return next(err);
   }
 };
 
-export const getOrCreateCart = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const getOrCreateCart = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
   const userId = req.user.id;
   try {
@@ -124,11 +98,7 @@ export const getOrCreateCart = async (
   }
 };
 
-export const getUserCartALLProducts = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const getUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
   const cartId = Number(req.query.cartId);
   try {
     const data = await getCartALLProducts(cartId);
@@ -142,11 +112,7 @@ export const getUserCartALLProducts = async (
   }
 };
 
-export const createOrChangeUserCartProduct = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const createOrChangeUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
   const product_id = Number(req.params.productId);
   const { cart_id, quantity } = req.body;
   try {
@@ -163,11 +129,7 @@ export const createOrChangeUserCartProduct = async (
   }
 };
 
-export const deleteUserCartProduct = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const deleteUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
   const { cart_id, product_id } = req.body;
   try {
     const data = await deleteCartProduct(cart_id, product_id);
@@ -177,11 +139,7 @@ export const deleteUserCartProduct = async (
   }
 };
 
-export const deleteUserCartALLProducts = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const deleteUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
   const { cart_id } = req.body;
   try {
     const data = await deleteCartAllProducts(cart_id);
@@ -191,11 +149,7 @@ export const deleteUserCartALLProducts = async (
   }
 };
 
-export const checkoutUserCart = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const checkoutUserCart = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
   const user_id = req.user.id;
   const { cart_id, cartProducts } = req.body;
@@ -210,11 +164,7 @@ export const checkoutUserCart = async (
   }
 };
 
-export const orderHistory = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const orderHistory = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
   const user_id = req.user.id;
   try {
@@ -225,11 +175,7 @@ export const orderHistory = async (
   }
 };
 
-export const orderListForCompany = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const orderListForCompany = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
   const company_id = req.user.id;
   try {
@@ -240,11 +186,7 @@ export const orderListForCompany = async (
   }
 };
 
-export const changStatusOfConfirm = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const changStatusOfConfirm = async (req: Request, res: Response, next: NextFunction) => {
   const { confirmedIds } = req.body;
   try {
     const data = await confirmingOrder(confirmedIds);
@@ -254,11 +196,7 @@ export const changStatusOfConfirm = async (
   }
 };
 
-export const confirmedOrderList = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const confirmedOrderList = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
   const company_id = req.user.id;
   try {

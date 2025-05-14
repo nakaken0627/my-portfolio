@@ -18,9 +18,7 @@ dotenv.config();
 const port = process.env.PORT || 3001;
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
-  throw new Error(
-    "SESSION_SECRET is not defined in the environment variables.",
-  );
+  throw new Error("SESSION_SECRET is not defined in the environment variables.");
 }
 
 //特定のサーバからのアクセスを許可するcors設定

@@ -24,10 +24,7 @@ type OrderProducts = {
   price: number;
 };
 
-export const createOrderProduct = async (
-  order_id: number,
-  orderProducts: OrderProducts[],
-) => {
+export const createOrderProduct = async (order_id: number, orderProducts: OrderProducts[]) => {
   const client: PoolClient = await pool.connect();
   try {
     await client.query("BEGIN");

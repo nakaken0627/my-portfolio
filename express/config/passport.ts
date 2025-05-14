@@ -12,10 +12,7 @@ passport.use(
   new LocalStrategy(async (username: string, password: string, done) => {
     try {
       //ユーザー名がDBの値と一致するか確認、不一致の場合はメッセージを返す
-      const result = await pool.query(
-        "SELECT * FROM companies WHERE name = $1",
-        [username],
-      );
+      const result = await pool.query("SELECT * FROM companies WHERE name = $1", [username]);
       const company = result.rows[0];
       if (!company) {
         return done(null, false, { message: "ユーザー名が間違っています" });
@@ -42,9 +39,7 @@ passport.use(
   new LocalStrategy(async (username: string, password: string, done) => {
     try {
       //ユーザー名がDBの値と一致するか確認、不一致の場合はメッセージを返す
-      const result = await pool.query("SELECT * FROM users WHERE name = $1", [
-        username,
-      ]);
+      const result = await pool.query("SELECT * FROM users WHERE name = $1", [username]);
       const user = result.rows[0];
       if (!user) {
         return done(null, false, { message: "ユーザー名が間違っています" });
@@ -74,14 +69,10 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (data: Express.User, done) => {
   try {
     if (data.type === "company") {
-      const result = await pool.query("SELECT * FROM companies WHERE id = $1", [
-        data.id,
-      ]);
+      const result = await pool.query("SELECT * FROM companies WHERE id = $1", [data.id]);
       return done(null, { ...result.rows[0], type: "company" });
     } else if (data.type === "user") {
-      const result = await pool.query("SELECT * FROM users WHERE id = $1", [
-        data.id,
-      ]);
+      const result = await pool.query("SELECT * FROM users WHERE id = $1", [data.id]);
       return done(null, { ...result.rows[0], type: "users" });
     } else {
       return done(null, false);

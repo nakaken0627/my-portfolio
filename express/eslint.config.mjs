@@ -23,10 +23,7 @@ export default [
       quotes: ["error", "single"], // シングルクオートを使用
       "no-console": ["error", { allow: ["warn", "error"] }],
       "no-undef": "off",
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        { vars: "all", args: "after-used", ignoreRestSiblings: false },
-      ], // 未使用変数の警告
+      "@typescript-eslint/no-unused-vars": ["warn", { vars: "all", args: "after-used", ignoreRestSiblings: false }], // 未使用変数の警告
     },
   },
   prettierConfig,

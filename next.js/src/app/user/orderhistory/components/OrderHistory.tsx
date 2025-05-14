@@ -26,13 +26,13 @@ type Order = {
   company_name: string;
 };
 
+type GroupedOrder = Record<number, Order[]>;
+
 export const OrderHistory = () => {
   const cartContext = useContext(CartContext);
   const { myUser } = cartContext ?? {};
 
   const [orders, setOrders] = useState<GroupedOrder>({});
-
-  type GroupedOrder = Record<number, Order[]>;
 
   const orderTotalAmount = (order_id: number, data: Order[]) => {
     const orderData = data.filter((item) => item.order_id === order_id);

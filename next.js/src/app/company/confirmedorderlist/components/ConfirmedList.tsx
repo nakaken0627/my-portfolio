@@ -30,11 +30,11 @@ type ConfirmedList = {
   price: number;
 };
 
-type groupedList = Record<number, ConfirmedList[]>;
+type GroupedList = Record<number, ConfirmedList[]>;
 
 export const ConfirmedList = () => {
   const companyContext = useContext(CompanyContext);
-  const [groupingList, setGroupingList] = useState<groupedList>({});
+  const [groupingList, setGroupingList] = useState<GroupedList>({});
 
   const { myCompany } = companyContext ?? {};
 
@@ -48,7 +48,7 @@ export const ConfirmedList = () => {
         },
       );
       const data: ConfirmedList[] = await res.json();
-      const groupedList = data.reduce<groupedList>((acc, item) => {
+      const groupedList = data.reduce<GroupedList>((acc, item) => {
         acc[item.order_id] ??= [];
         acc[item.order_id].push(item);
         return acc;

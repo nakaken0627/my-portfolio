@@ -4,6 +4,7 @@ import {
   createContext,
   Dispatch,
   SetStateAction,
+  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -66,7 +67,7 @@ export const CartContextProvider = ({
       if (!response.ok) {
         throw new Error("[cart-context]fetchMyUserでエラー発生");
       }
-      const data = await response.json();
+      const data: User = await response.json();
       setMyUser(data);
     } catch (err) {
       console.error(err);
@@ -82,7 +83,7 @@ export const CartContextProvider = ({
       if (!response.ok) {
         throw new Error("[cart-context]fetchMyCartでエラー発生");
       }
-      const data = await response.json();
+      const data: { id: number } = await response.json();
       setCartId(data);
     } catch (err) {
       console.error(err);
@@ -101,43 +102,47 @@ export const CartContextProvider = ({
       if (!response.ok) {
         throw new Error("[cart-context]fetchProductsでエラー発生");
       }
-      const data = await response.json();
+      const data: Product[] = await response.json();
       setProductList(data);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const getCartLatestData = async () => {
+  //useEffectで呼び出す際にcartIdとの依存関係がないためwarningとなるのを防ぐため、useCallbackで回避
+  const getCartLatestData = useCallback(async () => {
     if (!cartId) return;
     try {
       const response = await fetch(
-        `http://localhost:3001/api/cart/getproducts?cartId=${cartId.id}`,
+        `http://localhost:3001/api/cart/getproducts?cartId=${String(cartId.id)}`,
         {
           method: "GET",
         },
       );
 
-      const data = await response.json();
+      const data: CartProduct[] = await response.json();
       setCartProducts(data);
     } catch (err) {
       console.error("cartデータの取得に失敗しました", err);
     }
-  };
+  }, [cartId]);
 
   const sendCartLatestData = async (productId: number, quantity: number) => {
     if (!cartId) return;
     try {
-      await fetch(`http://localhost:3001/api/cart/product/${productId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      await fetch(
+        `http://localhost:3001/api/cart/product/${String(productId)}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cart_id: cartId.id,
+            quantity: quantity,
+          }),
         },
-        body: JSON.stringify({
-          cart_id: cartId.id,
-          quantity: quantity,
-        }),
-      });
+      );
     } catch (err) {
       console.error("更新失敗", err);
     }
@@ -181,35 +186,31 @@ export const CartContextProvider = ({
       return updateCart;
     });
 
-    sendCartLatestData(addProductId, newQuantity);
+    await sendCartLatestData(addProductId, newQuantity);
   };
 
   const reduceProduct = async (reduceProductId: number) => {
     setCartProducts((prev) => {
-      const updateCart = prev.map((item) =>
+      return prev.map((item) =>
         item.product_id === reduceProductId
           ? { ...item, quantity: Math.max(item.quantity - 1, 0) }
           : item,
       );
-      const targetItem = prev.find(
-        (item) => item.product_id === reduceProductId,
-      );
-      if (targetItem) {
-        const newQuantity = Math.max(targetItem.quantity - 1, 0);
-        sendCartLatestData(reduceProductId, newQuantity);
-      }
-      return updateCart;
     });
+    const targetItem = cartProducts.find(
+      (item) => item.product_id === reduceProductId,
+    );
+    if (targetItem) {
+      const newQuantity = Math.max(targetItem.quantity - 1, 0);
+      await sendCartLatestData(reduceProductId, newQuantity);
+    }
   };
 
   const deleteProduct = async (deleteProductId: number) => {
     setCartProducts((prev) => {
-      const updateCart = prev.filter(
-        (item) => item.product_id !== deleteProductId,
-      );
-      sendCartDeleteProduct(deleteProductId);
-      return updateCart;
+      return prev.filter((item) => item.product_id !== deleteProductId);
     });
+    await sendCartDeleteProduct(deleteProductId);
   };
 
   const handleQuantityChange = async (
@@ -218,14 +219,13 @@ export const CartContextProvider = ({
   ) => {
     if (newQuantity < 0) return;
     setCartProducts((prev) => {
-      const updateCart = prev.map((item) =>
+      return prev.map((item) =>
         item.product_id === targetProductId
           ? { ...item, quantity: newQuantity }
           : item,
       );
-      sendCartLatestData(targetProductId, newQuantity);
-      return updateCart;
     });
+    await sendCartLatestData(targetProductId, newQuantity);
   };
 
   const calcProductTotalAmount = (productId: number) => {
@@ -258,16 +258,16 @@ export const CartContextProvider = ({
   };
 
   useEffect(() => {
-    fetchMyUser();
-    fetchProducts();
-    fetchMyCart();
+    void fetchMyUser();
+    void fetchProducts();
+    void fetchMyCart();
   }, []);
 
   useEffect(() => {
     if (cartId) {
-      getCartLatestData();
+      void getCartLatestData();
     }
-  }, [cartId]);
+  }, [cartId, getCartLatestData]);
 
   return (
     <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>

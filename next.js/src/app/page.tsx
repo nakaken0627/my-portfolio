@@ -1,5 +1,5 @@
-import { Box, Button, Toolbar, Typography } from "@mui/material";
 import Link from "next/link";
+import { Box, Button, Toolbar, Typography } from "@mui/material";
 import { TopNav } from "components/navigation/TopNav";
 
 export default function Home() {
