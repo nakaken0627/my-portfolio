@@ -30,7 +30,9 @@ export const TopNav = () => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const toggleDrawer = () => setDrawerOpen(!drawerOpen);
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
 
   return (
     <>

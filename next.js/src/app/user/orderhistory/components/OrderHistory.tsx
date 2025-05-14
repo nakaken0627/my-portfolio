@@ -15,49 +15,24 @@ import {
   Typography,
 } from "@mui/material";
 
+type Order = {
+  order_id: number;
+  cart_id: number;
+  product_id: number;
+  model_number: string;
+  product_name: string;
+  price: number;
+  quantity: number;
+  company_name: string;
+};
+
+type GroupedOrder = Record<number, Order[]>;
+
 export const OrderHistory = () => {
   const cartContext = useContext(CartContext);
-  if (!cartContext) return null;
-  const { myUser } = cartContext;
-
-  type Order = {
-    order_id: number;
-    cart_id: number;
-    product_id: number;
-    model_number: string;
-    product_name: string;
-    price: number;
-    quantity: number;
-    company_name: string;
-  };
-
-  type GroupedOrder = {
-    [order_id: number]: Order[];
-  };
+  const { myUser } = cartContext ?? {};
 
   const [orders, setOrders] = useState<GroupedOrder>({});
-
-  const fetchOrder = async () => {
-    try {
-      const res = await fetch("http://localhost:3001/api/user/orderhistory", {
-        method: "GET",
-        credentials: "include",
-      });
-      const data: Order[] = await res.json();
-
-      const groupedOrder = data.reduce((acc, item) => {
-        if (!acc[item.order_id]) {
-          acc[item.order_id] = [];
-        }
-        acc[item.order_id].push(item);
-        return acc;
-      }, {} as GroupedOrder);
-
-      setOrders(groupedOrder);
-    } catch (err) {
-      console.error("注文履歴の取得に失敗しました", err);
-    }
-  };
 
   const orderTotalAmount = (order_id: number, data: Order[]) => {
     const orderData = data.filter((item) => item.order_id === order_id);
@@ -67,8 +42,35 @@ export const OrderHistory = () => {
   };
 
   useEffect(() => {
-    fetchOrder();
+    if (!myUser) return;
+
+    //myUserとの依存関係を保持し、エラーを避けるためにuseEffect内で定義
+    const fetchOrder = async () => {
+      try {
+        const res = await fetch("http://localhost:3001/api/user/orderhistory", {
+          method: "GET",
+          credentials: "include",
+        });
+        const data: Order[] = await res.json();
+
+        const groupedOrder = data.reduce<GroupedOrder>((acc, item) => {
+          acc[item.order_id] ??= [];
+          acc[item.order_id].push(item);
+          return acc;
+        }, {});
+
+        setOrders(groupedOrder);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    void fetchOrder();
   }, [myUser]);
+
+  if (!cartContext) {
+    return <Typography>Loading...</Typography>;
+  }
 
   return (
     <Container maxWidth="md" sx={{ py: 1 }}>
@@ -105,7 +107,10 @@ export const OrderHistory = () => {
               </TableHead>
               <TableBody>
                 {items.map((item) => (
-                  <TableRow key={`${item.cart_id}-${item.model_number}`} hover>
+                  <TableRow
+                    key={`${String(item.cart_id)}-${item.model_number}`}
+                    hover
+                  >
                     <TableCell>{item.model_number}</TableCell>
                     <TableCell>{item.product_name}</TableCell>
                     <TableCell>

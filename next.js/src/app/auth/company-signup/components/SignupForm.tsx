@@ -26,7 +26,8 @@ export const SignupForm = () => {
     setError(null);
 
     if (companyPassword !== confirmedCompanyPassword) {
-      return setError("パスワードが一致しません");
+      setError("パスワードが一致しません");
+      return;
     }
 
     try {
@@ -42,15 +43,16 @@ export const SignupForm = () => {
         },
       );
 
-      const data = await response.json();
+      const data: { message: string } = await response.json();
 
       if (response.ok) {
         router.push("/company/mypage");
       } else {
         setError(data.message || "サインアップに失敗しました");
       }
-    } catch (error) {
+    } catch (err) {
       setError("ネットワークエラーが発生しました");
+      console.error(err);
     }
   };
 
@@ -75,7 +77,9 @@ export const SignupForm = () => {
             id="companyName"
             label="企業ID"
             value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
+            onChange={(e) => {
+              setCompanyName(e.target.value);
+            }}
           />
           <TextField
             margin="normal"
@@ -85,7 +89,9 @@ export const SignupForm = () => {
             label="パスワード"
             type="password"
             value={companyPassword}
-            onChange={(e) => setCompanyPassword(e.target.value)}
+            onChange={(e) => {
+              setCompanyPassword(e.target.value);
+            }}
           />
           <TextField
             margin="normal"
@@ -95,7 +101,9 @@ export const SignupForm = () => {
             label="パスワード（確認用）"
             type="password"
             value={confirmedCompanyPassword}
-            onChange={(e) => setConfirmedCompanyPassword(e.target.value)}
+            onChange={(e) => {
+              setConfirmedCompanyPassword(e.target.value);
+            }}
           />
           <Button
             type="submit"

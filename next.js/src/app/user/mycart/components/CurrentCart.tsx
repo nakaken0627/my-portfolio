@@ -37,7 +37,6 @@ export const CurrentCart = () => {
   if (!myUser || !cartId) return null;
 
   const cartProductsWithPrice = () => {
-    if (!cartProducts) return [];
     return cartProducts.map((product) => {
       const findItem = productList.find(
         (item) => item.id === product.product_id,
@@ -50,7 +49,7 @@ export const CurrentCart = () => {
   const handleCheckout = async () => {
     const cartProductWithPriceData = cartProductsWithPrice();
     try {
-      const data = await fetch("http://localhost:3001/api/cart/checkout", {
+      await fetch("http://localhost:3001/api/cart/checkout", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -59,7 +58,6 @@ export const CurrentCart = () => {
           cartProducts: cartProductWithPriceData,
         }),
       });
-      if (!data) return;
       setCartProducts([]);
     } catch (err) {
       console.error(err);

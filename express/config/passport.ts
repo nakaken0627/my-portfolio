@@ -1,8 +1,9 @@
 //認証方法の定義、セッションへの保存
 
+import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import bcrypt from "bcrypt";
+
 import pool from "./database.js";
 
 //companyの認証のためローカル戦略を使って定義
@@ -29,7 +30,7 @@ passport.use(
     } catch (error) {
       return done(error);
     }
-  })
+  }),
 );
 
 //userの認証のためローカル戦略を使って定義
@@ -56,7 +57,7 @@ passport.use(
     } catch (error) {
       return done(error);
     }
-  })
+  }),
 );
 
 //セッションへ保存する情報を定義

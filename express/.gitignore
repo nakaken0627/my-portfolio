@@ -26,7 +26,7 @@ coverage/
 .vscode/
 .idea/
 
-# Docker関連（必要に応じて）
+# Docker関連
 docker-compose.override.yml
 *.local.yml
 

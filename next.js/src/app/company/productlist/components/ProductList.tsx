@@ -18,10 +18,10 @@ import {
 
 export const ProductList = () => {
   const companyContext = useContext(CompanyContext);
-  if (!companyContext) return <Typography>Loading...</Typography>;
-
-  const { myProducts, fetchMyProducts } = companyContext;
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+  if (!companyContext) return <Typography>Loading...</Typography>;
+  const { myProducts, fetchMyProducts } = companyContext;
 
   const handleCheckBoxStatus = (productId: number) => {
     setSelectedIds((prev) =>
@@ -41,9 +41,9 @@ export const ProductList = () => {
       });
 
       setSelectedIds([]);
-      fetchMyProducts();
+      await fetchMyProducts();
     } catch (err) {
-      console.error("[MyCompanyPage]handleDeleteProducts:通信エラー");
+      console.error(err);
     }
   };
 
@@ -69,7 +69,9 @@ export const ProductList = () => {
                 <TableCell>
                   <Checkbox
                     checked={selectedIds.includes(product.id)}
-                    onChange={() => handleCheckBoxStatus(product.id)}
+                    onChange={() => {
+                      handleCheckBoxStatus(product.id);
+                    }}
                   />
                 </TableCell>
                 <TableCell>{product.name}</TableCell>

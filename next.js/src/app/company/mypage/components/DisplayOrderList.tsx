@@ -3,7 +3,6 @@
 import { useContext, useEffect, useState } from "react";
 import { CompanyContext } from "@/context/company-context";
 import {
-  Box,
   Button,
   Card,
   CardContent,
@@ -32,20 +31,17 @@ type OrderList = {
   price: number;
 };
 
-type GroupedOrderList = {
-  [order_id: number]: OrderList[];
-};
+type GroupedOrderList = Record<number, OrderList[]>;
 
 export const DisplayOrderList = () => {
   const companyContext = useContext(CompanyContext);
-  if (!companyContext) return <Typography>Loading...</Typography>;
-
-  const { myCompany } = companyContext;
   const [orderList, setOrderList] = useState<OrderList[]>([]);
   const [groupedOrderList, setGroupedOrderList] = useState<GroupedOrderList>(
     {},
   );
   const [confirmedIds, setConfirmedIds] = useState<number[]>([]);
+
+  const { myCompany } = companyContext ?? {};
 
   const fetchMyOrderList = async () => {
     try {
@@ -59,11 +55,11 @@ export const DisplayOrderList = () => {
       const data: OrderList[] = await res.json();
       setOrderList(data);
 
-      const groupedOrders = data.reduce((acc, item) => {
-        if (!acc[item.order_id]) acc[item.order_id] = [];
+      const groupedOrders = data.reduce<GroupedOrderList>((acc, item) => {
+        acc[item.order_id] ??= [];
         acc[item.order_id].push(item);
         return acc;
-      }, {} as GroupedOrderList);
+      }, {});
       setGroupedOrderList(groupedOrders);
     } catch (err) {
       console.error(err);
@@ -82,7 +78,6 @@ export const DisplayOrderList = () => {
   };
 
   const handleClickChangeStatus = async (confirmedIds: number[]) => {
-    if (!confirmedIds) return;
     try {
       await fetch("http://localhost:3001/api/company/confirmorder", {
         method: "PATCH",
@@ -90,7 +85,7 @@ export const DisplayOrderList = () => {
         body: JSON.stringify({ confirmedIds }),
       });
       setConfirmedIds([]);
-      fetchMyOrderList();
+      await fetchMyOrderList();
     } catch (err) {
       console.error(err);
     }
@@ -106,8 +101,10 @@ export const DisplayOrderList = () => {
   };
 
   useEffect(() => {
-    fetchMyOrderList();
+    void fetchMyOrderList();
   }, [myCompany]);
+
+  if (!companyContext) return <Typography>Loading...</Typography>;
 
   return (
     <Container maxWidth="lg" sx={{ py: 1 }}>
@@ -125,7 +122,12 @@ export const DisplayOrderList = () => {
           </Button>
         </Grid>
         <Grid>
-          <Button variant="outlined" onClick={() => handlePushAllIds()}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              handlePushAllIds();
+            }}
+          >
             一括選択
           </Button>
         </Grid>
@@ -165,11 +167,15 @@ export const DisplayOrderList = () => {
                   </TableHead>
                   <TableBody>
                     {items.map((item) => (
-                      <TableRow key={`${item.order_id}-${item.product_id}`}>
+                      <TableRow
+                        key={`${String(item.order_id)}-${String(item.product_id)}`}
+                      >
                         <TableCell>
                           <Checkbox
                             checked={confirmedIds.includes(item.id)}
-                            onChange={() => handleCheckBoxStatus(item.id)}
+                            onChange={() => {
+                              handleCheckBoxStatus(item.id);
+                            }}
                           />
                         </TableCell>
                         <TableCell>{item.model_number}</TableCell>
