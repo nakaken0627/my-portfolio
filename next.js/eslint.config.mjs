@@ -4,7 +4,7 @@ import { FlatCompat } from "@eslint/eslintrc";
 import eslint from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import importPlugin from "eslint-plugin-import";
-import tailwind from "eslint-plugin-tailwindcss";
+import pluginTailwindcss from "eslint-plugin-tailwindcss";
 import unusedImports from "eslint-plugin-unused-imports";
 import tseslint from "typescript-eslint";
 
@@ -15,9 +15,8 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
 export default tseslint.config(
   {
     // グローバルで読み込むファイルの拡張子
-    files: ["*.js", "*.jsx", "*.ts", "*.tsx"],
-  },
-  {
+    files: ["**/*.{js,jsx,ts,tsx"],
+
     // グローバルで無視するファイル
     ignores: ["**/.next/**/*", "*.config.*", "**/.prettierrc.mjs"],
   },
@@ -30,9 +29,11 @@ export default tseslint.config(
     "next/typescript",
     "prettier",
   ),
-  ...tailwind.configs["flat/recommended"],
   {
     // tailwindcssに関する設定
+    plugins: {
+      tailwindcss: pluginTailwindcss,
+    },
     settings: {
       tailwindcss: {
         whitelist: ["hidden-scrollbar", "-webkit-scrollbar"],

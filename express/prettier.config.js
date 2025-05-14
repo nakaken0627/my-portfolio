@@ -4,16 +4,7 @@
 /** @type { PrettierConfig | SortImportsConfig } */
 const config = {
   plugins: ["@ianvs/prettier-plugin-sort-imports"],
-  importOrder: [
-    "^expo",
-    "<TYPES>",
-    "<THIRD_PARTY_MODULES>",
-    "",
-    "^@acme",
-    "^~/",
-    "^[../]",
-    "^[./]",
-  ],
+  importOrder: ["^expo", "<TYPES>", "<THIRD_PARTY_MODULES>", "", "^@acme", "^~/", "^[../]", "^[./]"],
   importOrderParserPlugins: ["typescript", "jsx", "decorators-legacy"],
   importOrderTypeScriptVersion: "5.0.0",
   arrowParens: "always",

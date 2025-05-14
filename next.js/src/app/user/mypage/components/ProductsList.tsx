@@ -1,8 +1,8 @@
 "use client";
 
-import { Container, Grid, Typography } from "@mui/material";
 import { useContext } from "react";
 import { CartContext } from "@/context/cart-context";
+import { Container, Grid, Typography } from "@mui/material";
 
 import { ProductCard } from "./ProductCard";
 

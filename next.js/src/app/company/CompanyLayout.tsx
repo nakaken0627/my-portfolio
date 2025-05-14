@@ -1,5 +1,5 @@
-import { Toolbar } from "@mui/material";
 import { CompanyContextProvider } from "@/context/company-context";
+import { Toolbar } from "@mui/material";
 import { CompanyNav } from "components/navigation/CompanyNav";
 
 export const CompanyLayout = ({ children }: { children: React.ReactNode }) => {

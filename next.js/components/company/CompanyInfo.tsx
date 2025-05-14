@@ -1,8 +1,8 @@
 "use client";
 
-import { Typography } from "@mui/material";
 import { useContext } from "react";
 import { CompanyContext } from "@/context/company-context";
+import { Typography } from "@mui/material";
 
 export const CompanyInfo = () => {
   const companyContext = useContext(CompanyContext);

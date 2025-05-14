@@ -1,24 +1,20 @@
 import { NextFunction, Request, Response } from "express";
 
 import passport from "../config/passport.js";
-import userModel from "../models/userModel.js";
+import { createUser, findByUsername } from "../models/userModel.js";
 
-export const signup = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const signup = async (req: Request, res: Response, next: NextFunction) => {
   const { username, password } = req.body;
 
   try {
     //ユーザー名の重複確認
-    const existingUser = await userModel.findByUsername(username);
+    const existingUser = await findByUsername(username);
     if (existingUser) {
       res.status(409).json({ message: "ユーザー名はすでに登録されています" });
       return;
     }
     //ユーザー登録
-    const newUser = await userModel.createUser(username, password);
+    const newUser = await createUser(username, password);
 
     // サインアップ後に自動的にログインする
     req.login(newUser, (err) => {
@@ -37,11 +33,7 @@ export const signup = async (
   }
 };
 
-export const login = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const login = async (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate("user-local", (err: Error, getUser: any, info: any) => {
     if (err) {
       return next(err);
@@ -67,11 +59,7 @@ export const login = async (
   })(req, res, next);
 };
 
-export const logout = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const logout = async (req: Request, res: Response, next: NextFunction) => {
   req.logout((err) => {
     if (err) {
       return next(err);
