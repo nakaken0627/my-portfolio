@@ -12,7 +12,7 @@ type Product = {
   id: number;
   name: string;
   model_number: string;
-  price: number;
+  default_price: number;
   description: string;
 };
 
@@ -39,7 +39,7 @@ export const CompanyContextProvider = ({
         credentials: "include",
       });
       if (!res.ok) throw new Error("レスポンスエラーが発生");
-      const data = await res.json();
+      const data: Company = await res.json();
       setMyCompany(data);
     } catch (err) {
       console.error(err);
@@ -67,11 +67,11 @@ export const CompanyContextProvider = ({
   };
 
   useEffect(() => {
-    fetchMyCompany();
+    void fetchMyCompany();
   }, []);
 
   useEffect(() => {
-    fetchMyProducts();
+    void fetchMyProducts();
   }, [myCompany]);
 
   const contextValue = {

@@ -62,6 +62,7 @@ export const addProductForCompany = async (
       description,
     );
     res.status(200).json(result);
+    console.log(result);
   } catch (err) {
     return next(err);
   }

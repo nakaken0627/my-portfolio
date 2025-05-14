@@ -76,7 +76,7 @@ export const ProductList = () => {
                 </TableCell>
                 <TableCell>{product.name}</TableCell>
                 <TableCell>{product.model_number}</TableCell>
-                <TableCell>{Math.round(product.price)}</TableCell>
+                <TableCell>{Math.round(product.default_price)}</TableCell>
                 <TableCell>{product.description}</TableCell>
               </TableRow>
             ))}

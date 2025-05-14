@@ -61,7 +61,7 @@ class CompanyModel {
           model_number, 
           products.id,
           products.name, 
-          price, 
+          default_price, 
           description 
           FROM products 
           INNER JOIN companies ON companies.id = products.company_id 
@@ -85,9 +85,9 @@ class CompanyModel {
     const client: PoolClient = await pool.connect();
     try {
       const result = await client.query(
-        `INSERT INTO products (company_id, model_number, name, price, description)
+        `INSERT INTO products (company_id, model_number, name, default_price, description)
            VALUES ($1,$2,$3,$4,$5)
-           RETURNING name,price `,
+           RETURNING id,default_price `,
         [company_id, model_number, name, price, description],
       );
       return result.rows[0];

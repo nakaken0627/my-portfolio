@@ -6,13 +6,14 @@ INSERT INTO companies (name, password) VALUES
 ('company_b','$2b$12$noG404YnA8SovqIJ6oc5NeLoYm.NUVjSun.jaOmLjc93wC4L6uILW'), --ハッシュ化前のPW：12345
 ('company_c','$2b$12$lk3bnxUtj0y7dRrCWGz.v.20Tp98jOs5Z.UtZLQdCoozoqt88OXW6'); --ハッシュ化前のPW：12345
 
-INSERT INTO users (name, password) VALUES
-('test','$2b$12$/tcIMCgw.IgATlLlDD0bJ.ZRCW6KD1q1bvwRlBuPxVrWgDixnoh7K'), --ハッシュ化前のPW：test
-('user_a','$2b$12$0KS/yIj7MS7pn889KZsgpOiFWxp//FSdYsZGKnHprUafq40fodX3e'), --ハッシュ化前のPW：12345
-('user_b','$2b$12$yTgbjAqRqNiA.vNZhd0W9OtunHHd5xt7U0FnAmRKNnoM5kpG34Zju'), --ハッシュ化前のPW：12345
-('user_c','$2b$12$fOXpjcaE2PgBWwifxjZbaeGB/dlXKiROiaEFb/F/YkSiP16l3eOvO'); --ハッシュ化前のPW：12345
+INSERT INTO users (id,name, password) VALUES
+(0,'dummy','$2b$12$sz.2kHVUsQ3wjT.osC3PRu6PmZpL0M7wkz8Nur6VtEifv942HhdNO'), --ハッシュ化前のPW：dummy
+(1,'test','$2b$12$/tcIMCgw.IgATlLlDD0bJ.ZRCW6KD1q1bvwRlBuPxVrWgDixnoh7K'), --ハッシュ化前のPW：test
+(2,'user_a','$2b$12$0KS/yIj7MS7pn889KZsgpOiFWxp//FSdYsZGKnHprUafq40fodX3e'), --ハッシュ化前のPW：12345
+(3,'user_b','$2b$12$yTgbjAqRqNiA.vNZhd0W9OtunHHd5xt7U0FnAmRKNnoM5kpG34Zju'), --ハッシュ化前のPW：12345
+(4,'user_c','$2b$12$fOXpjcaE2PgBWwifxjZbaeGB/dlXKiROiaEFb/F/YkSiP16l3eOvO'); --ハッシュ化前のPW：12345
 
-INSERT INTO products (company_id, model_number, name, price, description) VALUES
+INSERT INTO products (company_id, model_number, name, default_price, description) VALUES
 (1, 'TW-1001', 'ルーター', 12800.00, '高速インターネット向けルーター'),
 (1, 'TW-2002', 'ネットワークスイッチ', 7400.00, 'ギガビット対応のネットワークスイッチ'),
 (1, 'GF-330', '電気ケトル', 3600.00, '省エネ設計の電気ケトル'),

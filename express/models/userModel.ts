@@ -48,7 +48,7 @@ class UserModel {
           products.id as id,
           model_number,
           products.name as product_name, 
-          price, 
+          default_price, 
           description
           FROM products
           INNER JOIN companies
