@@ -13,6 +13,8 @@ import {
 } from "../models/cartModel.js";
 import {
   addCompanyProduct,
+  addCustomProduct,
+  addDefaultProduct,
   confirmingOrder,
   deleteCompanyProducts,
   findCompanyProducts,
@@ -49,9 +51,9 @@ export const addProductForCompany = async (req: Request, res: Response, next: Ne
   const { model_number, name, price, description } = req.body;
 
   try {
-    const result = await addCompanyProduct(company_id, model_number, name, price, description);
+    const data = await addCompanyProduct(company_id, model_number, name, price, description);
+    const result = await addDefaultProduct(data.id, data.default_price, data.description);
     res.status(200).json(result);
-    console.log(result);
   } catch (err) {
     return next(err);
   }
@@ -202,6 +204,17 @@ export const confirmedOrderList = async (req: Request, res: Response, next: Next
   const company_id = req.user.id;
   try {
     const data = await getConfirmedOrderList(company_id);
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const registerCustomProduct = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body) return;
+  const { product_id, user_id, custom_price, description, start_date, end_date } = req.body;
+  try {
+    const data = await addCustomProduct(product_id, user_id, custom_price, description, start_date, end_date);
     res.status(200).json(data);
   } catch (err) {
     return next(err);

@@ -17,6 +17,7 @@ import {
   getUserCartALLProducts,
   orderHistory,
   orderListForCompany,
+  registerCustomProduct,
 } from "../../controllers/productControlling.js";
 
 //routerオブジェクトを設定
@@ -28,6 +29,7 @@ router.get("/company/myproductlist", findProductsForCompany);
 router.get("/company/getmyorderlist", orderListForCompany);
 router.get("/company/confirmedorder", confirmedOrderList);
 router.post("/company/addproduct", addProductForCompany);
+router.post("/company/addcustomproduct", registerCustomProduct);
 router.patch("/company/confirmorder", changStatusOfConfirm);
 router.delete("/company/deleteproducts", deleteProductsForCompany);
 

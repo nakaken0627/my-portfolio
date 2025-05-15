@@ -50,7 +50,7 @@ export const findCompanyProducts = async (companyId: number): Promise<Product[] 
   try {
     const result = await client.query(
       `SELECT
-          companies.name as company_name ,
+          companies.name as company_name,
           model_number, 
           products.id,
           products.name, 
@@ -78,9 +78,9 @@ export const addCompanyProduct = async (
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
-      `INSERT INTO products (company_id, model_number, name, default_price,, description)
+      `INSERT INTO products (company_id, model_number, name, default_price, description)
            VALUES ($1,$2,$3,$4,$5)
-           RETURNING id,default_price  `,
+           RETURNING id,default_price,description`,
       [company_id, model_number, name, price, description],
     );
     return result.rows[0];
@@ -193,6 +193,57 @@ export const getConfirmedOrderList = async (company_id: number) => {
       [company_id],
     );
     return result.rows;
+  } finally {
+    client.release();
+  }
+};
+
+export const addDefaultProduct = async (product_id: number, default_price: number, description: string) => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      `
+      INSERT INTO custom_products
+       (product_id,
+        user_id,
+        is_default,
+        custom_price,
+        description)
+      VALUES ($1,0,true,$2,$3)
+      `,
+      [product_id, default_price, description],
+    );
+    return result.rows[0];
+  } finally {
+    client.release();
+  }
+};
+
+export const addCustomProduct = async (
+  product_id: number,
+  user_id: number,
+  custom_price: number,
+  description: string,
+  start_date: string,
+  end_date: string,
+) => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      `
+      INSERT INTO custom_products
+       (product_id,
+        user_id,
+        custom_price,
+        description,
+        start_date,
+        end_date)
+      VALUES ($1,$2,$3,$4,$5,$6)
+      RETURNING id,product_id
+      `,
+      [product_id, user_id, custom_price, description, start_date, end_date],
+    );
+    return result.rows[0];
   } finally {
     client.release();
   }
