@@ -80,7 +80,7 @@ export const addCompanyProduct = async (
     const result = await client.query(
       `INSERT INTO products (company_id, model_number, name, default_price, description)
            VALUES ($1,$2,$3,$4,$5)
-           RETURNING id,default_price,description`,
+           RETURNING id,model_number,name,default_price,description`,
       [company_id, model_number, name, price, description],
     );
     return result.rows[0];
@@ -198,7 +198,45 @@ export const getConfirmedOrderList = async (company_id: number) => {
   }
 };
 
-export const addDefaultProduct = async (product_id: number, default_price: number, description: string) => {
+export const findCustomCompanyProducts = async (company_id: number): Promise<Product[] | null> => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      `SELECT
+        custom_products.id as custom_product_id,
+        companies.name as company_name,
+        custom_model_number, 
+        products.id as product_id,
+        custom_product_name, 
+        users.name as user_name,
+        custom_price, 
+        custom_description,
+        TO_CHAR(start_date,'yyyy/mm/dd') as start_date,
+        TO_CHAR(end_date,'yyyy/mm/dd') as end_date
+      FROM custom_products 
+      INNER JOIN products
+      ON products.id = custom_products.product_id
+      INNER JOIN companies 
+      ON companies.id = products.company_id 
+      INNER JOIN users
+  	  ON users.id = custom_products.user_id
+      WHERE company_id = $1`,
+      [company_id],
+    );
+
+    return result.rows;
+  } finally {
+    client.release();
+  }
+};
+
+export const addDefaultProduct = async (
+  product_id: number,
+  model_number: string,
+  name: string,
+  default_price: number,
+  description: string,
+) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
@@ -207,11 +245,13 @@ export const addDefaultProduct = async (product_id: number, default_price: numbe
        (product_id,
         user_id,
         is_default,
+        custom_model_number,
+        custom_product_name,
         custom_price,
-        description)
-      VALUES ($1,0,true,$2,$3)
+        custom_description)
+      VALUES ($1,0,true,$2,$3,$4,$5)
       `,
-      [product_id, default_price, description],
+      [product_id, model_number, name, default_price, description],
     );
     return result.rows[0];
   } finally {
@@ -222,6 +262,8 @@ export const addDefaultProduct = async (product_id: number, default_price: numbe
 export const addCustomProduct = async (
   product_id: number,
   user_id: number,
+  custom_model_number: string,
+  custom_product_name: string,
   custom_price: number,
   description: string,
   start_date: string,
@@ -234,16 +276,43 @@ export const addCustomProduct = async (
       INSERT INTO custom_products
        (product_id,
         user_id,
+        custom_model_number,
+        custom_product_name,
         custom_price,
-        description,
+        custom_description,
         start_date,
         end_date)
-      VALUES ($1,$2,$3,$4,$5,$6)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
       RETURNING id,product_id
       `,
-      [product_id, user_id, custom_price, description, start_date, end_date],
+      [product_id, user_id, custom_model_number, custom_product_name, custom_price, description, start_date, end_date],
     );
     return result.rows[0];
+  } finally {
+    client.release();
+  }
+};
+
+export const deleteCustomCompanyProducts = async (customProductIds: number[]): Promise<number[]> => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      `DELETE FROM custom_products
+        WHERE id =ANY($1::int[])
+        RETURNING *`,
+      [customProductIds],
+    );
+    return result.rows;
+  } finally {
+    client.release();
+  }
+};
+
+export const getUserIds = async () => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(`SELECT id,name FROM users`);
+    return result.rows;
   } finally {
     client.release();
   }

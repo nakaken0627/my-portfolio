@@ -21,27 +21,27 @@ export const ProductList = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
   if (!companyContext) return <Typography>Loading...</Typography>;
-  const { myProducts, fetchMyProducts } = companyContext;
+  const { myProducts, fetchMyCustomProducts } = companyContext;
 
-  const handleCheckBoxStatus = (productId: number) => {
+  const handleCheckBoxStatus = (customId: number) => {
     setSelectedIds((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId],
+      prev.includes(customId)
+        ? prev.filter((id) => id !== customId)
+        : [...prev, customId],
     );
   };
 
   const handleDeleteProducts = async () => {
     try {
-      await fetch("http://localhost:3001/api/company/deleteproducts", {
+      await fetch("http://localhost:3001/api/company/deletecustomproducts", {
         method: "DELETE",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productsIds: selectedIds }),
+        body: JSON.stringify({ customProductIds: selectedIds }),
       });
 
       setSelectedIds([]);
-      await fetchMyProducts();
+      await fetchMyCustomProducts();
     } catch (err) {
       console.error(err);
     }
@@ -56,28 +56,50 @@ export const ProductList = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>選択</TableCell>
-              <TableCell>商品名</TableCell>
-              <TableCell>型番</TableCell>
-              <TableCell>価格</TableCell>
-              <TableCell>説明</TableCell>
+              <TableCell align="center">選択</TableCell>
+              <TableCell align="center">ID</TableCell>
+              <TableCell align="center">商品ID</TableCell>
+              <TableCell align="center">商品名</TableCell>
+              <TableCell align="center">型番</TableCell>
+              <TableCell align="center">単価種別</TableCell>
+              <TableCell align="center">価格</TableCell>
+              <TableCell align="center">説明</TableCell>
+              <TableCell align="center">適用開始日</TableCell>
+              <TableCell align="center">適用終了日</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {myProducts.map((product) => (
-              <TableRow key={product.id}>
-                <TableCell>
+              <TableRow key={product.custom_product_id}>
+                <TableCell align="center">
                   <Checkbox
-                    checked={selectedIds.includes(product.id)}
+                    checked={selectedIds.includes(product.custom_product_id)}
                     onChange={() => {
-                      handleCheckBoxStatus(product.id);
+                      handleCheckBoxStatus(product.custom_product_id);
                     }}
                   />
                 </TableCell>
-                <TableCell>{product.name}</TableCell>
-                <TableCell>{product.model_number}</TableCell>
-                <TableCell>{Math.round(product.default_price)}</TableCell>
-                <TableCell>{product.description}</TableCell>
+                <TableCell align="center">
+                  {product.custom_product_id}
+                </TableCell>
+                <TableCell align="center">{product.product_id}</TableCell>
+                <TableCell align="center">
+                  {product.custom_product_name}
+                </TableCell>
+                <TableCell align="center">
+                  {product.custom_model_number}
+                </TableCell>
+                <TableCell align="center">
+                  {product.user_name === "dummy" ? "共通品" : product.user_name}
+                </TableCell>
+                <TableCell align="center">
+                  {Math.round(product.custom_price)}
+                </TableCell>
+                <TableCell align="center">
+                  {product.custom_description}
+                </TableCell>
+                <TableCell align="center">{product.start_date}</TableCell>
+                <TableCell align="center">{product.end_date}</TableCell>
               </TableRow>
             ))}
           </TableBody>

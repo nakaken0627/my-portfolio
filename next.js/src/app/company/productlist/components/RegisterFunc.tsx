@@ -1,91 +1,30 @@
 "use client";
 
-import { useContext, useState } from "react";
-import { CompanyContext } from "@/context/company-context";
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { useState } from "react";
+import { Box, Button } from "@mui/material";
+
+import { AddCustomProduct } from "./AddCustomProduct";
+import { AddDefaultProduct } from "./AddDefaultProduct";
 
 export const RegisterFunc = () => {
-  const companyContext = useContext(CompanyContext);
-
-  const [modelNum, setModelNum] = useState("");
-  const [productName, setProductName] = useState("");
-  const [price, setPrice] = useState<number>(0);
-  const [description, setDescription] = useState("");
-
-  if (!companyContext) return <Typography>Loading...</Typography>;
-
-  const { fetchMyProducts } = companyContext;
-
-  const handleSubmitProduct = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await fetch("http://localhost:3001/api/company/addproduct", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model_number: modelNum,
-          name: productName,
-          price,
-          description,
-        }),
-      });
-
-      setProductName("");
-      setModelNum("");
-      setPrice(0);
-      setDescription("");
-      await fetchMyProducts();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+  const [isDefaultForm, setIsDefaultForm] = useState(true);
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>
-        商品登録
-      </Typography>
-      <Box component="form" onSubmit={handleSubmitProduct} noValidate>
-        <Stack spacing={2}>
-          <TextField
-            label="商品名"
-            value={productName}
-            onChange={(e) => {
-              setProductName(e.target.value);
-            }}
-            required
-          />
-          <TextField
-            label="型番"
-            value={modelNum}
-            onChange={(e) => {
-              setModelNum(e.target.value);
-            }}
-            required
-          />
-          <TextField
-            label="金額"
-            type="number"
-            value={price}
-            onChange={(e) => {
-              setPrice(Number(e.target.value));
-            }}
-            required
-          />
-          <TextField
-            label="説明"
-            value={description}
-            onChange={(e) => {
-              setDescription(e.target.value);
-            }}
-            required
-          />
-          <Button type="submit" variant="contained" color="primary">
-            登録
-          </Button>
-        </Stack>
-      </Box>
+      <Button
+        onClick={() => {
+          setIsDefaultForm(true);
+        }}
+      >
+        新規商品登録
+      </Button>
+      <Button
+        onClick={() => {
+          setIsDefaultForm(false);
+        }}
+      >
+        個別商品登録
+      </Button>
+      {isDefaultForm ? <AddDefaultProduct /> : <AddCustomProduct />}
     </Box>
   );
 };
