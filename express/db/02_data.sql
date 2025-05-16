@@ -25,6 +25,7 @@ INSERT INTO products (company_id, model_number, name, default_price, description
 (2, 'AQ-10X', '浄水器', 15800.00, '家庭用浄水器'),
 (2, 'AQ-22W', 'クリーナーボトル', 950.00, '霧吹き式クリーナーボトル');
 
+-- 共通品(マスタデータ)のサンプル
 INSERT INTO public.custom_products
 (product_id, user_id, is_default, custom_price, custom_description, custom_product_name, custom_model_number)
 VALUES
@@ -39,6 +40,7 @@ VALUES
 (9, 0, true, 15800.00, '家庭用浄水器', '浄水器', 'AQ-10X'),
 (10, 0, true, 950.00, '霧吹き式クリーナーボトル', 'クリーナーボトル', 'AQ-22W');
 
+-- 個別品のサンプル
 INSERT INTO public.custom_products
 (product_id, user_id, is_default, custom_price, custom_description, start_date, end_date, custom_product_name, custom_model_number)
 VALUES
