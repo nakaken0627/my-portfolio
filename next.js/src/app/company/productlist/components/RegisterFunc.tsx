@@ -12,7 +12,7 @@ export const RegisterFunc = () => {
     <Box>
       <Stack direction="row" spacing={2}>
         <Button
-          variant="contained"
+          variant="outlined"
           fullWidth
           onClick={() => {
             setIsDefaultForm(true);
@@ -21,7 +21,7 @@ export const RegisterFunc = () => {
           新規商品登録
         </Button>
         <Button
-          variant="contained"
+          variant="outlined"
           fullWidth
           onClick={() => {
             setIsDefaultForm(false);
@@ -30,7 +30,9 @@ export const RegisterFunc = () => {
           個別商品登録
         </Button>
       </Stack>
-      {isDefaultForm ? <AddDefaultProduct /> : <AddCustomProduct />}
+      <Box sx={{ my: 2 }}>
+        {isDefaultForm ? <AddDefaultProduct /> : <AddCustomProduct />}
+      </Box>
     </Box>
   );
 };

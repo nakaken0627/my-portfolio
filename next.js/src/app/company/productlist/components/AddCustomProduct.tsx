@@ -2,7 +2,14 @@
 
 import { useContext, useEffect, useState } from "react";
 import { CompanyContext } from "@/context/company-context";
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 type User = {
   id: number;
@@ -102,23 +109,29 @@ export const AddCustomProduct = () => {
     searchDefaultProduct();
   }, [inputProductId, myProducts]);
 
-  if (!companyContext) return;
+  if (!companyContext) {
+    return <Typography>Loading...</Typography>;
+  }
 
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
         個別商品登録
       </Typography>
-      <Box onSubmit={handleSubmit}>
+      <Box component="form" onSubmit={handleSubmit}>
         <Stack spacing={2}>
-          <TextField
-            label="商品ID検索"
-            placeholder="対象の商品IDを入力して下さい"
-            value={inputProductId}
-            onChange={(e) => {
-              setInputProductId(e.target.value);
+          <Autocomplete
+            id="product-box"
+            options={myProducts ?? []}
+            getOptionLabel={(option) =>
+              `${String(option.product_id)}-${option.product_name}`
+            }
+            onChange={(e, newValue) => {
+              if (newValue) {
+                setInputProductId(String(newValue.product_id));
+              }
             }}
-            required
+            renderInput={(params) => <TextField {...params} label="商品ID" />}
           />
 
           <TextField
@@ -175,6 +188,12 @@ export const AddCustomProduct = () => {
 
           <TextField
             type="date"
+            label="適用開始日"
+            slotProps={{
+              inputLabel: {
+                shrink: true,
+              },
+            }}
             value={startDate}
             onChange={(e) => {
               setStartDate(e.target.value);
@@ -183,6 +202,12 @@ export const AddCustomProduct = () => {
 
           <TextField
             type="date"
+            label="適用終了日"
+            slotProps={{
+              inputLabel: {
+                shrink: true,
+              },
+            }}
             value={endDate}
             onChange={(e) => {
               setEndDate(e.target.value);

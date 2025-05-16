@@ -14,7 +14,7 @@ export const AddDefaultProduct = () => {
 
   if (!companyContext) return <Typography>Loading...</Typography>;
 
-  const { fetchMyCustomProducts } = companyContext;
+  const { fetchMyProducts, fetchMyCustomProducts } = companyContext;
 
   const handleSubmitProduct = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,6 +35,7 @@ export const AddDefaultProduct = () => {
       setModelNum("");
       setPrice("");
       setDescription("");
+      await fetchMyProducts();
       await fetchMyCustomProducts();
     } catch (err) {
       console.error(err);
