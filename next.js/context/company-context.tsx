@@ -8,6 +8,14 @@ type Company = {
 };
 
 type Product = {
+  product_id: number;
+  product_name: string;
+  model_number: string;
+  default_price: number;
+  description: string;
+};
+
+type CustomProduct = {
   custom_product_id: number;
   company_name: string;
   product_id: number;
@@ -23,6 +31,7 @@ type Product = {
 type CompanyContext = {
   myCompany: Company | null;
   myProducts: Product[];
+  myCustomProducts: CustomProduct[];
   fetchMyProducts: () => Promise<void>;
   fetchMyCustomProducts: () => Promise<void>;
 };
@@ -36,6 +45,7 @@ export const CompanyContextProvider = ({
 }) => {
   const [myCompany, setMyCompany] = useState<Company | null>(null);
   const [myProducts, setMyProducts] = useState<Product[]>([]);
+  const [myCustomProducts, setMyCustomProducts] = useState<CustomProduct[]>([]);
 
   const fetchMyCompany = async () => {
     try {
@@ -66,7 +76,7 @@ export const CompanyContextProvider = ({
       const data: Product[] = await res.json();
       setMyProducts(data);
     } catch (err) {
-      console.error("[MycompanyPage]myCompanyデータ取得エラー", err);
+      console.error(err);
     }
   };
 
@@ -82,10 +92,10 @@ export const CompanyContextProvider = ({
       if (!res.ok) {
         throw new Error("[MyCompanyPage]レスポンスエラー(products)");
       }
-      const data: Product[] = await res.json();
-      setMyProducts(data);
+      const data: CustomProduct[] = await res.json();
+      setMyCustomProducts(data);
     } catch (err) {
-      console.error("[MycompanyPage]myCompanyデータ取得エラー", err);
+      console.error(err);
     }
   };
 
@@ -94,12 +104,14 @@ export const CompanyContextProvider = ({
   }, []);
 
   useEffect(() => {
+    void fetchMyProducts();
     void fetchMyCustomProducts();
   }, [myCompany]);
 
   const contextValue = {
     myCompany,
     myProducts,
+    myCustomProducts,
     fetchMyProducts,
     fetchMyCustomProducts,
   };

@@ -21,7 +21,7 @@ export const ProductList = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
   if (!companyContext) return <Typography>Loading...</Typography>;
-  const { myProducts, fetchMyCustomProducts } = companyContext;
+  const { myCustomProducts, fetchMyCustomProducts } = companyContext;
 
   const handleCheckBoxStatus = (customId: number) => {
     setSelectedIds((prev) =>
@@ -69,7 +69,7 @@ export const ProductList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {myProducts.map((product) => (
+            {myCustomProducts.map((product) => (
               <TableRow key={product.custom_product_id}>
                 <TableCell align="center">
                   <Checkbox

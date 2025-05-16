@@ -52,8 +52,8 @@ export const findCompanyProducts = async (companyId: number): Promise<Product[] 
       `SELECT
           companies.name as company_name,
           model_number, 
-          products.id,
-          products.name, 
+          products.id as product_id,
+          products.name as product_name, 
           default_price, 
           description 
           FROM products 

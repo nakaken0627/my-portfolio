@@ -18,7 +18,7 @@ export const AddCustomProduct = () => {
   const [inputProductName, setInputProductName] = useState("");
   const [inputModelNum, setInputModelNum] = useState("");
   const [inputPrice, setInputPrice] = useState("");
-  const [inputDescriptin, setInputDescriptin] = useState("");
+  const [inputDescription, setInputDescription] = useState("");
   const [inputUserId, setInputUserId] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -54,7 +54,7 @@ export const AddCustomProduct = () => {
           custom_model_number: inputModelNum,
           custom_product_name: inputProductName,
           custom_price: inputPrice,
-          description: inputDescriptin,
+          description: inputDescription,
           start_date: startDate || null,
           end_date: endDate || null,
         }),
@@ -64,7 +64,7 @@ export const AddCustomProduct = () => {
       setInputModelNum("");
       setInputProductName("");
       setInputPrice("");
-      setInputDescriptin("");
+      setInputDescription("");
       setProductId("");
       setStartDate("");
       setEndDate("");
@@ -84,19 +84,19 @@ export const AddCustomProduct = () => {
     const searchDefaultProduct = () => {
       if (!myProducts) return;
       const existingProduct = myProducts.find(
-        (product) => product.custom_product_id === Number(inputProductId),
+        (product) => product.product_id === Number(inputProductId),
       );
       if (!existingProduct) {
         setInputProductName("");
         setInputModelNum("");
         setInputPrice("");
-        setInputDescriptin("");
+        setInputDescription("");
       } else {
         setProductId(String(existingProduct.product_id));
-        setInputProductName(existingProduct.company_name);
-        setInputModelNum(existingProduct.custom_model_number);
-        setInputPrice(String(Math.floor(existingProduct.custom_price)));
-        setInputDescriptin(existingProduct.custom_description);
+        setInputProductName(existingProduct.product_name);
+        setInputModelNum(existingProduct.model_number);
+        setInputPrice(String(Math.floor(existingProduct.default_price)));
+        setInputDescription(existingProduct.description);
       }
     };
     searchDefaultProduct();
@@ -167,15 +167,14 @@ export const AddCustomProduct = () => {
 
           <TextField
             label="説明"
-            value={inputDescriptin}
+            value={inputDescription}
             onChange={(e) => {
-              setInputDescriptin(e.target.value);
+              setInputDescription(e.target.value);
             }}
           />
 
           <TextField
             type="date"
-            id="startdate"
             value={startDate}
             onChange={(e) => {
               setStartDate(e.target.value);
@@ -184,7 +183,6 @@ export const AddCustomProduct = () => {
 
           <TextField
             type="date"
-            id="enddate"
             value={endDate}
             onChange={(e) => {
               setEndDate(e.target.value);
