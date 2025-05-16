@@ -67,4 +67,6 @@ app.use((req, res) => {
 });
 
 //サーバを起動
-app.listen(port, () => {});
+app.listen(port, () => {
+  console.warn(`Server is running at http://localhost:${port}`);
+});

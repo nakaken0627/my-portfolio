@@ -13,11 +13,16 @@ import {
 } from "../models/cartModel.js";
 import {
   addCompanyProduct,
+  addCustomProduct,
+  addDefaultProduct,
   confirmingOrder,
   deleteCompanyProducts,
+  deleteCustomCompanyProducts,
   findCompanyProducts,
+  findCustomCompanyProducts,
   getConfirmedOrderList,
   getMyOrderList,
+  getUserIds,
 } from "../models/companyModel.js";
 import { createOrder, createOrderProduct } from "../models/orderModel.js";
 import { findProductsForUser, orderedProductList } from "../models/userModel.js";
@@ -49,7 +54,8 @@ export const addProductForCompany = async (req: Request, res: Response, next: Ne
   const { model_number, name, price, description } = req.body;
 
   try {
-    const result = await addCompanyProduct(company_id, model_number, name, price, description);
+    const data = await addCompanyProduct(company_id, model_number, name, price, description);
+    const result = await addDefaultProduct(data.id, data.model_number, data.name, data.default_price, data.description);
     res.status(200).json(result);
   } catch (err) {
     return next(err);
@@ -202,6 +208,72 @@ export const confirmedOrderList = async (req: Request, res: Response, next: Next
   try {
     const data = await getConfirmedOrderList(company_id);
     res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const findCustomProductsForCompany = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) return;
+  const company_id = req.user.id;
+
+  try {
+    const products = await findCustomCompanyProducts(company_id);
+    res.status(200).json(products);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const registerCustomProduct = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body) return;
+  const {
+    product_id,
+    user_id,
+    custom_model_number,
+    custom_product_name,
+    custom_price,
+    custom_description,
+    start_date,
+    end_date,
+  } = req.body;
+  try {
+    const data = await addCustomProduct(
+      product_id,
+      user_id,
+      custom_model_number,
+      custom_product_name,
+      custom_price,
+      custom_description,
+      start_date,
+      end_date,
+    );
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const deleteCustomProductsForCompany = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body) return;
+
+  const { customProductIds } = req.body;
+
+  try {
+    const result = await deleteCustomCompanyProducts(customProductIds);
+    res.status(200).json({
+      message: "削除が成功しました",
+      result,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const getUserList = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await getUserIds();
+    res.status(200).json(result);
   } catch (err) {
     return next(err);
   }
