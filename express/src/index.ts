@@ -5,8 +5,8 @@ import dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
 
-import pool from "../config/database.js";
-import passport from "../config/passport.js";
+import pool from "./config/database.js";
+import passport from "./config/passport.js";
 import apiRouter from "./routes/api.js";
 import authRouter from "./routes/auth.js";
 
@@ -67,4 +67,7 @@ app.use((req, res) => {
 });
 
 //サーバを起動
-app.listen(port, () => {});
+app.listen(port, () => {
+  /* eslint-disable no-console */
+  console.log(`Server started on http://localhost:${port}`);
+});

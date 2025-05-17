@@ -4,12 +4,12 @@ import {
   login as userLogin,
   logout as userLogout,
   signup as userSignup,
-} from "../../controllers/authCompanyControlling.js";
+} from "../controllers/authCompanyControlling.js";
 import {
   login as companyLogin,
   logout as companyLogout,
   signup as companySignup,
-} from "../../controllers/authUserControlling.js";
+} from "../controllers/authUserControlling.js";
 
 const router = express.Router();
 
