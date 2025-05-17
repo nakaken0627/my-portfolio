@@ -19,7 +19,7 @@ import {
   orderHistory,
   orderListForCompany,
   registerCustomProduct,
-} from "../../controllers/productControlling.js";
+} from "../controllers//productControlling.js";
 import { getMyCompany } from "../controllers/authCompanyControlling.js";
 import { getMyUser } from "../controllers/authUserControlling.js";
 
