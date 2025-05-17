@@ -1,7 +1,5 @@
 import express from "express";
 
-import { getMyCompany } from "../../controllers/authCompanyControlling.js";
-import { getMyUser } from "../../controllers/authUserControlling.js";
 import {
   addProductForCompany,
   changStatusOfConfirm,
@@ -22,6 +20,8 @@ import {
   orderListForCompany,
   registerCustomProduct,
 } from "../../controllers/productControlling.js";
+import { getMyCompany } from "../controllers/authCompanyControlling.js";
+import { getMyUser } from "../controllers/authUserControlling.js";
 
 //routerオブジェクトを設定
 const router = express.Router();
