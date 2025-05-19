@@ -63,13 +63,13 @@ passport.use(
 
 //セッションへ保存する情報を定義
 passport.serializeUser((user: Express.User, done) => {
-  const expressUser = user as Express.User;
+  const expressUser = user as Express.User; //型定義ファイルが反映しないため、明示的に型を指定するためキャスト
   done(null, { id: expressUser.id, type: expressUser.type });
 });
 
 //センションからユーザー情報を復元
 passport.deserializeUser(async (data: Express.User, done) => {
-  const expressData = data as Express.User;
+  const expressData = data as Express.User; //型定義ファイルが反映しないため、明示的に型を指定するためキャスト
   try {
     if (expressData.type === "company") {
       const result = await pool.query("SELECT * FROM companies WHERE id = $1", [expressData.id]);
