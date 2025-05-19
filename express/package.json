@@ -26,9 +26,9 @@
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
-    "passport": "^0.7.0",
+    "passport": "^0.6.0",
     "passport-local": "^1.0.0",
-    "pg": "^8.14.1"
+    "pg": "^8.16.0"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
@@ -36,7 +36,7 @@
     "@types/connect-pg-simple": "^7.0.3",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.1",
+    "@types/express": "^5.0.2",
     "@types/express-session": "^1.18.1",
     "@types/node": "^22.14.1",
     "@types/passport": "^1.0.17",
