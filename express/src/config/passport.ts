@@ -1,6 +1,7 @@
-//認証方法の定義、セッションへの保存
+/// <reference path="../@types/express/globals.d.ts" />
 
-import bcrypt from "bcrypt";
+//認証方法の定義、セッションへの保存
+import * as bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 
@@ -61,19 +62,21 @@ passport.use(
 );
 
 //セッションへ保存する情報を定義
-passport.serializeUser((user, done) => {
-  done(null, { id: user.id, type: user.type });
+passport.serializeUser((user: Express.User, done) => {
+  const expressUser = user as Express.User; //型定義ファイルが反映しないため、明示的に型を指定するためキャスト
+  done(null, { id: expressUser.id, type: expressUser.type });
 });
 
 //センションからユーザー情報を復元
 passport.deserializeUser(async (data: Express.User, done) => {
+  const expressData = data as Express.User; //型定義ファイルが反映しないため、明示的に型を指定するためキャスト
   try {
-    if (data.type === "company") {
-      const result = await pool.query("SELECT * FROM companies WHERE id = $1", [data.id]);
+    if (expressData.type === "company") {
+      const result = await pool.query("SELECT * FROM companies WHERE id = $1", [expressData.id]);
       return done(null, { ...result.rows[0], type: "company" });
-    } else if (data.type === "user") {
-      const result = await pool.query("SELECT * FROM users WHERE id = $1", [data.id]);
-      return done(null, { ...result.rows[0], type: "users" });
+    } else if (expressData.type === "user") {
+      const result = await pool.query("SELECT * FROM users WHERE id = $1", [expressData.id]);
+      return done(null, { ...result.rows[0], type: "user" });
     } else {
       return done(null, false);
     }
