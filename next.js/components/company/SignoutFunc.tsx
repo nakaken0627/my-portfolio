@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "@/components/lib/api";
 import { Button } from "@mui/material";
 
 export const SignoutFunc = () => {
@@ -8,7 +9,7 @@ export const SignoutFunc = () => {
 
   const handleClickSignout = async () => {
     try {
-      const res = await fetch("http://localhost:3001/auth/company/logout", {
+      const res = await fetch(`${API_BASE_URL}/auth/company/logout`, {
         method: "GET",
         credentials: "include",
       });

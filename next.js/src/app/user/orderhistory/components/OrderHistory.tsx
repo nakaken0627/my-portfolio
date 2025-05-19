@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
+import { API_BASE_URL } from "@/components/lib/api";
 import { CartContext } from "@/context/cart-context";
 import {
   Box,
@@ -47,7 +48,7 @@ export const OrderHistory = () => {
     //myUserとの依存関係を保持し、エラーを避けるためにuseEffect内で定義
     const fetchOrder = async () => {
       try {
-        const res = await fetch("http://localhost:3001/api/user/orderhistory", {
+        const res = await fetch(`${API_BASE_URL}/api/user/orders/history`, {
           method: "GET",
           credentials: "include",
         });

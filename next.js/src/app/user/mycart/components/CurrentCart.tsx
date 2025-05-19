@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext } from "react";
+import { API_BASE_URL } from "@/components/lib/api";
 import { CartContext } from "@/context/cart-context";
 import {
   Box,
@@ -49,7 +50,7 @@ export const CurrentCart = () => {
   const handleCheckout = async () => {
     const cartProductWithPriceData = cartProductsWithPrice();
     try {
-      await fetch("http://localhost:3001/api/cart/checkout", {
+      await fetch(`${API_BASE_URL}/api/cart/checkout`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
