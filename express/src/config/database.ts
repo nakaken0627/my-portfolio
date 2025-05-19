@@ -1,13 +1,11 @@
 // PostgreSQLデータベースへの接続設定
 
-import dotenv from "dotenv"; // dotenvをインポートして環境変数を読み込む
-import pg from "pg"; // PostgreSQLのクライアントライブラリをインポート
-
-const { Pool } = pg;
+import * as dotenv from "dotenv"; // dotenvをインポートして環境変数を読み込む
+import * as pg from "pg"; // PostgreSQLのクライアントライブラリをインポート
 
 dotenv.config();
 
-const pool = new Pool({
+const pool = new pg.Pool({
   host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT || "5432"),
   database: process.env.DB_NAME,
