@@ -6,7 +6,7 @@ import {
   Autocomplete,
   Box,
   Button,
-  Stack,
+  Grid,
   TextField,
   Typography,
 } from "@mui/material";
@@ -119,10 +119,11 @@ export const AddCustomProduct = () => {
         個別商品登録
       </Typography>
       <Box component="form" onSubmit={handleSubmit}>
-        <Stack spacing={2}>
+        <Box mb={2}>
           <Autocomplete
             id="product-box"
             options={myProducts ?? []}
+            size="small"
             getOptionLabel={(option) =>
               `${String(option.product_id)}-${option.product_name}`
             }
@@ -133,91 +134,118 @@ export const AddCustomProduct = () => {
             }}
             renderInput={(params) => <TextField {...params} label="商品ID" />}
           />
+        </Box>
 
-          <TextField
-            label="商品名"
-            value={inputProductName}
-            onChange={(e) => {
-              setInputProductName(e.target.value);
-            }}
-            required
-          />
+        <Grid container spacing={2} mb={2}>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <TextField
+              label="商品名"
+              value={inputProductName}
+              onChange={(e) => {
+                setInputProductName(e.target.value);
+              }}
+              required
+              size="small"
+              fullWidth
+            />
+          </Grid>
 
-          <TextField
-            label="ユーザーID"
-            placeholder="対象のユーザーIDを入力して下さい"
-            value={inputUserId}
-            onChange={(e) => {
-              setInputUserId(e.target.value);
-            }}
-            required
-          />
-          {inputUserId.trim() !== "" &&
-            (isExistingUser ? (
-              <span>ユーザー名:{isExistingUser.name}</span>
-            ) : (
-              <span> ※ ユーザーは存在しません</span>
-            ))}
+          <Grid size={{ xs: 12, md: 4 }}>
+            <TextField
+              label="型番"
+              value={inputModelNum}
+              onChange={(e) => {
+                setInputModelNum(e.target.value);
+              }}
+              required
+              size="small"
+              fullWidth
+            />
+          </Grid>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <TextField
+              type="number"
+              label="個別単価"
+              value={inputPrice}
+              onChange={(e) => {
+                setInputPrice(e.target.value);
+              }}
+              required
+              size="small"
+              fullWidth
+            />
+          </Grid>
+        </Grid>
 
-          <TextField
-            label="型番"
-            value={inputModelNum}
-            onChange={(e) => {
-              setInputModelNum(e.target.value);
-            }}
-            required
-          />
+        <TextField
+          label="ユーザーID"
+          placeholder="対象のユーザーIDを入力して下さい"
+          value={inputUserId}
+          onChange={(e) => {
+            setInputUserId(e.target.value);
+          }}
+          required
+          size="small"
+        />
+        {inputUserId.trim() !== "" &&
+          (isExistingUser ? (
+            <span>ユーザー名:{isExistingUser.name}</span>
+          ) : (
+            <span> ※ ユーザーは存在しません</span>
+          ))}
 
-          <TextField
-            type="number"
-            label="個別単価"
-            value={inputPrice}
-            onChange={(e) => {
-              setInputPrice(e.target.value);
-            }}
-            required
-          />
-
-          <TextField
-            label="説明"
-            value={inputDescription}
-            onChange={(e) => {
-              setInputDescription(e.target.value);
-            }}
-          />
-
-          <TextField
-            type="date"
-            label="適用開始日"
-            slotProps={{
-              inputLabel: {
-                shrink: true,
-              },
-            }}
-            value={startDate}
-            onChange={(e) => {
-              setStartDate(e.target.value);
-            }}
-          />
-
-          <TextField
-            type="date"
-            label="適用終了日"
-            slotProps={{
-              inputLabel: {
-                shrink: true,
-              },
-            }}
-            value={endDate}
-            onChange={(e) => {
-              setEndDate(e.target.value);
-            }}
-          />
-
-          <Button type="submit" variant="contained">
+        <TextField
+          type="date"
+          label="適用開始日"
+          slotProps={{
+            inputLabel: {
+              shrink: true,
+            },
+          }}
+          value={startDate}
+          onChange={(e) => {
+            setStartDate(e.target.value);
+          }}
+          size="small"
+        />
+        <TextField
+          type="date"
+          label="適用終了日"
+          slotProps={{
+            inputLabel: {
+              shrink: true,
+            },
+          }}
+          value={endDate}
+          onChange={(e) => {
+            setEndDate(e.target.value);
+          }}
+          size="small"
+        />
+        <TextField
+          label="説明"
+          value={inputDescription}
+          onChange={(e) => {
+            setInputDescription(e.target.value);
+          }}
+          size="small"
+        />
+        {/* ユーザー確認 */}
+        {inputUserId.trim() !== "" &&
+          (isExistingUser ? (
+            <Typography variant="body2" color="primary">
+              ユーザー名: {isExistingUser.name}
+            </Typography>
+          ) : (
+            <Typography variant="body2" color="error">
+              ※ ユーザーは存在しません
+            </Typography>
+          ))}
+        <Box textAlign="right">
+          <Button type="submit" variant="contained" size="small">
             登録
           </Button>
-        </Stack>
+        </Box>
       </Box>
     </Box>
   );

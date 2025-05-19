@@ -72,15 +72,14 @@ CREATE TABLE IF NOT EXISTS order_products (
   UNIQUE (order_id, product_id)
 );
 
-CREATE TABLE IF NOT EXISTS custom_products(
+CREATE TABLE IF NOT EXISTS product_customizations(
   id SERIAL PRIMARY KEY,
   product_id INTEGER NOT NULL REFERENCES products(id),
   user_id INTEGER NOT NULL REFERENCES users(id),
-  is_default BOOLEAN NOT NULL DEFAULT false,
-  custom_product_name VARCHAR(255) NOT NULL,
-  custom_model_number VARCHAR(255) NOT NULL,
-  custom_price NUMERIC(10,2) NOT NULL,
-  custom_description TEXT,
+  name VARCHAR(255) NOT NULL,
+  model_number VARCHAR(255) NOT NULL,
+  price NUMERIC(10,2) NOT NULL,
+  description TEXT,
   document_url TEXT,
   start_date DATE,
   end_date DATE,

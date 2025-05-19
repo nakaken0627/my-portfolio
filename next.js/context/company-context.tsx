@@ -16,14 +16,13 @@ type Product = {
 };
 
 type CustomProduct = {
-  custom_product_id: number;
-  company_name: string;
+  customization_id: number;
   product_id: number;
-  custom_product_name: string;
-  custom_model_number: string;
   user_name: string;
-  custom_price: number;
-  custom_description: string;
+  model_number: string;
+  display_name: string;
+  display_price: number;
+  description: string;
   start_date: string;
   end_date: string;
 };

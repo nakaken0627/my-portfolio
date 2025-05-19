@@ -48,12 +48,12 @@ export const ProductList = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 1 }}>
-      <Typography variant="h4" gutterBottom>
+    <Container maxWidth="lg" sx={{ py: 2 }}>
+      <Typography variant="h5" gutterBottom>
         商品一覧
       </Typography>
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer component={Paper} sx={{ overflowX: "auto" }}>
+        <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell align="center">選択</TableCell>
@@ -61,7 +61,7 @@ export const ProductList = () => {
               <TableCell align="center">商品ID</TableCell>
               <TableCell align="center">商品名</TableCell>
               <TableCell align="center">型番</TableCell>
-              <TableCell align="center">単価種別</TableCell>
+              <TableCell align="center">種別</TableCell>
               <TableCell align="center">価格</TableCell>
               <TableCell align="center">説明</TableCell>
               <TableCell align="center">適用開始日</TableCell>
@@ -70,36 +70,32 @@ export const ProductList = () => {
           </TableHead>
           <TableBody>
             {myCustomProducts.map((product) => (
-              <TableRow key={product.custom_product_id}>
+              <TableRow key={product.customization_id || product.product_id}>
                 <TableCell align="center">
                   <Checkbox
-                    checked={selectedIds.includes(product.custom_product_id)}
+                    checked={selectedIds.includes(product.product_id)}
                     onChange={() => {
-                      handleCheckBoxStatus(product.custom_product_id);
+                      handleCheckBoxStatus(product.customization_id);
                     }}
                   />
                 </TableCell>
                 <TableCell align="center">
-                  {product.custom_product_id}
+                  {product.customization_id || "-"}
                 </TableCell>
                 <TableCell align="center">{product.product_id}</TableCell>
+                <TableCell align="center">{product.display_name}</TableCell>
+                <TableCell align="center">{product.model_number}</TableCell>
                 <TableCell align="center">
-                  {product.custom_product_name}
+                  {product.user_name ? product.user_name : "共通品"}
                 </TableCell>
                 <TableCell align="center">
-                  {product.custom_model_number}
+                  {Math.round(product.display_price)}
                 </TableCell>
+                <TableCell align="center">{product.description}</TableCell>
                 <TableCell align="center">
-                  {product.user_name === "dummy" ? "共通品" : product.user_name}
+                  {product.start_date || "-"}
                 </TableCell>
-                <TableCell align="center">
-                  {Math.round(product.custom_price)}
-                </TableCell>
-                <TableCell align="center">
-                  {product.custom_description}
-                </TableCell>
-                <TableCell align="center">{product.start_date}</TableCell>
-                <TableCell align="center">{product.end_date}</TableCell>
+                <TableCell align="center">{product.end_date || "-"}</TableCell>
               </TableRow>
             ))}
           </TableBody>

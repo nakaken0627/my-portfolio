@@ -122,6 +122,6 @@
     "esm": true,
     "transpileOnly": true
   },
-  "include": ["src/**/*", "src/config/**/*", "src/types/**/*", "src/controllers"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }

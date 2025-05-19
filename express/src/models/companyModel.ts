@@ -202,25 +202,42 @@ export const findCustomCompanyProducts = async (company_id: number): Promise<Pro
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
-      `SELECT
-        custom_products.id as custom_product_id,
-        companies.name as company_name,
-        custom_model_number, 
-        products.id as product_id,
-        custom_product_name, 
-        users.name as user_name,
-        custom_price, 
-        custom_description,
-        TO_CHAR(start_date,'yyyy/mm/dd') as start_date,
-        TO_CHAR(end_date,'yyyy/mm/dd') as end_date
-      FROM custom_products 
-      INNER JOIN products
-      ON products.id = custom_products.product_id
-      INNER JOIN companies 
-      ON companies.id = products.company_id 
-      INNER JOIN users
-  	  ON users.id = custom_products.user_id
-      WHERE company_id = $1`,
+      `
+        SELECT
+          p.id AS product_id,
+          NULL AS customization_id,
+          NULL AS user_id,
+          NULL AS user_name,
+          p.model_number,
+          p.name AS display_name,
+          p.default_price AS display_price,
+          p.description,
+          NULL AS start_date,
+          NULL AS end_date
+        FROM
+          products p
+        WHERE company_id = $1
+
+        UNION ALL
+
+        SELECT
+          p.id AS product_id,
+          pc.id AS customization_id,
+          pc.user_id,
+          u.name AS user_name ,
+          pc.model_number,
+          pc.name AS display_name,
+          pc.price AS display_price,
+          pc.description,
+          TO_CHAR(pc.start_date,'yyyy/mm/dd') as start_date,
+          TO_CHAR(pc.end_date,'yyyy/mm/dd') as end_date
+        FROM
+          products p
+        JOIN product_customizations pc
+          ON p.id = pc.product_id
+        INNER JOIN users u
+          ON pc.user_id = u.id
+        WHERE p.company_id = $1`,
       [company_id],
     );
 
