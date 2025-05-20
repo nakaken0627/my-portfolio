@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "@/components/lib/api";
 import {
   Alert,
   Box,
@@ -31,7 +32,7 @@ export const SignupForm = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3001/auth/user/signup", {
+      const response = await fetch(`${API_BASE_URL}/auth/user/signup`, {
         method: "POST",
         credentials: "include",
         headers: {

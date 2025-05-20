@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
+import { API_BASE_URL } from "@/components/lib/api";
 import { CompanyContext } from "@/context/company-context";
 import {
   Box,
@@ -40,13 +41,10 @@ export const ConfirmedList = () => {
 
   const fetchConfirmedOrderList = async () => {
     try {
-      const res = await fetch(
-        "http://localhost:3001/api/company/confirmedorder",
-        {
-          method: "GET",
-          credentials: "include",
-        },
-      );
+      const res = await fetch(`${API_BASE_URL}/api/company/orders/confirmed`, {
+        method: "GET",
+        credentials: "include",
+      });
       const data: ConfirmedList[] = await res.json();
       const groupedList = data.reduce<GroupedList>((acc, item) => {
         acc[item.order_id] ??= [];

@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext, useState } from "react";
+import { API_BASE_URL } from "@/components/lib/api";
 import { CompanyContext } from "@/context/company-context";
 import {
   Button,
@@ -33,7 +34,7 @@ export const ProductList = () => {
 
   const handleDeleteProducts = async () => {
     try {
-      await fetch("http://localhost:3001/api/company/deletecustomproducts", {
+      await fetch(`${API_BASE_URL}/api/company/custom-products`, {
         method: "DELETE",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

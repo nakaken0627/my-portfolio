@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
+import { API_BASE_URL } from "@/components/lib/api";
 import { CompanyContext } from "@/context/company-context";
 import {
   Button,
@@ -45,13 +46,10 @@ export const DisplayOrderList = () => {
 
   const fetchMyOrderList = async () => {
     try {
-      const res = await fetch(
-        "http://localhost:3001/api/company/getmyorderlist",
-        {
-          method: "GET",
-          credentials: "include",
-        },
-      );
+      const res = await fetch(`${API_BASE_URL}/api/company/orders`, {
+        method: "GET",
+        credentials: "include",
+      });
       const data: OrderList[] = await res.json();
       setOrderList(data);
 
@@ -79,7 +77,7 @@ export const DisplayOrderList = () => {
 
   const handleClickChangeStatus = async (confirmedIds: number[]) => {
     try {
-      await fetch("http://localhost:3001/api/company/confirmorder", {
+      await fetch(`${API_BASE_URL}/api/company/orders/confirmed`, {
         method: "PATCH",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({ confirmedIds }),

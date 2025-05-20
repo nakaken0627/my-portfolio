@@ -8,6 +8,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { API_BASE_URL } from "@/components/lib/api";
 
 type User = {
   id: number;
@@ -60,7 +61,7 @@ export const CartContextProvider = ({
 
   const fetchMyUser = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/user/myuser", {
+      const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
         method: "GET",
         credentials: "include",
       });
@@ -76,7 +77,7 @@ export const CartContextProvider = ({
 
   const fetchMyCart = async () => {
     try {
-      const response = await fetch("http://localhost:3001/api/cart/mycart", {
+      const response = await fetch(`${API_BASE_URL}/api/cart`, {
         method: "GET",
         credentials: "include",
       });
@@ -92,13 +93,10 @@ export const CartContextProvider = ({
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:3001/api/user/productlist",
-        {
-          method: "GET",
-          credentials: "include",
-        },
-      );
+      const response = await fetch(`${API_BASE_URL}/api/user/products`, {
+        method: "GET",
+        credentials: "include",
+      });
       if (!response.ok) {
         throw new Error("[cart-context]fetchProductsでエラー発生");
       }
@@ -114,7 +112,7 @@ export const CartContextProvider = ({
     if (!cartId) return;
     try {
       const response = await fetch(
-        `http://localhost:3001/api/cart/getproducts?cartId=${String(cartId.id)}`,
+        `${API_BASE_URL}/api/cart/products?cartId=${String(cartId.id)}`,
         {
           method: "GET",
         },
@@ -130,19 +128,16 @@ export const CartContextProvider = ({
   const sendCartLatestData = async (productId: number, quantity: number) => {
     if (!cartId) return;
     try {
-      await fetch(
-        `http://localhost:3001/api/cart/product/${String(productId)}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            cart_id: cartId.id,
-            quantity: quantity,
-          }),
+      await fetch(`${API_BASE_URL}/api/cart/product/${String(productId)}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          cart_id: cartId.id,
+          quantity: quantity,
+        }),
+      });
     } catch (err) {
       console.error("更新失敗", err);
     }
@@ -151,7 +146,7 @@ export const CartContextProvider = ({
   const sendCartDeleteProduct = async (productId: number) => {
     if (!cartId) return;
     try {
-      await fetch("http://localhost:3001/api/cart/deleteproduct", {
+      await fetch(`${API_BASE_URL}/api/cart/products`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",

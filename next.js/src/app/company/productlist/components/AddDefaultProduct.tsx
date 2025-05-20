@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext, useState } from "react";
+import { API_BASE_URL } from "@/components/lib/api";
 import { CompanyContext } from "@/context/company-context";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 
@@ -19,7 +20,7 @@ export const AddDefaultProduct = () => {
   const handleSubmitProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await fetch("http://localhost:3001/api/company/addproduct", {
+      await fetch(`${API_BASE_URL}/api/company/products`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

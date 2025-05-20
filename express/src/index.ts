@@ -15,7 +15,7 @@ const app: Express = express();
 
 //環境変数を設定
 dotenv.config();
-const port = process.env.PORT || 3001;
+const port = Number(process.env.PORT) || 3001;
 const sessionSecret = process.env.SESSION_SECRET;
 if (!sessionSecret) {
   throw new Error("SESSION_SECRET is not defined in the environment variables.");
@@ -46,6 +46,8 @@ const sessionOptions = {
   createTableIfMissing: true, //sessionテーブルが存在しない場合に自動作成するオプション
 };
 
+const host = process.env.HOST || "localhost";
+
 app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -67,6 +69,6 @@ app.use((req, res) => {
 });
 
 //サーバを起動
-app.listen(port, () => {
-  console.warn(`Server is running at http://localhost:${port}`);
+app.listen(port, host, () => {
+  console.warn(`Server is running at http://${host}:${port}`);
 });

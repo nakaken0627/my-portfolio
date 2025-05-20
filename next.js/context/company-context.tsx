@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useEffect, useState } from "react";
+import { API_BASE_URL } from "@/components/lib/api";
 
 type Company = {
   id: number;
@@ -48,7 +49,7 @@ export const CompanyContextProvider = ({
 
   const fetchMyCompany = async () => {
     try {
-      const res = await fetch("http://localhost:3001/api/company/mycompany", {
+      const res = await fetch(`${API_BASE_URL}/api/company/profile`, {
         method: "GET",
         credentials: "include",
       });
@@ -62,13 +63,10 @@ export const CompanyContextProvider = ({
 
   const fetchMyProducts = async () => {
     try {
-      const res = await fetch(
-        "http://localhost:3001/api/company/myproductlist",
-        {
-          method: "GET",
-          credentials: "include", //cookieデータをつけて送る
-        },
-      );
+      const res = await fetch(`${API_BASE_URL}/api/company/products`, {
+        method: "GET",
+        credentials: "include", //cookieデータをつけて送る
+      });
       if (!res.ok) {
         throw new Error("[MyCompanyPage]レスポンスエラー(products)");
       }
@@ -81,13 +79,10 @@ export const CompanyContextProvider = ({
 
   const fetchMyCustomProducts = async () => {
     try {
-      const res = await fetch(
-        "http://localhost:3001/api/company/mycustomproductlist",
-        {
-          method: "GET",
-          credentials: "include", //cookieデータをつけて送る
-        },
-      );
+      const res = await fetch(`${API_BASE_URL}/api/company/custom-products`, {
+        method: "GET",
+        credentials: "include", //cookieデータをつけて送る
+      });
       if (!res.ok) {
         throw new Error("[MyCompanyPage]レスポンスエラー(products)");
       }
@@ -99,6 +94,7 @@ export const CompanyContextProvider = ({
   };
 
   useEffect(() => {
+    void fetchMyCompany();
     void fetchMyCompany();
   }, []);
 
