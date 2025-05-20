@@ -34,11 +34,7 @@ export const ProductList = () => {
 
   const handleDeleteProducts = async () => {
     try {
-<<<<<<< Updated upstream
-      await fetch("http://localhost:3001/api/company/deleteproducts", {
-=======
       await fetch(`${API_BASE_URL}/api/company/custom-products`, {
->>>>>>> Stashed changes
         method: "DELETE",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

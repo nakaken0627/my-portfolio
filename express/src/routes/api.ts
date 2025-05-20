@@ -23,30 +23,20 @@ import {
 const router = express.Router();
 
 //問屋用のAPI
-<<<<<<< Updated upstream
-router.get("/company/mycompany", getMyCompany);
-router.get("/company/myproductlist", findProductsForCompany);
-router.get("/company/getmyorderlist", orderListForCompany);
-router.get("/company/confirmedorder", confirmedOrderList);
-router.post("/company/addproduct", addProductForCompany);
-router.patch("/company/confirmorder", changStatusOfConfirm);
-router.delete("/company/deleteproducts", deleteProductsForCompany);
-=======
 router.get("/company/profile", getMyCompany);
-router.get("/company/users", getUserList);
+// router.get("/company/users", getUserList);
 router.get("/company/products", findProductsForCompany);
-router.get("/company/custom-products", findCustomProductsForCompany);
+// router.get("/company/custom-products", findCustomProductsForCompany);
 router.get("/company/orders", orderListForCompany);
 router.get("/company/orders/confirmed", confirmedOrderList);
 
 router.post("/company/products", addProductForCompany);
-router.post("/company/custom-products", registerCustomProduct);
+// router.post("/company/custom-products", registerCustomProduct);
 
 router.patch("/company/orders/confirmed", changStatusOfConfirm);
 
 router.delete("/company/products", deleteProductsForCompany);
-router.delete("/company/custom-products", deleteCustomProductsForCompany);
->>>>>>> Stashed changes
+// router.delete("/company/custom-products", deleteCustomProductsForCompany);
 
 //発注者用API
 router.get("/user/profile", getMyUser);

@@ -69,12 +69,6 @@ app.use((req, res) => {
 });
 
 //サーバを起動
-<<<<<<< Updated upstream
-app.listen(port, () => {
-  /* eslint-disable no-console */
-  console.log(`Server started on http://localhost:${port}`);
-=======
 app.listen(port, host, () => {
   console.warn(`Server is running at http://${host}:${port}`);
->>>>>>> Stashed changes
 });

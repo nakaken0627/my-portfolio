@@ -40,7 +40,7 @@ export const CompanyContextProvider = ({
         credentials: "include",
       });
       if (!res.ok) throw new Error("レスポンスエラーが発生");
-      const data = await res.json();
+      const data: Company = await res.json();
       setMyCompany(data);
     } catch (err) {
       console.error(err);
@@ -56,40 +56,19 @@ export const CompanyContextProvider = ({
       if (!res.ok) {
         throw new Error("[MyCompanyPage]レスポンスエラー(products)");
       }
-      const data = await res.json();
-      // console.log("[MyCompanyPage]myCompanyデータ取得成功", data);
+      const data: Product[] = await res.json();
       setMyProducts(data);
     } catch (err) {
-<<<<<<< Updated upstream
       console.error("[MycompanyPage]myCompanyデータ取得エラー", err);
-=======
-      console.error(err);
-    }
-  };
-
-  const fetchMyCustomProducts = async () => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/company/custom-products`, {
-        method: "GET",
-        credentials: "include", //cookieデータをつけて送る
-      });
-      if (!res.ok) {
-        throw new Error("[MyCompanyPage]レスポンスエラー(products)");
-      }
-      const data: CustomProduct[] = await res.json();
-      setMyCustomProducts(data);
-    } catch (err) {
-      console.error(err);
->>>>>>> Stashed changes
     }
   };
 
   useEffect(() => {
-    fetchMyCompany();
+    void fetchMyCompany();
   }, []);
 
   useEffect(() => {
-    fetchMyProducts();
+    void fetchMyProducts();
   }, [myCompany]);
 
   const contextValue = {
