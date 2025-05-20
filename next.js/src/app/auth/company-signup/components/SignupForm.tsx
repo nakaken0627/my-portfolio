@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "@/components/lib/api";
 import {
   Alert,
   Box,
@@ -31,17 +32,14 @@ export const SignupForm = () => {
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:3001/auth/company/signup",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ companyName, companyPassword }),
+      const response = await fetch(`${API_BASE_URL}/auth/company/signup`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({ companyName, companyPassword }),
+      });
 
       const data: { message: string } = await response.json();
 

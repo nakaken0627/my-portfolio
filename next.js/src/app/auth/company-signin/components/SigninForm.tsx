@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { API_BASE_URL } from "@/components/lib/api";
 import {
   Alert,
   Box,
@@ -25,7 +26,7 @@ export const SigninForm = () => {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:3001/auth/company/login", {
+      const response = await fetch(`${API_BASE_URL}/auth/company/login`, {
         method: "POST",
         credentials: "include",
         headers: {

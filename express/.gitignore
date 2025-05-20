@@ -17,6 +17,7 @@ pnpm-debug.log*
 # TypeScriptビルド成果物
 dist/
 build/
+*.tsbuildinfo
 
 # テスト関連
 coverage/

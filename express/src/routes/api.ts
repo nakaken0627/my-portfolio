@@ -23,25 +23,32 @@ import {
 const router = express.Router();
 
 //問屋用のAPI
-router.get("/company/mycompany", getMyCompany);
-router.get("/company/myproductlist", findProductsForCompany);
-router.get("/company/getmyorderlist", orderListForCompany);
-router.get("/company/confirmedorder", confirmedOrderList);
-router.post("/company/addproduct", addProductForCompany);
-router.patch("/company/confirmorder", changStatusOfConfirm);
-router.delete("/company/deleteproducts", deleteProductsForCompany);
+router.get("/company/profile", getMyCompany);
+// router.get("/company/users", getUserList);
+router.get("/company/products", findProductsForCompany);
+// router.get("/company/custom-products", findCustomProductsForCompany);
+router.get("/company/orders", orderListForCompany);
+router.get("/company/orders/confirmed", confirmedOrderList);
+
+router.post("/company/products", addProductForCompany);
+// router.post("/company/custom-products", registerCustomProduct);
+
+router.patch("/company/orders/confirmed", changStatusOfConfirm);
+
+router.delete("/company/products", deleteProductsForCompany);
+// router.delete("/company/custom-products", deleteCustomProductsForCompany);
 
 //発注者用API
-router.get("/user/myuser", getMyUser);
-router.get("/user/productlist", findProductsFromUser);
-router.get("/user/orderhistory", orderHistory);
+router.get("/user/profile", getMyUser);
+router.get("/user/products", findProductsFromUser);
+router.get("/user/orders/history", orderHistory);
 
 //カート機能
-router.get("/cart/mycart", getOrCreateCart);
-router.get("/cart/getproducts", getUserCartALLProducts);
+router.get("/cart/cart", getOrCreateCart);
+router.get("/cart/products", getUserCartALLProducts);
 router.put("/cart/product/:productId", createOrChangeUserCartProduct);
 router.post("/cart/checkout", checkoutUserCart);
-router.delete("/cart/deleteproduct", deleteUserCartProduct);
-router.delete("/cart/deleteallproducts", deleteUserCartALLProducts);
+router.delete("/cart/products", deleteUserCartProduct);
+router.delete("/cart/all-products", deleteUserCartALLProducts);
 
 export default router;
