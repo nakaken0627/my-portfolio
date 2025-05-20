@@ -26,7 +26,7 @@ const host = process.env.HOST || "localhost";
 
 //特定のサーバからのアクセスを許可するcors設定
 const corsOptions = {
-  origin: `http://${frontIp}:3000`,
+  origin: [`http://${frontIp}:3000`, `http://${frontIp}`],
   credentials: true,
 };
 app.use(cors(corsOptions));
