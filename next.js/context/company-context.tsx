@@ -58,9 +58,7 @@ export const CompanyContextProvider = ({
       }
       const data: Product[] = await res.json();
       setMyProducts(data);
-    } catch (err) {
-      console.error("[MycompanyPage]myCompanyデータ取得エラー", err);
-    }
+    } catch (err) {}
   };
 
   useEffect(() => {

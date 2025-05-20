@@ -11,10 +11,13 @@ const pool = new pg.Pool({
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
+  ssl: { rejectUnauthorized: false }, //RDSでは暗号化されていないものはデフォルトで拒否するためfalseで可
 });
 
 //接続状況確認用
-pool.on("connect", () => {});
+pool.on("connect", () => {
+  console.info("PostgreSQLに接続しました。");
+});
 pool.on("error", (err) => {
   console.error("PostgreSQL接続エラー:", err);
 });

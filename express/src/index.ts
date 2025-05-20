@@ -21,9 +21,12 @@ if (!sessionSecret) {
   throw new Error("SESSION_SECRET is not defined in the environment variables.");
 }
 
+const frontIp = process.env.FRONT_IP || "localhost";
+const host = process.env.HOST || "localhost";
+
 //特定のサーバからのアクセスを許可するcors設定
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: `http://${frontIp}:3000`,
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -46,8 +49,6 @@ const sessionOptions = {
   createTableIfMissing: true, //sessionテーブルが存在しない場合に自動作成するオプション
 };
 
-const host = process.env.HOST || "localhost";
-
 app.use(session(sessionOptions));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -69,6 +70,10 @@ app.use((req, res) => {
 });
 
 //サーバを起動
-app.listen(port, host, () => {
-  console.warn(`Server is running at http://${host}:${port}`);
-});
+app
+  .listen(port, host, () => {
+    console.warn(`Server is running at http://${host}:${port}`);
+  })
+  .on("error", (err) => {
+    console.error(err);
+  });
