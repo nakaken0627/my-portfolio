@@ -57,6 +57,7 @@ export const AddDefaultProduct = () => {
               setProductName(e.target.value);
             }}
             required
+            size="small"
           />
           <TextField
             label="型番"
@@ -65,6 +66,7 @@ export const AddDefaultProduct = () => {
               setModelNum(e.target.value);
             }}
             required
+            size="small"
           />
           <TextField
             label="単価"
@@ -74,6 +76,7 @@ export const AddDefaultProduct = () => {
               setPrice(e.target.value);
             }}
             required
+            size="small"
           />
           <TextField
             label="説明"
@@ -82,6 +85,7 @@ export const AddDefaultProduct = () => {
               setDescription(e.target.value);
             }}
             required
+            size="small"
           />
           <Button type="submit" variant="contained" color="primary">
             登録

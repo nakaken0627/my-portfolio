@@ -14,7 +14,6 @@ import {
 import {
   addCompanyProduct,
   addCustomProduct,
-  addDefaultProduct,
   confirmingOrder,
   deleteCompanyProducts,
   deleteCustomCompanyProducts,
@@ -55,8 +54,7 @@ export const addProductForCompany = async (req: Request, res: Response, next: Ne
 
   try {
     const data = await addCompanyProduct(company_id, model_number, name, price, description);
-    const result = await addDefaultProduct(data.id, data.model_number, data.name, data.default_price, data.description);
-    res.status(200).json(result);
+    res.status(200).json(data);
   } catch (err) {
     return next(err);
   }

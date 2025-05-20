@@ -247,35 +247,6 @@ export const findCustomCompanyProducts = async (company_id: number): Promise<Pro
   }
 };
 
-export const addDefaultProduct = async (
-  product_id: number,
-  model_number: string,
-  name: string,
-  default_price: number,
-  description: string,
-) => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `
-      INSERT INTO custom_products
-       (product_id,
-        user_id,
-        is_default,
-        custom_model_number,
-        custom_product_name,
-        custom_price,
-        custom_description)
-      VALUES ($1,0,true,$2,$3,$4,$5)
-      `,
-      [product_id, model_number, name, default_price, description],
-    );
-    return result.rows[0];
-  } finally {
-    client.release();
-  }
-};
-
 export const addCustomProduct = async (
   product_id: number,
   user_id: number,
