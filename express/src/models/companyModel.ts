@@ -203,6 +203,7 @@ export const findCustomCompanyProducts = async (company_id: number): Promise<Pro
   try {
     const result = await client.query(
       `
+      (
         SELECT
           p.id AS product_id,
           NULL AS customization_id,
@@ -233,14 +234,35 @@ export const findCustomCompanyProducts = async (company_id: number): Promise<Pro
           TO_CHAR(pc.end_date,'yyyy/mm/dd') as end_date
         FROM
           products p
-        JOIN product_customizations pc
+        INNER JOIN product_customizations pc
           ON p.id = pc.product_id
         INNER JOIN users u
           ON pc.user_id = u.id
-        WHERE p.company_id = $1`,
+        WHERE p.company_id = $1)
+        ORDER BY product_id ASC, customization_id DESC`,
       [company_id],
     );
 
+    return result.rows;
+  } finally {
+    client.release();
+  }
+};
+
+export const fetchMergedCompanyProducts = async (company_id: number) => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      ` SELECT
+          row_to_json(p.*) AS product,
+          row_to_json(pc.*) AS customization
+        FROM products p
+        LEFT JOIN product_customizations pc
+          ON p.id = pc.product_id
+        WHERE p.company_id =$1
+        ORDER BY p.id `,
+      [company_id],
+    );
     return result.rows;
   } finally {
     client.release();
@@ -261,19 +283,34 @@ export const addCustomProduct = async (
   try {
     const result = await client.query(
       `
-      INSERT INTO custom_products
+      INSERT INTO product_customizations
        (product_id,
         user_id,
-        custom_model_number,
-        custom_product_name,
-        custom_price,
-        custom_description,
+        model_number,
+        name,
+        price,
+        description,
         start_date,
         end_date)
       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
       RETURNING id,product_id
       `,
       [product_id, user_id, custom_model_number, custom_product_name, custom_price, description, start_date, end_date],
+    );
+    return result.rows[0];
+  } finally {
+    client.release();
+  }
+};
+
+export const deleteCustomCompanyProduct = async (customProductId: number[]): Promise<number[]> => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      `DELETE FROM custom_products
+        WHERE id = $1
+        RETURNING *`,
+      [customProductId],
     );
     return result.rows[0];
   } finally {

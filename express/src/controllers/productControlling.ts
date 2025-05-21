@@ -16,7 +16,9 @@ import {
   addCustomProduct,
   confirmingOrder,
   deleteCompanyProducts,
+  deleteCustomCompanyProduct,
   deleteCustomCompanyProducts,
+  fetchMergedCompanyProducts,
   findCompanyProducts,
   findCustomCompanyProducts,
   getConfirmedOrderList,
@@ -216,8 +218,74 @@ export const findCustomProductsForCompany = async (req: Request, res: Response, 
   const company_id = req.user.id;
 
   try {
-    const products = await findCustomCompanyProducts(company_id);
-    res.status(200).json(products);
+    const data = await findCustomCompanyProducts(company_id);
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+type defaultProductWithCustomization = {
+  id: number;
+  name: string;
+  model_number: string;
+  default_price: number;
+  description: string;
+  customization: ProductCustomization[];
+};
+
+type ProductCustomization = {
+  id: number;
+  user_name: string;
+  model_number: string;
+  name: string;
+  price: number;
+  description: string;
+  start_date: string;
+  end_date: string;
+};
+
+type GroupedProduct = Record<number, defaultProductWithCustomization>;
+
+export const fetchDisplayProductsByCompany = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) return;
+  const company_id = req.user.id;
+
+  try {
+    const products = await fetchMergedCompanyProducts(company_id);
+
+    const groupedProducts = products.reduce<GroupedProduct>((acc, row) => {
+      const product = row.product;
+      const customization = row.customization;
+
+      if (!acc[product.id]) {
+        acc[product.id] = {
+          id: product.id,
+          name: product.name,
+          model_number: product.model_number,
+          default_price: product.default_price,
+          description: product.description,
+          customization: [],
+        };
+      }
+      if (customization) {
+        acc[product.id].customization.push({
+          id: customization.id,
+          user_name: customization.user_name,
+          model_number: customization.model_number,
+          name: customization.name,
+          price: customization.price,
+          description: customization.description,
+          start_date: customization.start_date,
+          end_date: customization.end_date,
+        });
+      }
+      return acc;
+    }, {});
+
+    const data = Object.values(groupedProducts);
+
+    res.status(200).json(data);
   } catch (err) {
     return next(err);
   }
@@ -225,24 +293,15 @@ export const findCustomProductsForCompany = async (req: Request, res: Response, 
 
 export const registerCustomProduct = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.body) return;
-  const {
-    product_id,
-    user_id,
-    custom_model_number,
-    custom_product_name,
-    custom_price,
-    custom_description,
-    start_date,
-    end_date,
-  } = req.body;
+  const { product_id, user_id, model_number, product_name, price, description, start_date, end_date } = req.body;
   try {
     const data = await addCustomProduct(
       product_id,
       user_id,
-      custom_model_number,
-      custom_product_name,
-      custom_price,
-      custom_description,
+      model_number,
+      product_name,
+      price,
+      description,
       start_date,
       end_date,
     );
@@ -258,11 +317,24 @@ export const deleteCustomProductsForCompany = async (req: Request, res: Response
   const { customProductIds } = req.body;
 
   try {
-    const result = await deleteCustomCompanyProducts(customProductIds);
+    const data = await deleteCustomCompanyProducts(customProductIds);
     res.status(200).json({
       message: "削除が成功しました",
-      result,
+      data,
     });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const deleteCustomProduct = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body) return;
+
+  const { customProductId } = req.body;
+
+  try {
+    const data = await deleteCustomCompanyProduct(customProductId);
+    res.status(200).json(data);
   } catch (err) {
     return next(err);
   }

@@ -6,10 +6,12 @@ import {
   checkoutUserCart,
   confirmedOrderList,
   createOrChangeUserCartProduct,
+  deleteCustomProduct,
   deleteCustomProductsForCompany,
   deleteProductsForCompany,
   deleteUserCartALLProducts,
   deleteUserCartProduct,
+  fetchDisplayProductsByCompany,
   findCustomProductsForCompany,
   findProductsForCompany,
   findProductsFromUser,
@@ -30,7 +32,8 @@ const router = express.Router();
 router.get("/company/profile", getMyCompany);
 router.get("/company/users", getUserList);
 router.get("/company/products", findProductsForCompany);
-router.get("/company/custom-products", findCustomProductsForCompany);
+router.get("/company/products/all", findCustomProductsForCompany);
+router.get("/company/products/custom", fetchDisplayProductsByCompany);
 router.get("/company/orders", orderListForCompany);
 router.get("/company/orders/confirmed", confirmedOrderList);
 
@@ -41,6 +44,7 @@ router.patch("/company/orders/confirmed", changStatusOfConfirm);
 
 router.delete("/company/products", deleteProductsForCompany);
 router.delete("/company/custom-products", deleteCustomProductsForCompany);
+router.delete("/company/custom-product", deleteCustomProduct);
 
 //発注者用API
 router.get("/user/profile", getMyUser);

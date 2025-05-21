@@ -52,16 +52,16 @@ export const AddCustomProduct = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await fetch("http://localhost:3001/api/company/addcustomproduct", {
+      await fetch("http://localhost:3001/api/company/custom-products", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           product_id: productId,
           user_id: inputUserId,
-          custom_model_number: inputModelNum,
-          custom_product_name: inputProductName,
-          custom_price: inputPrice,
+          model_number: inputModelNum,
+          product_name: inputProductName,
+          price: inputPrice,
           description: inputDescription,
           start_date: startDate || null,
           end_date: endDate || null,
