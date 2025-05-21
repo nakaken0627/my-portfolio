@@ -31,7 +31,8 @@ export const AddCustomProduct = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  const { myProducts, fetchMyCustomProducts } = companyContext ?? {};
+  const { companyCustomProducts, fetchCompanyCustomProducts } =
+    companyContext ?? {};
 
   const fetchUserList = async () => {
     try {
@@ -76,8 +77,8 @@ export const AddCustomProduct = () => {
       setProductId("");
       setStartDate("");
       setEndDate("");
-      if (fetchMyCustomProducts) {
-        await fetchMyCustomProducts();
+      if (fetchCompanyCustomProducts) {
+        await fetchCompanyCustomProducts();
       }
     } catch (err) {
       console.error(err);
@@ -90,9 +91,9 @@ export const AddCustomProduct = () => {
 
   useEffect(() => {
     const searchDefaultProduct = () => {
-      if (!myProducts) return;
-      const existingProduct = myProducts.find(
-        (product) => product.product_id === Number(inputProductId),
+      if (!companyCustomProducts) return;
+      const existingProduct = companyCustomProducts.find(
+        (product) => product.id === Number(inputProductId),
       );
       if (!existingProduct) {
         setInputProductName("");
@@ -100,15 +101,15 @@ export const AddCustomProduct = () => {
         setInputPrice("");
         setInputDescription("");
       } else {
-        setProductId(String(existingProduct.product_id));
-        setInputProductName(existingProduct.product_name);
+        setProductId(String(existingProduct.id));
+        setInputProductName(existingProduct.name);
         setInputModelNum(existingProduct.model_number);
-        setInputPrice(String(Math.floor(existingProduct.default_price)));
+        setInputPrice(String(Math.floor(existingProduct.price)));
         setInputDescription(existingProduct.description);
       }
     };
     searchDefaultProduct();
-  }, [inputProductId, myProducts]);
+  }, [inputProductId, companyCustomProducts]);
 
   if (!companyContext) {
     return <Typography>Loading...</Typography>;
@@ -125,14 +126,14 @@ export const AddCustomProduct = () => {
             <Grid size={{ xs: 12, md: 4 }}>
               <Autocomplete
                 id="product-box"
-                options={myProducts ?? []}
+                options={companyCustomProducts ?? []}
                 size="small"
                 getOptionLabel={(option) =>
-                  `${String(option.product_id)}-${option.product_name}`
+                  `${String(option.id)}-${option.name}`
                 }
                 onChange={(e, newValue) => {
                   if (newValue) {
-                    setInputProductId(String(newValue.product_id));
+                    setInputProductId(String(newValue.id));
                   }
                 }}
                 renderInput={(params) => (

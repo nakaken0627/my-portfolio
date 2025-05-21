@@ -54,7 +54,7 @@ export const findCompanyProducts = async (companyId: number): Promise<Product[] 
           model_number, 
           products.id as product_id,
           products.name as product_name, 
-          default_price, 
+          price, 
           description 
           FROM products 
           INNER JOIN companies ON companies.id = products.company_id 
@@ -78,9 +78,9 @@ export const addCompanyProduct = async (
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
-      `INSERT INTO products (company_id, model_number, name, default_price, description)
+      `INSERT INTO products (company_id, model_number, name, price, description)
            VALUES ($1,$2,$3,$4,$5)
-           RETURNING id,model_number,name,default_price,description`,
+           RETURNING id,model_number,name,price,description`,
       [company_id, model_number, name, price, description],
     );
     return result.rows[0];
@@ -192,57 +192,6 @@ export const getConfirmedOrderList = async (company_id: number) => {
       `,
       [company_id],
     );
-    return result.rows;
-  } finally {
-    client.release();
-  }
-};
-
-export const findCustomCompanyProducts = async (company_id: number): Promise<Product[] | null> => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `
-      (
-        SELECT
-          p.id AS product_id,
-          NULL AS customization_id,
-          NULL AS user_id,
-          NULL AS user_name,
-          p.model_number,
-          p.name AS display_name,
-          p.default_price AS display_price,
-          p.description,
-          NULL AS start_date,
-          NULL AS end_date
-        FROM
-          products p
-        WHERE company_id = $1
-
-        UNION ALL
-
-        SELECT
-          p.id AS product_id,
-          pc.id AS customization_id,
-          pc.user_id,
-          u.name AS user_name ,
-          pc.model_number,
-          pc.name AS display_name,
-          pc.price AS display_price,
-          pc.description,
-          TO_CHAR(pc.start_date,'yyyy/mm/dd') as start_date,
-          TO_CHAR(pc.end_date,'yyyy/mm/dd') as end_date
-        FROM
-          products p
-        INNER JOIN product_customizations pc
-          ON p.id = pc.product_id
-        INNER JOIN users u
-          ON pc.user_id = u.id
-        WHERE p.company_id = $1)
-        ORDER BY product_id ASC, customization_id DESC`,
-      [company_id],
-    );
-
     return result.rows;
   } finally {
     client.release();

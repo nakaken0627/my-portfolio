@@ -45,7 +45,7 @@ export const findProductsForUser = async () => {
           products.id as id,
           model_number,
           products.name as product_name, 
-          default_price, 
+          price, 
           description
           FROM products
           INNER JOIN companies

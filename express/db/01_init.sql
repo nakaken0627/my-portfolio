@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS products (
     company_id INTEGER NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
     model_number VARCHAR(100),
     name VARCHAR(255) NOT NULL,
-    default_price NUMERIC(10, 2) NOT NULL,
+    price NUMERIC(10, 2) NOT NULL,
     description TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

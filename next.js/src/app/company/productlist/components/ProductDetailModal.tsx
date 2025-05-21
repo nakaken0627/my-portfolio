@@ -94,7 +94,7 @@ export const ProductsDetailModal = ({
               型番: {productWithCustoms.model_number}
             </Typography>
             <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
-              価格: ¥{Number(productWithCustoms.default_price).toLocaleString()}
+              価格: ¥{Number(productWithCustoms.price).toLocaleString()}
             </Typography>
             <Typography
               variant="body2"

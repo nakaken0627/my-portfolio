@@ -12,7 +12,6 @@ import {
   deleteUserCartALLProducts,
   deleteUserCartProduct,
   fetchDisplayProductsByCompany,
-  findCustomProductsForCompany,
   findProductsForCompany,
   findProductsFromUser,
   getOrCreateCart,
@@ -32,7 +31,6 @@ const router = express.Router();
 router.get("/company/profile", getMyCompany);
 router.get("/company/users", getUserList);
 router.get("/company/products", findProductsForCompany);
-router.get("/company/products/all", findCustomProductsForCompany);
 router.get("/company/products/custom", fetchDisplayProductsByCompany);
 router.get("/company/orders", orderListForCompany);
 router.get("/company/orders/confirmed", confirmedOrderList);

@@ -20,7 +20,6 @@ import {
   deleteCustomCompanyProducts,
   fetchMergedCompanyProducts,
   findCompanyProducts,
-  findCustomCompanyProducts,
   getConfirmedOrderList,
   getMyOrderList,
   getUserIds,
@@ -213,23 +212,11 @@ export const confirmedOrderList = async (req: Request, res: Response, next: Next
   }
 };
 
-export const findCustomProductsForCompany = async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user) return;
-  const company_id = req.user.id;
-
-  try {
-    const data = await findCustomCompanyProducts(company_id);
-    res.status(200).json(data);
-  } catch (err) {
-    return next(err);
-  }
-};
-
 type defaultProductWithCustomization = {
   id: number;
   name: string;
   model_number: string;
-  default_price: number;
+  price: number;
   description: string;
   customization: ProductCustomization[];
 };
@@ -263,7 +250,7 @@ export const fetchDisplayProductsByCompany = async (req: Request, res: Response,
           id: product.id,
           name: product.name,
           model_number: product.model_number,
-          default_price: product.default_price,
+          price: product.price,
           description: product.description,
           customization: [],
         };

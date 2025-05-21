@@ -2,7 +2,7 @@ export type DefaultProduct = {
   id: number;
   name: string;
   model_number: string;
-  default_price: number;
+  price: number;
   description: string;
   customization: ProductCustomization[];
 };
