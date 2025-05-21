@@ -64,7 +64,7 @@ export const ProductList = () => {
   return (
     <Container maxWidth="lg" sx={{ py: 2 }}>
       <Typography variant="h5" gutterBottom>
-        カスタム商品一覧
+        商品一覧
       </Typography>
       <TableContainer
         component={Paper}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
+import { API_BASE_URL } from "@/components/lib/api";
 import { CompanyContext } from "@/context/company-context";
 import {
   Autocomplete,
@@ -36,7 +37,7 @@ export const AddCustomProduct = () => {
 
   const fetchUserList = async () => {
     try {
-      const res = await fetch("http://localhost:3001/api/company/users", {
+      const res = await fetch(`${API_BASE_URL}/api/company/users`, {
         method: "GET",
       });
       const data: User[] = await res.json();
@@ -53,7 +54,7 @@ export const AddCustomProduct = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await fetch("http://localhost:3001/api/company/custom-products", {
+      await fetch(`${API_BASE_URL}/api/company/custom-products`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
