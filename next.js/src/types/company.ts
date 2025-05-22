@@ -1,13 +1,13 @@
-export type DefaultProduct = {
+export type DefaultProductWithCustomization = {
   id: number;
   name: string;
   model_number: string;
   price: number;
   description: string;
-  customization: ProductCustomization[];
+  customization: ProductCustomizations[];
 };
 
-export type ProductCustomization = {
+export type ProductCustomizations = {
   id: number;
   user_name: string;
   model_number: string;

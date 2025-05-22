@@ -212,16 +212,16 @@ export const confirmedOrderList = async (req: Request, res: Response, next: Next
   }
 };
 
-type defaultProductWithCustomization = {
+type DefaultProductWithCustomization = {
   id: number;
   name: string;
   model_number: string;
   price: number;
   description: string;
-  customization: ProductCustomization[];
+  customization: ProductCustomizations[];
 };
 
-type ProductCustomization = {
+type ProductCustomizations = {
   id: number;
   user_name: string;
   model_number: string;
@@ -232,7 +232,7 @@ type ProductCustomization = {
   end_date: string;
 };
 
-type GroupedProduct = Record<number, defaultProductWithCustomization>;
+type GroupedProduct = Record<number, DefaultProductWithCustomization>;
 
 export const fetchDisplayProductsByCompany = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;

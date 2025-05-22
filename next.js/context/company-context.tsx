@@ -2,7 +2,7 @@
 
 import { createContext, useEffect, useState } from "react";
 import { API_BASE_URL } from "@/components/lib/api";
-import { DefaultProduct } from "@/types/company";
+import { DefaultProductWithCustomization } from "@/types/company";
 
 type Company = {
   id: number;
@@ -11,7 +11,7 @@ type Company = {
 
 type CompanyContext = {
   myCompany: Company | null;
-  companyCustomProducts: DefaultProduct[];
+  companyCustomProducts: DefaultProductWithCustomization[];
   fetchCompanyCustomProducts: () => Promise<void>;
 };
 
@@ -24,7 +24,7 @@ export const CompanyContextProvider = ({
 }) => {
   const [myCompany, setMyCompany] = useState<Company | null>(null);
   const [companyCustomProducts, setCompanyCustomProducts] = useState<
-    DefaultProduct[]
+    DefaultProductWithCustomization[]
   >([]);
 
   const fetchMyCompany = async () => {
@@ -50,7 +50,7 @@ export const CompanyContextProvider = ({
       if (!res.ok) {
         throw new Error("レスポンスエラー");
       }
-      const data: DefaultProduct[] = await res.json();
+      const data: DefaultProductWithCustomization[] = await res.json();
       setCompanyCustomProducts(data);
     } catch (err) {
       console.error(err);

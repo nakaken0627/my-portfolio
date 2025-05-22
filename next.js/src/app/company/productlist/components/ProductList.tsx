@@ -3,7 +3,7 @@
 import { useContext, useState } from "react";
 import { API_BASE_URL } from "@/components/lib/api";
 import { CompanyContext } from "@/context/company-context";
-import { DefaultProduct } from "@/types/company";
+import { DefaultProductWithCustomization } from "@/types/company";
 import {
   Button,
   Checkbox,
@@ -24,7 +24,8 @@ export const ProductList = () => {
   const companyContext = useContext(CompanyContext);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [selectedProduct, setSelectedProduct] = useState<DefaultProduct>();
+  const [selectedProduct, setSelectedProduct] =
+    useState<DefaultProductWithCustomization>();
 
   if (!companyContext) return <Typography>Loading...</Typography>;
   const { companyCustomProducts, fetchCompanyCustomProducts } = companyContext;
