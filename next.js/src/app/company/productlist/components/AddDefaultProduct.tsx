@@ -5,17 +5,17 @@ import { API_BASE_URL } from "@/components/lib/api";
 import { CompanyContext } from "@/context/company-context";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 
-export const RegisterFunc = () => {
+export const AddDefaultProduct = () => {
   const companyContext = useContext(CompanyContext);
 
   const [modelNum, setModelNum] = useState("");
   const [productName, setProductName] = useState("");
-  const [price, setPrice] = useState<number>(0);
+  const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
 
   if (!companyContext) return <Typography>Loading...</Typography>;
 
-  const { fetchMyProducts } = companyContext;
+  const { fetchCompanyCustomProducts } = companyContext;
 
   const handleSubmitProduct = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,9 +34,9 @@ export const RegisterFunc = () => {
 
       setProductName("");
       setModelNum("");
-      setPrice(0);
+      setPrice("");
       setDescription("");
-      await fetchMyProducts();
+      await fetchCompanyCustomProducts();
     } catch (err) {
       console.error(err);
     }
@@ -56,6 +56,7 @@ export const RegisterFunc = () => {
               setProductName(e.target.value);
             }}
             required
+            size="small"
           />
           <TextField
             label="型番"
@@ -64,15 +65,17 @@ export const RegisterFunc = () => {
               setModelNum(e.target.value);
             }}
             required
+            size="small"
           />
           <TextField
-            label="金額"
+            label="単価"
             type="number"
             value={price}
             onChange={(e) => {
-              setPrice(Number(e.target.value));
+              setPrice(e.target.value);
             }}
             required
+            size="small"
           />
           <TextField
             label="説明"
@@ -81,6 +84,7 @@ export const RegisterFunc = () => {
               setDescription(e.target.value);
             }}
             required
+            size="small"
           />
           <Button type="submit" variant="contained" color="primary">
             登録
