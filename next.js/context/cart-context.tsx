@@ -77,7 +77,7 @@ export const CartContextProvider = ({
 
   const fetchMyCart = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/cart`, {
+      const response = await fetch(`${API_BASE_URL}/api/cart/cart`, {
         method: "GET",
         credentials: "include",
       });
