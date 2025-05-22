@@ -2,25 +2,17 @@
 
 import { createContext, useEffect, useState } from "react";
 import { API_BASE_URL } from "@/components/lib/api";
+import { DefaultProductWithCustomization } from "@/types/company";
 
 type Company = {
   id: number;
   name: string;
 };
 
-type Product = {
-  company_name: string;
-  id: number;
-  name: string;
-  model_number: string;
-  price: number;
-  description: string;
-};
-
 type CompanyContext = {
   myCompany: Company | null;
-  myProducts: Product[];
-  fetchMyProducts: () => Promise<void>;
+  companyCustomProducts: DefaultProductWithCustomization[];
+  fetchCompanyCustomProducts: () => Promise<void>;
 };
 
 export const CompanyContext = createContext<CompanyContext | null>(null);
@@ -31,7 +23,9 @@ export const CompanyContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [myCompany, setMyCompany] = useState<Company | null>(null);
-  const [myProducts, setMyProducts] = useState<Product[]>([]);
+  const [companyCustomProducts, setCompanyCustomProducts] = useState<
+    DefaultProductWithCustomization[]
+  >([]);
 
   const fetchMyCompany = async () => {
     try {
@@ -47,18 +41,20 @@ export const CompanyContextProvider = ({
     }
   };
 
-  const fetchMyProducts = async () => {
+  const fetchCompanyCustomProducts = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/company/products`, {
+      const res = await fetch(`${API_BASE_URL}/api/company/products/custom`, {
         method: "GET",
         credentials: "include", //cookieデータをつけて送る
       });
       if (!res.ok) {
-        throw new Error("[MyCompanyPage]レスポンスエラー(products)");
+        throw new Error("レスポンスエラー");
       }
-      const data: Product[] = await res.json();
-      setMyProducts(data);
-    } catch (err) {}
+      const data: DefaultProductWithCustomization[] = await res.json();
+      setCompanyCustomProducts(data);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   useEffect(() => {
@@ -66,13 +62,13 @@ export const CompanyContextProvider = ({
   }, []);
 
   useEffect(() => {
-    void fetchMyProducts();
+    void fetchCompanyCustomProducts();
   }, [myCompany]);
 
   const contextValue = {
     myCompany,
-    myProducts,
-    fetchMyProducts,
+    companyCustomProducts,
+    fetchCompanyCustomProducts,
   };
 
   return (

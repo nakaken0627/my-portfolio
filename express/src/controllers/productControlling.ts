@@ -13,11 +13,16 @@ import {
 } from "../models/cartModel.js";
 import {
   addCompanyProduct,
+  addCustomProduct,
   confirmingOrder,
   deleteCompanyProducts,
+  deleteCustomCompanyProduct,
+  deleteCustomCompanyProducts,
+  fetchMergedCompanyProducts,
   findCompanyProducts,
   getConfirmedOrderList,
   getMyOrderList,
+  getUserIds,
 } from "../models/companyModel.js";
 import { createOrder, createOrderProduct } from "../models/orderModel.js";
 import { findProductsForUser, orderedProductList } from "../models/userModel.js";
@@ -49,8 +54,8 @@ export const addProductForCompany = async (req: Request, res: Response, next: Ne
   const { model_number, name, price, description } = req.body;
 
   try {
-    const result = await addCompanyProduct(company_id, model_number, name, price, description);
-    res.status(200).json(result);
+    const data = await addCompanyProduct(company_id, model_number, name, price, description);
+    res.status(200).json(data);
   } catch (err) {
     return next(err);
   }
@@ -202,6 +207,130 @@ export const confirmedOrderList = async (req: Request, res: Response, next: Next
   try {
     const data = await getConfirmedOrderList(company_id);
     res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+type DefaultProductWithCustomization = {
+  id: number;
+  name: string;
+  model_number: string;
+  price: number;
+  description: string;
+  customization: ProductCustomizations[];
+};
+
+type ProductCustomizations = {
+  id: number;
+  user_name: string;
+  model_number: string;
+  name: string;
+  price: number;
+  description: string;
+  start_date: string;
+  end_date: string;
+};
+
+type GroupedProduct = Record<number, DefaultProductWithCustomization>;
+
+export const fetchDisplayProductsByCompany = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) return;
+  const company_id = req.user.id;
+
+  try {
+    const products = await fetchMergedCompanyProducts(company_id);
+
+    const groupedProducts = products.reduce<GroupedProduct>((acc, row) => {
+      const product = row.product;
+      const customization = row.customization;
+
+      if (!acc[product.id]) {
+        acc[product.id] = {
+          id: product.id,
+          name: product.name,
+          model_number: product.model_number,
+          price: product.price,
+          description: product.description,
+          customization: [],
+        };
+      }
+      if (customization) {
+        acc[product.id].customization.push({
+          id: customization.id,
+          user_name: customization.user_name,
+          model_number: customization.model_number,
+          name: customization.name,
+          price: customization.price,
+          description: customization.description,
+          start_date: customization.start_date,
+          end_date: customization.end_date,
+        });
+      }
+      return acc;
+    }, {});
+
+    const data = Object.values(groupedProducts);
+
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const registerCustomProduct = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body) return;
+  const { product_id, user_id, model_number, product_name, price, description, start_date, end_date } = req.body;
+  try {
+    const data = await addCustomProduct(
+      product_id,
+      user_id,
+      model_number,
+      product_name,
+      price,
+      description,
+      start_date,
+      end_date,
+    );
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const deleteCustomProductsForCompany = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body) return;
+
+  const { customProductIds } = req.body;
+
+  try {
+    const data = await deleteCustomCompanyProducts(customProductIds);
+    res.status(200).json({
+      message: "削除が成功しました",
+      data,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const deleteCustomProduct = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body) return;
+
+  const { customProductId } = req.body;
+
+  try {
+    const data = await deleteCustomCompanyProduct(customProductId);
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const getUserList = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await getUserIds();
+    res.status(200).json(result);
   } catch (err) {
     return next(err);
   }

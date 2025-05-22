@@ -48,7 +48,6 @@ CREATE TABLE IF NOT EXISTS cart_products (
   cart_id INTEGER NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
   product_id INTEGER NOT NULL REFERENCES products(id),
   quantity INTEGER NOT NULL,
-  -- status VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (cart_id, product_id)
@@ -71,4 +70,19 @@ CREATE TABLE IF NOT EXISTS order_products (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (order_id, product_id)
+);
+
+CREATE TABLE IF NOT EXISTS product_customizations(
+  id SERIAL PRIMARY KEY,
+  product_id INTEGER NOT NULL REFERENCES products(id),
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  name VARCHAR(255) NOT NULL,
+  model_number VARCHAR(255) NOT NULL,
+  price NUMERIC(10,2) NOT NULL,
+  description TEXT,
+  document_url TEXT,
+  start_date DATE,
+  end_date DATE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

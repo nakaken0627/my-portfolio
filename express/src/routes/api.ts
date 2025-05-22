@@ -1,42 +1,48 @@
 import express from "express";
 
-import { getMyCompany } from "../controllers/authCompanyControlling.js";
-import { getMyUser } from "../controllers/authUserControlling.js";
 import {
   addProductForCompany,
   changStatusOfConfirm,
   checkoutUserCart,
   confirmedOrderList,
   createOrChangeUserCartProduct,
+  deleteCustomProduct,
+  deleteCustomProductsForCompany,
   deleteProductsForCompany,
   deleteUserCartALLProducts,
   deleteUserCartProduct,
+  fetchDisplayProductsByCompany,
   findProductsForCompany,
   findProductsFromUser,
   getOrCreateCart,
   getUserCartALLProducts,
+  getUserList,
   orderHistory,
   orderListForCompany,
-} from "../controllers/productControlling.js";
+  registerCustomProduct,
+} from "../controllers//productControlling.js";
+import { getMyCompany } from "../controllers/authCompanyControlling.js";
+import { getMyUser } from "../controllers/authUserControlling.js";
 
 //routerオブジェクトを設定
 const router = express.Router();
 
 //問屋用のAPI
 router.get("/company/profile", getMyCompany);
-// router.get("/company/users", getUserList);
+router.get("/company/users", getUserList);
 router.get("/company/products", findProductsForCompany);
-// router.get("/company/custom-products", findCustomProductsForCompany);
+router.get("/company/products/custom", fetchDisplayProductsByCompany);
 router.get("/company/orders", orderListForCompany);
 router.get("/company/orders/confirmed", confirmedOrderList);
 
 router.post("/company/products", addProductForCompany);
-// router.post("/company/custom-products", registerCustomProduct);
+router.post("/company/custom-products", registerCustomProduct);
 
 router.patch("/company/orders/confirmed", changStatusOfConfirm);
 
 router.delete("/company/products", deleteProductsForCompany);
-// router.delete("/company/custom-products", deleteCustomProductsForCompany);
+router.delete("/company/custom-products", deleteCustomProductsForCompany);
+router.delete("/company/custom-product", deleteCustomProduct);
 
 //発注者用API
 router.get("/user/profile", getMyUser);
