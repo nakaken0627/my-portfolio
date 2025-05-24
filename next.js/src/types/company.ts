@@ -4,6 +4,7 @@ export type DefaultProductWithCustomization = {
   model_number: string;
   price: number;
   description: string;
+  imageUrl: string;
   customization: ProductCustomizations[];
 };
 

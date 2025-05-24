@@ -15,7 +15,7 @@ const compat = new FlatCompat({ baseDirectory: __dirname });
 export default tseslint.config(
   {
     // グローバルで読み込むファイルの拡張子
-    files: ["**/*.{js,jsx,ts,tsx"],
+    files: ["**/*.{js,jsx,ts,tsx}"],
 
     // グローバルで無視するファイル
     ignores: ["**/.next/**/*", "*.config.*", "**/.prettierrc.mjs"],
@@ -53,6 +53,13 @@ export default tseslint.config(
       "@typescript-eslint/consistent-type-definitions": ["error", "type"],
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-misused-promises": "off",
+      "@typescript-eslint/naming-convention": [
+        "error",
+        {
+          selector: "typeAlias",
+          format: ["PascalCase"],
+        },
+      ],
     },
   },
   {

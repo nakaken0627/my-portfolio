@@ -74,14 +74,15 @@ export const addCompanyProduct = async (
   name: string,
   price: number,
   description: string,
+  imageName: string,
 ) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
-      `INSERT INTO products (company_id, model_number, name, price, description)
-           VALUES ($1,$2,$3,$4,$5)
-           RETURNING id,model_number,name,price,description`,
-      [company_id, model_number, name, price, description],
+      `INSERT INTO products (company_id, model_number, name, price, description,image_name)
+           VALUES ($1,$2,$3,$4,$5,$6)
+           RETURNING *`,
+      [company_id, model_number, name, price, description, imageName],
     );
     return result.rows[0];
   } finally {
@@ -89,17 +90,18 @@ export const addCompanyProduct = async (
   }
 };
 
-export const deleteCompanyProducts = async (companyId: number, productsIds: number[]): Promise<number[]> => {
+export const deleteCompanyProduct = async (companyId: number, productsId: number): Promise<string> => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
       `DELETE FROM products
         WHERE company_id = $1 
-        AND id =ANY($2::int[])
-        RETURNING *`,
-      [companyId, productsIds],
+        AND id = $2
+        RETURNING image_name`,
+      [companyId, productsId],
     );
-    return result.rows;
+    const imageName: string = result.rows[0].image_name;
+    return imageName;
   } finally {
     client.release();
   }
@@ -286,6 +288,16 @@ export const getUserIds = async () => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(`SELECT id,name FROM users`);
+    return result.rows;
+  } finally {
+    client.release();
+  }
+};
+
+export const getImages = async () => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(`SELECT * FROM images`);
     return result.rows;
   } finally {
     client.release();

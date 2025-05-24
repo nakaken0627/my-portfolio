@@ -15,7 +15,7 @@ import {
   addCompanyProduct,
   addCustomProduct,
   confirmingOrder,
-  deleteCompanyProducts,
+  deleteCompanyProduct,
   deleteCustomCompanyProduct,
   deleteCustomCompanyProducts,
   fetchMergedCompanyProducts,
@@ -26,6 +26,7 @@ import {
 } from "../models/companyModel.js";
 import { createOrder, createOrderProduct } from "../models/orderModel.js";
 import { findProductsForUser, orderedProductList } from "../models/userModel.js";
+import { deleteImage, getSignedImageUrl, uploadImage } from "../services/s3Service.js";
 
 export const findProductsForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   if (!req.isAuthenticated()) {
@@ -48,13 +49,15 @@ export const findProductsForCompany = async (req: Request, res: Response, next: 
 };
 
 export const addProductForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  if (!req.body || !req.user) return;
+  if (!req.body || !req.user || !req.file) return;
 
-  const company_id = String(req.user.id); //string型にしないとエラー、addCompanyProductの引数の型と合わずエラー発生
+  const company_id = String(req.user.id);
   const { model_number, name, price, description } = req.body;
 
+  const imageName = await uploadImage(req.file);
+
   try {
-    const data = await addCompanyProduct(company_id, model_number, name, price, description);
+    const data = await addCompanyProduct(company_id, model_number, name, price, description, imageName);
     res.status(200).json(data);
   } catch (err) {
     return next(err);
@@ -68,11 +71,15 @@ export const deleteProductsForCompany = async (req: Request, res: Response, next
   const { productsIds } = req.body;
 
   try {
-    const result = await deleteCompanyProducts(companyId, productsIds);
-    res.status(200).json({
-      message: "削除が成功しました",
-      result,
-    });
+    await Promise.all(
+      productsIds.map(async (id: number) => {
+        const result = await deleteCompanyProduct(companyId, id);
+        res.status(200).json({
+          message: "削除が成功しました",
+        });
+        await deleteImage(result);
+      }),
+    );
   } catch (err) {
     return next(err);
   }
@@ -218,6 +225,8 @@ type DefaultProductWithCustomization = {
   model_number: string;
   price: number;
   description: string;
+  image_name?: string;
+  imageUrl?: string | null;
   customization: ProductCustomizations[];
 };
 
@@ -241,8 +250,24 @@ export const fetchDisplayProductsByCompany = async (req: Request, res: Response,
   try {
     const products = await fetchMergedCompanyProducts(company_id);
 
-    const groupedProducts = products.reduce<GroupedProduct>((acc, row) => {
-      const product = row.product;
+    const enrichedProducts = await Promise.all(
+      products.map(async (row) => {
+        const product: DefaultProductWithCustomization = row.product;
+        const customization: ProductCustomizations = row.customization;
+
+        let imageUrl: string | null = null;
+
+        //image_nameがnullの場合、S3へのリクエストがエラーになるため存在チェックを行う
+        if (product.image_name) {
+          imageUrl = await getSignedImageUrl(product.image_name);
+        }
+        const productWithUrl = { ...product, imageUrl };
+        return { productWithUrl, customization };
+      }),
+    );
+
+    const groupedProducts = enrichedProducts.reduce<GroupedProduct>((acc, row) => {
+      const product = row.productWithUrl;
       const customization = row.customization;
 
       if (!acc[product.id]) {
@@ -252,6 +277,8 @@ export const fetchDisplayProductsByCompany = async (req: Request, res: Response,
           model_number: product.model_number,
           price: product.price,
           description: product.description,
+          image_name: product.image_name,
+          imageUrl: product.imageUrl,
           customization: [],
         };
       }

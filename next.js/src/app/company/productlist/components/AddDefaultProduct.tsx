@@ -12,30 +12,41 @@ export const AddDefaultProduct = () => {
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [imageFile, setImageFile] = useState<File | undefined>(undefined);
 
   if (!companyContext) return <Typography>Loading...</Typography>;
 
   const { fetchCompanyCustomProducts } = companyContext;
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const inputFIle = e.target.files[0];
+    setImageFile(inputFIle);
+  };
+
   const handleSubmitProduct = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    if (!imageFile) return;
+    formData.append("model_number", modelNum);
+    formData.append("name", productName);
+    formData.append("price", price);
+    formData.append("description", description);
+    formData.append("image", imageFile);
+
     try {
       await fetch(`${API_BASE_URL}/api/company/products`, {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model_number: modelNum,
-          name: productName,
-          price,
-          description,
-        }),
+        body: formData,
       });
 
       setProductName("");
       setModelNum("");
       setPrice("");
       setDescription("");
+      setImageFile(undefined);
       await fetchCompanyCustomProducts();
     } catch (err) {
       console.error(err);
@@ -85,6 +96,17 @@ export const AddDefaultProduct = () => {
             }}
             required
             size="small"
+          />
+          <TextField
+            type="file"
+            size="small"
+            variant="standard"
+            fullWidth
+            slotProps={{
+              htmlInput: { accept: "image/*" },
+              inputLabel: { shrink: true },
+            }}
+            onChange={handleImageChange}
           />
           <Button type="submit" variant="contained" color="primary">
             登録

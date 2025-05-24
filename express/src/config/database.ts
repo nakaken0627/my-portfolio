@@ -11,7 +11,7 @@ const pool = new pg.Pool({
   database: process.env.DB_NAME,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  ssl: { rejectUnauthorized: false }, //RDSでは暗号化されていないものはデフォルトで拒否するためfalseで可
+  // ssl: { rejectUnauthorized: false }, //RDSでは暗号化されていないものはデフォルトで拒否するためfalseで可
 });
 
 //接続状況確認用

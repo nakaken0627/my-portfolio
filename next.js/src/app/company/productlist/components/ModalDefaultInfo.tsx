@@ -13,7 +13,7 @@ export const ModalDefaultInfo = ({ product }: Props) => {
         <Grid size={{ xs: 12, sm: 4 }}>
           <Box
             component="img"
-            src="/images/sample.jpg"
+            src={product.imageUrl || "/images/sample.jpg"}
             alt={product.name}
             sx={{
               width: "150px",
