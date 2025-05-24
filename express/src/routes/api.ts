@@ -36,7 +36,7 @@ router.get("/company/products/custom", fetchDisplayProductsByCompany);
 router.get("/company/orders", orderListForCompany);
 router.get("/company/orders/confirmed", confirmedOrderList);
 
-router.post("/company/product", upload.single("image"), addProductForCompany);
+router.post("/company/products", upload.single("image"), addProductForCompany);
 router.post("/company/custom-products", registerCustomProduct);
 
 router.patch("/company/orders/confirmed", changStatusOfConfirm);
