@@ -10,8 +10,6 @@ import passport from "./config/passport.js";
 import apiRouter from "./routes/api.js";
 import authRouter from "./routes/auth.js";
 
-// import s3Router from "./routes/sample.js";
-
 //expressのインスタンスを作成
 const app: Express = express();
 
@@ -62,8 +60,6 @@ app.use("/auth", authRouter);
 
 //情報取得用
 app.use("/api", apiRouter);
-
-// app.use("/s3", s3Router);
 
 //エラーハンドラー
 app.use((req, res) => {

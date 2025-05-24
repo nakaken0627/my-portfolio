@@ -257,6 +257,7 @@ export const fetchDisplayProductsByCompany = async (req: Request, res: Response,
 
         let imageUrl: string | null = null;
 
+        //image_nameがnullの場合、S3へのリクエストがエラーになるため存在チェックを行う
         if (product.image_name) {
           imageUrl = await getSignedImageUrl(product.image_name);
         }

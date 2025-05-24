@@ -36,7 +36,7 @@ export const AddDefaultProduct = () => {
     formData.append("image", imageFile);
 
     try {
-      await fetch(`${API_BASE_URL}/api/company/product`, {
+      await fetch(`${API_BASE_URL}/api/company/products`, {
         method: "POST",
         credentials: "include",
         body: formData,
