@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import sharp from "sharp";
 
@@ -43,4 +43,13 @@ export const getSignedImageUrl = async (key: string) => {
     Key: key,
   });
   return await getSignedUrl(s3, command, { expiresIn: 3600 });
+};
+
+export const deleteImage = async (image_name: string) => {
+  const command = new DeleteObjectCommand({
+    Bucket: bucketName,
+    Key: image_name,
+  });
+
+  await s3.send(command);
 };

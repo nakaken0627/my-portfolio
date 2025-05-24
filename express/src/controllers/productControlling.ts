@@ -15,7 +15,7 @@ import {
   addCompanyProduct,
   addCustomProduct,
   confirmingOrder,
-  deleteCompanyProducts,
+  deleteCompanyProduct,
   deleteCustomCompanyProduct,
   deleteCustomCompanyProducts,
   fetchMergedCompanyProducts,
@@ -26,7 +26,7 @@ import {
 } from "../models/companyModel.js";
 import { createOrder, createOrderProduct } from "../models/orderModel.js";
 import { findProductsForUser, orderedProductList } from "../models/userModel.js";
-import { getSignedImageUrl, uploadImage } from "../services/s3Service.js";
+import { deleteImage, getSignedImageUrl, uploadImage } from "../services/s3Service.js";
 
 export const findProductsForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   if (!req.isAuthenticated()) {
@@ -71,11 +71,15 @@ export const deleteProductsForCompany = async (req: Request, res: Response, next
   const { productsIds } = req.body;
 
   try {
-    const result = await deleteCompanyProducts(companyId, productsIds);
-    res.status(200).json({
-      message: "削除が成功しました",
-      result,
-    });
+    await Promise.all(
+      productsIds.map(async (id: number) => {
+        const result = await deleteCompanyProduct(companyId, id);
+        res.status(200).json({
+          message: "削除が成功しました",
+        });
+        await deleteImage(result);
+      }),
+    );
   } catch (err) {
     return next(err);
   }

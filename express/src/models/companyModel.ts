@@ -90,17 +90,18 @@ export const addCompanyProduct = async (
   }
 };
 
-export const deleteCompanyProducts = async (companyId: number, productsIds: number[]): Promise<number[]> => {
+export const deleteCompanyProduct = async (companyId: number, productsId: number): Promise<string> => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
       `DELETE FROM products
         WHERE company_id = $1 
-        AND id =ANY($2::int[])
-        RETURNING *`,
-      [companyId, productsIds],
+        AND id = $2
+        RETURNING image_name`,
+      [companyId, productsId],
     );
-    return result.rows;
+    const imageName: string = result.rows[0].image_name;
+    return imageName;
   } finally {
     client.release();
   }

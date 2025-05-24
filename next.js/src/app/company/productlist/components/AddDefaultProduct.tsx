@@ -3,14 +3,7 @@
 import { useContext, useState } from "react";
 import { API_BASE_URL } from "@/components/lib/api";
 import { CompanyContext } from "@/context/company-context";
-import {
-  Box,
-  Button,
-  Input,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 
 export const AddDefaultProduct = () => {
   const companyContext = useContext(CompanyContext);
@@ -104,11 +97,15 @@ export const AddDefaultProduct = () => {
             required
             size="small"
           />
-          <Input
+          <TextField
             type="file"
             size="small"
+            variant="standard"
             fullWidth
-            inputProps={{ accept: "image/*" }}
+            slotProps={{
+              htmlInput: { accept: "image/*" },
+              inputLabel: { shrink: true },
+            }}
             onChange={handleImageChange}
           />
           <Button type="submit" variant="contained" color="primary">

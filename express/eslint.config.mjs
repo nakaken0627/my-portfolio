@@ -21,7 +21,7 @@ export default [
       // その他のカスタムルールの定義
       semi: ["error", "always"], // セミコロンを常に使用
       quotes: ["error", "single"], // シングルクオートを使用
-      "no-console": ["error", { allow: ["warn", "error"] }],
+      "no-console": ["error", { allow: ["warn", "error", "info"] }],
       "no-undef": "off",
       "@typescript-eslint/no-unused-vars": ["warn", { vars: "all", args: "after-used", ignoreRestSiblings: false }], // 未使用変数の警告
       "@typescript-eslint/naming-convention": [
