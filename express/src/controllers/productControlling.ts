@@ -26,7 +26,7 @@ import {
 } from "../models/companyModel.js";
 import { createOrder, createOrderProduct } from "../models/orderModel.js";
 import { findProductsForUser, orderedProductList } from "../models/userModel.js";
-import { uploadImage } from "../services/s3Service.js";
+import { getSignedImageUrl, uploadImage } from "../services/s3Service.js";
 
 export const findProductsForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   if (!req.isAuthenticated()) {
@@ -221,6 +221,8 @@ type DefaultProductWithCustomization = {
   model_number: string;
   price: number;
   description: string;
+  image_name?: string;
+  imageUrl?: string | null;
   customization: ProductCustomizations[];
 };
 
@@ -244,8 +246,23 @@ export const fetchDisplayProductsByCompany = async (req: Request, res: Response,
   try {
     const products = await fetchMergedCompanyProducts(company_id);
 
-    const groupedProducts = products.reduce<GroupedProduct>((acc, row) => {
-      const product = row.product;
+    const enrichedProducts = await Promise.all(
+      products.map(async (row) => {
+        const product: DefaultProductWithCustomization = row.product;
+        const customization: ProductCustomizations = row.customization;
+
+        let imageUrl: string | null = null;
+
+        if (product.image_name) {
+          imageUrl = await getSignedImageUrl(product.image_name);
+        }
+        const productWithUrl = { ...product, imageUrl };
+        return { productWithUrl, customization };
+      }),
+    );
+
+    const groupedProducts = enrichedProducts.reduce<GroupedProduct>((acc, row) => {
+      const product = row.productWithUrl;
       const customization = row.customization;
 
       if (!acc[product.id]) {
@@ -255,6 +272,8 @@ export const fetchDisplayProductsByCompany = async (req: Request, res: Response,
           model_number: product.model_number,
           price: product.price,
           description: product.description,
+          image_name: product.image_name,
+          imageUrl: product.imageUrl,
           customization: [],
         };
       }
