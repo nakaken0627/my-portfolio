@@ -10,6 +10,8 @@ import passport from "./config/passport.js";
 import apiRouter from "./routes/api.js";
 import authRouter from "./routes/auth.js";
 
+// import s3Router from "./routes/sample.js";
+
 //expressのインスタンスを作成
 const app: Express = express();
 
@@ -17,10 +19,6 @@ const app: Express = express();
 dotenv.config();
 const port = Number(process.env.PORT) || 3001;
 const sessionSecret = process.env.SESSION_SECRET;
-if (!sessionSecret) {
-  throw new Error("SESSION_SECRET is not defined in the environment variables.");
-}
-
 const frontIp = process.env.FRONT_IP || "localhost";
 const host = process.env.HOST || "localhost";
 
@@ -31,12 +29,13 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-//body-parser の代替 (フォームデータ用)
-app.use(express.urlencoded({ extended: false }));
-// body-parser の代替 (JSON データ用)
-app.use(express.json());
+app.use(express.urlencoded({ extended: false })); //body-parser の代替 (フォームデータ用)
+app.use(express.json()); // body-parser の代替 (JSON データ用)
 
 //セッションの初期設定
+if (!sessionSecret) {
+  throw new Error("SESSION_SECRET is not defined in the environment variables.");
+}
 const sessionOptions = {
   store: new (connectPgSimple(session))({
     pool: pool,
@@ -63,6 +62,8 @@ app.use("/auth", authRouter);
 
 //情報取得用
 app.use("/api", apiRouter);
+
+// app.use("/s3", s3Router);
 
 //エラーハンドラー
 app.use((req, res) => {

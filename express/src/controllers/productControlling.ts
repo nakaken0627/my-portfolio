@@ -26,6 +26,7 @@ import {
 } from "../models/companyModel.js";
 import { createOrder, createOrderProduct } from "../models/orderModel.js";
 import { findProductsForUser, orderedProductList } from "../models/userModel.js";
+import { uploadImage } from "../services/s3Service.js";
 
 export const findProductsForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   if (!req.isAuthenticated()) {
@@ -48,13 +49,15 @@ export const findProductsForCompany = async (req: Request, res: Response, next: 
 };
 
 export const addProductForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  if (!req.body || !req.user) return;
+  if (!req.body || !req.user || !req.file) return;
 
-  const company_id = String(req.user.id); //string型にしないとエラー、addCompanyProductの引数の型と合わずエラー発生
+  const company_id = String(req.user.id);
   const { model_number, name, price, description } = req.body;
 
+  const imageName = await uploadImage(req.file);
+
   try {
-    const data = await addCompanyProduct(company_id, model_number, name, price, description);
+    const data = await addCompanyProduct(company_id, model_number, name, price, description, imageName);
     res.status(200).json(data);
   } catch (err) {
     return next(err);

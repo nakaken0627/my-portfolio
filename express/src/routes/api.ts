@@ -1,5 +1,6 @@
 import express from "express";
 
+import { upload } from "../config/upload.js";
 import {
   addProductForCompany,
   changStatusOfConfirm,
@@ -35,7 +36,7 @@ router.get("/company/products/custom", fetchDisplayProductsByCompany);
 router.get("/company/orders", orderListForCompany);
 router.get("/company/orders/confirmed", confirmedOrderList);
 
-router.post("/company/products", addProductForCompany);
+router.post("/company/product", upload.single("image"), addProductForCompany);
 router.post("/company/custom-products", registerCustomProduct);
 
 router.patch("/company/orders/confirmed", changStatusOfConfirm);

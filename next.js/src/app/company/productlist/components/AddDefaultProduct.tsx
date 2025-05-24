@@ -3,7 +3,14 @@
 import { useContext, useState } from "react";
 import { API_BASE_URL } from "@/components/lib/api";
 import { CompanyContext } from "@/context/company-context";
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Input,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 export const AddDefaultProduct = () => {
   const companyContext = useContext(CompanyContext);
@@ -12,30 +19,41 @@ export const AddDefaultProduct = () => {
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+  const [imageFile, setImageFile] = useState<File | undefined>(undefined);
 
   if (!companyContext) return <Typography>Loading...</Typography>;
 
   const { fetchCompanyCustomProducts } = companyContext;
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const inputFIle = e.target.files[0];
+    setImageFile(inputFIle);
+  };
+
   const handleSubmitProduct = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    if (!imageFile) return;
+    formData.append("model_number", modelNum);
+    formData.append("name", productName);
+    formData.append("price", price);
+    formData.append("description", description);
+    formData.append("image", imageFile);
+
     try {
-      await fetch(`${API_BASE_URL}/api/company/products`, {
+      await fetch(`${API_BASE_URL}/api/company/product`, {
         method: "POST",
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model_number: modelNum,
-          name: productName,
-          price,
-          description,
-        }),
+        body: formData,
       });
 
       setProductName("");
       setModelNum("");
       setPrice("");
       setDescription("");
+      setImageFile(undefined);
       await fetchCompanyCustomProducts();
     } catch (err) {
       console.error(err);
@@ -85,6 +103,13 @@ export const AddDefaultProduct = () => {
             }}
             required
             size="small"
+          />
+          <Input
+            type="file"
+            size="small"
+            fullWidth
+            inputProps={{ accept: "image/*" }}
+            onChange={handleImageChange}
           />
           <Button type="submit" variant="contained" color="primary">
             登録
