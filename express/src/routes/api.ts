@@ -13,9 +13,11 @@ import {
   deleteUserCartALLProducts,
   deleteUserCartProduct,
   fetchDisplayProductsByCompany,
+  fetchDisplayProductsForUser,
   findProductsForCompany,
   findProductsFromUser,
   getOrCreateCart,
+  getTotalProductsCount,
   getUserCartALLProducts,
   getUserList,
   orderHistory,
@@ -49,6 +51,8 @@ router.delete("/company/custom-product", deleteCustomProduct);
 router.get("/user/profile", getMyUser);
 router.get("/user/products", findProductsFromUser);
 router.get("/user/orders/history", orderHistory);
+router.get("/user/products/custom", fetchDisplayProductsForUser);
+router.get("/user/products/count", getTotalProductsCount);
 
 //カート機能
 router.get("/cart/cart", getOrCreateCart);
