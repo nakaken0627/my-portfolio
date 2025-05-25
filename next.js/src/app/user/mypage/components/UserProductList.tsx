@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { API_BASE_URL } from "@/components/lib/api";
 import { UserProductWithCustomization } from "@/types/user";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 
 import { UserPagiNation } from "./UserPagiNation";
 import { UserProductItem } from "./UserProductItem";

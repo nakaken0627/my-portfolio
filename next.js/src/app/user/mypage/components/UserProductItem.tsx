@@ -2,16 +2,8 @@ import { useState } from "react";
 import Image from "next/image";
 import { UserProductWithCustomization } from "@/types/user";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import TuneIcon from "@mui/icons-material/Tune";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  Stack,
-  Typography,
-} from "@mui/material";
+import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
+import { Box, Button, Card, Grid, Typography } from "@mui/material";
 
 import { UserDrawer } from "./UserDrawer";
 
@@ -38,95 +30,96 @@ export const UserProductItem = ({ id, product }: Props) => {
   };
 
   return (
-    <Grid container spacing={2}>
-      <Grid>
-        <Card
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            height: "100%",
-            width: "100%",
-            bgcolor: "#f0fff4",
-            borderRadius: 2,
-            boxShadow: 3,
-            p: 2,
-          }}
-          key={id}
-        >
-          <Grid size={{ xs: 12, sm: 4 }}>
-            <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-              <Grid>
-                <Box
-                  sx={{
-                    width: "100%",
-                    height: 200,
-                    position: "relative",
-                    borderRadius: 2,
-                    overflow: "hidden",
-                  }}
-                >
-                  <Image
-                    src={product.imageUrl ?? "/images/sample.jpg"}
-                    alt={product.name}
-                    width={400}
-                    height={180}
-                    style={{
-                      objectFit: "cover",
-                      borderRadius: 8,
-                      width: "100%",
-                      height: "100%",
-                    }}
-                  />
-                </Box>
-              </Grid>
-              <Grid>
-                <Box>
-                  <Typography variant="h6">{product.name}</Typography>
-                  <Typography variant="body2">
-                    型番: {product.model_number}
-                  </Typography>
-                  <Typography variant="body2">
-                    企業: {product.company_name}
-                  </Typography>
-                  <Typography variant="body2">
-                    説明: {product.description}
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ mt: 1, fontWeight: "bold" }}
-                  >
-                    ¥{Math.round(product.price).toLocaleString()}
-                  </Typography>
-                </Box>
-              </Grid>
-            </Stack>
+    <Box>
+      <Card
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          height: "100%",
+          width: "100%",
+          bgcolor: "#f0fff4",
+          borderRadius: 2,
+          boxShadow: 3,
+          p: 3,
+        }}
+        key={id}
+      >
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, sm: 5 }}>
+            <Box
+              sx={{
+                width: "100%",
+                height: 200,
+                position: "relative",
+                borderRadius: 2,
+                overflow: "hidden",
+              }}
+            >
+              <Image
+                src={product.imageUrl ?? "/images/sample.jpg"}
+                alt={product.name}
+                width={400}
+                height={180}
+                style={{
+                  objectFit: "cover",
+                  borderRadius: 8,
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
+            </Box>
+          </Grid>
 
-            <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
-              <Button
-                variant="contained"
-                color="success"
-                fullWidth
-                startIcon={<AddShoppingCartIcon />}
-                sx={{ whiteSpace: "nowrap" }}
+          <Grid size={{ xs: 12, sm: 7 }}>
+            <Box sx={{ mx: 3 }}>
+              <Typography
+                variant="h6"
+                sx={{ my: 1, mt: 1, fontWeight: "bold" }}
               >
-                カートへ
-              </Button>
+                {product.name}
+              </Typography>
+              <Typography variant="body2" sx={{ my: 1 }}>
+                型番: {product.model_number}
+              </Typography>
+              <Typography variant="body2" sx={{ my: 1 }}>
+                企業: {product.company_name}
+              </Typography>
+              <Typography variant="body2" sx={{ my: 1 }}>
+                説明:
+              </Typography>
+              <Typography variant="body2">・{product.description}</Typography>
+              <Typography
+                variant="subtitle1"
+                sx={{ my: 1, mt: 1, fontWeight: "bold" }}
+              >
+                ¥{Math.round(product.price).toLocaleString()}
+              </Typography>
               <Button
                 variant="outlined"
                 fullWidth
-                startIcon={<TuneIcon />}
+                startIcon={<FormatListBulletedOutlinedIcon />}
                 onClick={handleDrawerOpen}
                 sx={{ whiteSpace: "nowrap" }}
               >
-                カスタマイズ
+                個別商品一覧 （{product.customization.length}）
               </Button>
-            </Stack>
+            </Box>
           </Grid>
-        </Card>
+        </Grid>
 
-        <UserDrawer drawerProps={DrawerProps} />
-      </Grid>
-    </Grid>
+        <Button
+          variant="contained"
+          color="success"
+          fullWidth
+          startIcon={<AddShoppingCartIcon />}
+          sx={{ mt: 2, whiteSpace: "nowrap" }}
+        >
+          カートへ
+        </Button>
+      </Card>
+
+      <UserDrawer drawerProps={DrawerProps} />
+    </Box>
   );
 };
