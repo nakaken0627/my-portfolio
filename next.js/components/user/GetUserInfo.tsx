@@ -13,7 +13,7 @@ export const GetUserInfo = () => {
 
   return (
     <Typography variant="body1" sx={{ mx: 2, borderBottom: "1px solid" }}>
-      ようこそ、{myUser.name}様
+      ようこそ、{myUser.name === "test" ? "ゲスト" : myUser.name}様
     </Typography>
   );
 };

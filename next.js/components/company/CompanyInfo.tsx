@@ -13,7 +13,7 @@ export const CompanyInfo = () => {
 
   return (
     <Typography variant="body1" sx={{ mx: 2, borderBottom: "1px solid" }}>
-      ようこそ、{myCompany.name}様
+      ようこそ、{myCompany.name === "test" ? "ゲスト" : myCompany.name}様
     </Typography>
   );
 };
