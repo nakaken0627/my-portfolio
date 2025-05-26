@@ -8,7 +8,7 @@ import { Container, Grid, Typography } from "@mui/material";
 import { UserPagiNation } from "./UserPagiNation";
 import { UserProductItem } from "./UserProductItem";
 
-const limit = 4; //商品の表示数の制限
+const limit = 4; //商品の表示数を指定
 
 export const UserProductList = () => {
   const [products, setProducts] = useState<UserProductWithCustomization[]>([]);

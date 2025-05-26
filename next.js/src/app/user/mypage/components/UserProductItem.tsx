@@ -49,6 +49,7 @@ export const UserProductItem = ({ id, product }: Props) => {
           <Grid size={{ xs: 12, sm: 5 }}>
             <Box
               sx={{
+                mt: 2,
                 width: "100%",
                 height: 200,
                 position: "relative",
@@ -72,10 +73,23 @@ export const UserProductItem = ({ id, product }: Props) => {
           </Grid>
 
           <Grid size={{ xs: 12, sm: 7 }}>
-            <Box sx={{ mx: 3 }}>
+            <Box
+              sx={{
+                mx: 3,
+                whiteSpace: "nowrap",
+                overflowX: "auto",
+                display: "block",
+                maxWidth: "100%",
+                fontSize: "14px",
+              }}
+            >
               <Typography
                 variant="h6"
-                sx={{ my: 1, mt: 1, fontWeight: "bold" }}
+                sx={{
+                  my: 1,
+                  mt: 1,
+                  fontWeight: "bold",
+                }}
               >
                 {product.name}
               </Typography>
@@ -95,27 +109,36 @@ export const UserProductItem = ({ id, product }: Props) => {
               >
                 ¥{Math.round(product.price).toLocaleString()}
               </Typography>
+            </Box>
+            <Box sx={{ mx: 2 }}>
               <Button
-                variant="outlined"
+                variant="contained"
+                color="success"
                 fullWidth
-                startIcon={<FormatListBulletedOutlinedIcon />}
-                onClick={handleDrawerOpen}
-                sx={{ whiteSpace: "nowrap" }}
+                startIcon={<AddShoppingCartIcon />}
+                sx={{ px: 3, whiteSpace: "nowrap" }}
               >
-                個別商品一覧 （{product.customization.length}）
+                カートへ
               </Button>
             </Box>
           </Grid>
         </Grid>
-
         <Button
-          variant="contained"
-          color="success"
+          variant="outlined"
           fullWidth
-          startIcon={<AddShoppingCartIcon />}
-          sx={{ mt: 2, whiteSpace: "nowrap" }}
+          startIcon={<FormatListBulletedOutlinedIcon />}
+          onClick={handleDrawerOpen}
+          sx={{
+            px: 3,
+            mt: 2,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            color: "#4caf50",
+            borderColor: "#4caf50",
+          }}
         >
-          カートへ
+          個別商品一覧 （{String(product.customization.length)}）
         </Button>
       </Card>
 

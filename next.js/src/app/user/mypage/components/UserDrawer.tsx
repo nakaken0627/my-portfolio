@@ -16,8 +16,16 @@ type Props = {
 export const UserDrawer = ({ drawerProps }: Props) => {
   const { openDrawer, handleDrawerClose, customization } = drawerProps;
   return (
-    <Drawer anchor="right" open={openDrawer} onClose={handleDrawerClose}>
-      <Box sx={{ width: 360, p: 2 }}>
+    <Drawer anchor="bottom" open={openDrawer} onClose={handleDrawerClose}>
+      <Box
+        sx={{
+          width: "100%",
+          maxHeight: "80vh",
+          p: 2,
+          px: 5,
+          bgcolor: "f0fdf4",
+        }}
+      >
         <Typography variant="h6" sx={{ mb: 2 }}>
           カスタマイズ品一覧
         </Typography>
