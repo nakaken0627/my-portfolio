@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS cart_products (
   id SERIAL PRIMARY KEY,
   cart_id INTEGER NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
   product_id INTEGER NOT NULL REFERENCES products(id),
+  customization_id INTEGER REFERENCES product_customizations(id),
   quantity INTEGER NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

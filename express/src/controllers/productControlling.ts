@@ -1,15 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 
 import {
-  changeCartProduct,
   checkoutCart,
   createCart,
-  createCartProduct,
+  createOrUpdateCartProduct,
   deleteCartAllProducts,
   deleteCartProduct,
-  findCartProduct,
   getCart,
-  getCartALLProducts,
+  getCartAllProducts,
 } from "../models/cartModel.js";
 import {
   addCompanyProduct,
@@ -27,7 +25,7 @@ import {
 import { createOrder, createOrderProduct } from "../models/orderModel.js";
 import {
   countAllProducts,
-  findProductsForUser,
+  findAllProductsWithCustomization,
   findProductsWithCustomization,
   orderedProductList,
 } from "../models/userModel.js";
@@ -90,15 +88,6 @@ export const deleteProductsForCompany = async (req: Request, res: Response, next
   }
 };
 
-export const findProductsFromUser = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const data = await findProductsForUser();
-    res.status(200).json(data);
-  } catch (err) {
-    return next(err);
-  }
-};
-
 export const getOrCreateCart = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
   const userId = req.user.id;
@@ -118,38 +107,38 @@ export const getOrCreateCart = async (req: Request, res: Response, next: NextFun
 export const getUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
   const cartId = Number(req.query.cartId);
   try {
-    const data = await getCartALLProducts(cartId);
-    if (!data) {
+    const rows = await getCartAllProducts(cartId);
+    if (!rows) {
       res.status(404).json({ message: "データが見つかりません" });
       return;
     }
+    const data = rows.map((row) => {
+      return {
+        productId: row.product_id,
+        customizationId: row.customization_id,
+        quantity: row.quantity,
+      };
+    });
     res.status(200).json(data);
   } catch (err) {
     return next(err);
   }
 };
 
-export const createOrChangeUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
-  const product_id = Number(req.params.productId);
-  const { cart_id, quantity } = req.body;
+export const createOrUpdateUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
+  const { cartId, productId, customizationId, quantity } = req.body;
   try {
-    const data = await findCartProduct(cart_id, product_id);
-    if (!data) {
-      const newData = await createCartProduct(cart_id, product_id, quantity);
-      res.status(200).json(newData);
-    } else {
-      const changeData = await changeCartProduct(cart_id, product_id, quantity);
-      res.status(200).json(changeData);
-    }
+    const data = await createOrUpdateCartProduct(cartId, quantity, productId, customizationId);
+    res.status(200).json(data);
   } catch (err) {
     return next(err);
   }
 };
 
 export const deleteUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
-  const { cart_id, product_id } = req.body;
+  const { cartId, productId, customizationId } = req.body;
   try {
-    const data = await deleteCartProduct(cart_id, product_id);
+    const data = await deleteCartProduct(cartId, productId, customizationId);
     res.status(200).json(data);
   } catch (err) {
     return next(err);
@@ -157,9 +146,9 @@ export const deleteUserCartProduct = async (req: Request, res: Response, next: N
 };
 
 export const deleteUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
-  const { cart_id } = req.body;
+  const { cartId } = req.body;
   try {
-    const data = await deleteCartAllProducts(cart_id);
+    const data = await deleteCartAllProducts(cartId);
     res.status(200).json(data);
   } catch (err) {
     return next(err);
@@ -403,7 +392,7 @@ export const fetchDisplayProductsForUser = async (req: Request, res: Response, n
 
   try {
     const products = await findProductsWithCustomization(userId, limit, offset);
-
+    console.log(products);
     const enrichedProducts = await Promise.all(
       products.map(async (row) => {
         const product: UserProductWithCustomization = row.product;
@@ -446,6 +435,50 @@ export const fetchDisplayProductsForUser = async (req: Request, res: Response, n
           start_date: customization.start_date,
           end_date: customization.end_date,
         });
+      }
+      return acc;
+    }, {});
+    const data = Object.values(groupedProducts);
+    res.status(200).json(data);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const fetchAllProductsForUser = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) return;
+  const userId = req.user.id;
+  try {
+    const products = await findAllProductsWithCustomization(userId);
+
+    const groupedProducts = products.reduce<GroupedUserProduct>((acc, row) => {
+      const product: UserProductWithCustomization = row.product;
+      const customization: UserProductCustomization = row.customization;
+
+      if (!product) return acc;
+
+      if (!acc[product.id]) {
+        acc[product.id] = {
+          id: product.id,
+          name: product.name,
+          company_name: product.company_name,
+          model_number: product.model_number,
+          price: product.price,
+          description: product.description,
+          customization: [],
+        };
+
+        if (customization) {
+          acc[product.id].customization.push({
+            id: customization.id,
+            model_number: customization.model_number,
+            name: customization.name,
+            price: customization.price,
+            description: customization.description,
+            start_date: customization.start_date,
+            end_date: customization.end_date,
+          });
+        }
       }
       return acc;
     }, {});

@@ -33,14 +33,13 @@ export const createCart = async (user_id: number) => {
   }
 };
 
-export const getCartALLProducts = async (cart_id: number) => {
+export const getCartAllProducts = async (cart_id: number) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
-      `SELECT product_id,quantity
+      `SELECT *
         FROM cart_products
-        WHERE cart_id = $1
-        ORDER BY id ASC `,
+        WHERE cart_id = $1`,
       [cart_id],
     );
     return result.rows;
@@ -49,33 +48,22 @@ export const getCartALLProducts = async (cart_id: number) => {
   }
 };
 
-export const findCartProduct = async (cart_id: number, product_id: number) => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `SELECT * 
-        FROM cart_products
-        WHERE cart_id = $1
-        AND product_id = $2 `,
-      [cart_id, product_id],
-    );
-    return result.rows[0];
-  } finally {
-    client.release();
-  }
-};
-
-export const createCartProduct = async (cart_id: number, product_id: number, quantity: number) => {
+export const createOrUpdateCartProduct = async (
+  cart_id: number,
+  quantity: number,
+  product_id: number,
+  customizationId?: number,
+) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
       //新規登録ボタンを連続でクリックした際に登録の重複があったため、ON CONFLICTでエラーを回避
-      `INSERT INTO cart_products (cart_id,product_id,quantity)
-        VALUES ($1,$2,$3)
-        ON CONFLICT (cart_id,product_id)  
+      `INSERT INTO cart_products (cart_id,quantity,product_id,customization_id)
+        VALUES ($1,$2,$3,$4)
+        ON CONFLICT (cart_id,product_id,customization_id)  
         DO UPDATE SET quantity = EXCLUDED.quantity
-        RETURNING id,cart_id,product_id,quantity,created_at,updated_at`,
-      [cart_id, product_id, quantity],
+        RETURNING id`,
+      [cart_id, quantity, product_id, customizationId || null],
     );
     return result.rows[0];
   } finally {
@@ -83,32 +71,16 @@ export const createCartProduct = async (cart_id: number, product_id: number, qua
   }
 };
 
-export const changeCartProduct = async (cart_id: number, product_id: number, quantity: number) => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `UPDATE cart_products
-        SET quantity = $1
-        WHERE cart_id = $2
-        AND product_id = $3
-        RETURNING id,cart_id,product_id,quantity,created_at,updated_at`,
-      [quantity, cart_id, product_id],
-    );
-    return result.rows[0];
-  } finally {
-    client.release();
-  }
-};
-
-export const deleteCartProduct = async (cart_id: number, product_id: number) => {
+export const deleteCartProduct = async (cart_id: number, product_id: number, customizationId: number) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
       `DELETE FROM cart_products
         WHERE cart_id = $1
         AND product_id = $2
-        RETURNING id,cart_id,product_id,quantity,created_at,updated_at`,
-      [cart_id, product_id],
+        AND customization_id IS NOT DISTINCT FROM $3
+        RETURNING *`,
+      [cart_id, product_id, customizationId || null],
     );
     return result.rows[0];
   } finally {
@@ -116,14 +88,14 @@ export const deleteCartProduct = async (cart_id: number, product_id: number) => 
   }
 };
 
-export const deleteCartAllProducts = async (cart_id: number) => {
+export const deleteCartAllProducts = async (cartId: number) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
       `DELETE FROM cart_products
         WHERE cart_id = $1
-        RETURNING id,cart_id,product_id,quantity,created_at,updated_at`,
-      [cart_id],
+        RETURNING *`,
+      [cartId],
     );
     return result.rows;
   } finally {

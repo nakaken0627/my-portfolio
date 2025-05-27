@@ -26,7 +26,7 @@ export const CurrentCart = () => {
     cartId,
     cartProducts,
     setCartProducts,
-    productList,
+    productWithCustomList,
     calcProductTotalAmount,
     calcCartTotalAmount,
     addProduct,
@@ -37,13 +37,28 @@ export const CurrentCart = () => {
 
   if (!myUser || !cartId) return null;
 
-  const cartProductsWithPrice = () => {
-    return cartProducts.map((product) => {
-      const findItem = productList.find(
-        (item) => item.id === product.product_id,
+  type CartProduct = {
+    productId: number;
+    customizationId?: number | null;
+    quantity: number;
+  };
+
+  type CartProductWithPrice = CartProduct & { price: number | null };
+
+  const cartProductsWithPrice = (): CartProductWithPrice[] => {
+    return cartProducts.map((cp) => {
+      const product = productWithCustomList.find(
+        (item) => item.id === cp.productId,
       );
-      const price = findItem?.price;
-      return { ...product, price };
+      if (!product) return { ...cp, price: null };
+
+      const custom = cp.customizationId
+        ? product.customization.find((c) => c.id === cp.customizationId)
+        : null;
+
+      const price = custom ? custom.price : product.price;
+
+      return { ...cp, price };
     });
   };
 
@@ -55,7 +70,7 @@ export const CurrentCart = () => {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          cart_id: cartId.id,
+          cartId: cartId.id,
           cartProducts: cartProductWithPriceData,
         }),
       });
@@ -75,13 +90,24 @@ export const CurrentCart = () => {
           <Typography>カートが空です</Typography>
         ) : (
           cartProducts.map((cartProduct) => {
-            const product = productList.find(
-              (item) => item.id === cartProduct.product_id,
+            const product = productWithCustomList.find(
+              (item) => item.id === cartProduct.productId,
             );
             if (!product) return null;
+            const custom =
+              cartProduct.customizationId !== null
+                ? product.customization.find(
+                    (c) => c.id === cartProduct.customizationId,
+                  )
+                : null;
+
+            const displayItem = custom ?? product;
 
             return (
-              <Box key={cartProduct.product_id} sx={{ mb: 3 }}>
+              <Box
+                key={`${String(cartProduct.productId)}-${String(cartProduct.customizationId)}`}
+                sx={{ mb: 3 }}
+              >
                 <Grid
                   container
                   alignItems="center"
@@ -90,20 +116,24 @@ export const CurrentCart = () => {
                 >
                   <Grid size={{ xs: 12, sm: 2 }}>
                     <Typography sx={{ ml: 2 }}>
-                      {product.model_number}
+                      {displayItem.model_number}
                     </Typography>
                   </Grid>
                   <Grid size={{ xs: 12, sm: 3 }}>
-                    <Typography>{product.product_name}</Typography>
+                    <Typography>{displayItem.name}</Typography>
                   </Grid>
                   <Grid size={{ xs: 12, sm: 1 }}>
                     <Typography>
-                      ¥{Math.round(product.price).toLocaleString()}
+                      ¥{Math.round(displayItem.price).toLocaleString()}
                     </Typography>
                   </Grid>
                   <Grid size={{ xs: 12, sm: 3 }}>
                     <Box display="flex" alignItems="center">
-                      <Button onClick={() => reduceProduct(product.id)}>
+                      <Button
+                        onClick={() =>
+                          reduceProduct(product.id, custom?.id ?? null)
+                        }
+                      >
                         -
                       </Button>
                       <TextField
@@ -111,6 +141,7 @@ export const CurrentCart = () => {
                         onChange={(e) =>
                           handleQuantityChange(
                             product.id,
+                            custom?.id ?? null,
                             Number(e.target.value),
                           )
                         }
@@ -144,19 +175,31 @@ export const CurrentCart = () => {
                           },
                         }}
                       />
-                      <Button onClick={() => addProduct(product.id)}>+</Button>
+                      <Button
+                        onClick={() =>
+                          addProduct(product.id, custom?.id ?? null)
+                        }
+                      >
+                        +
+                      </Button>
                     </Box>
                   </Grid>
                   <Grid size={{ xs: 12, sm: 2 }}>
                     <Typography>
-                      ¥{calcProductTotalAmount(product.id).toLocaleString()}
+                      ¥
+                      {calcProductTotalAmount(
+                        product.id,
+                        custom?.id ?? null,
+                      ).toLocaleString()}
                     </Typography>
                   </Grid>
                   <Grid size={{ xs: 12, sm: 1 }}>
                     <Button
                       color="error"
                       sx={{ mr: 2 }}
-                      onClick={() => deleteProduct(product.id)}
+                      onClick={() =>
+                        deleteProduct(product.id, custom?.id ?? null)
+                      }
                     >
                       削除
                     </Button>
