@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { CartContext } from "@/context/cart-context";
 import { UserProductCustomization } from "@/types/user";
 import {
   Box,
@@ -14,9 +16,18 @@ import {
 
 type Props = {
   customization: UserProductCustomization[];
+  productId: number;
 };
 
-export const UserProductCustomizationList = ({ customization }: Props) => {
+export const UserProductCustomizationList = ({
+  customization,
+  productId,
+}: Props) => {
+  const cartContext = useContext(CartContext);
+  if (!cartContext) return <Typography>Loading...</Typography>;
+
+  const { addProduct } = cartContext;
+
   if (!customization.length)
     return <Typography>カスタマイズ品はありません。</Typography>;
 
@@ -90,7 +101,12 @@ export const UserProductCustomizationList = ({ customization }: Props) => {
             {customization.map((item) => (
               <TableRow key={item.id} hover>
                 <TableCell align="center">
-                  <Button variant="outlined" size="small" color="success">
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    color="success"
+                    onClick={() => addProduct(productId, item.id)}
+                  >
                     カートに追加
                   </Button>
                 </TableCell>

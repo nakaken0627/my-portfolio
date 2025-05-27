@@ -157,13 +157,14 @@ export const deleteUserCartALLProducts = async (req: Request, res: Response, nex
 
 export const checkoutUserCart = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
-  const user_id = req.user.id;
-  const { cart_id, cartProducts } = req.body;
+  const userId = req.user.id;
+  const { cartId, cartProducts } = req.body;
+
   try {
-    const order = await createOrder(user_id);
-    const order_id = order.id;
-    await checkoutCart(order_id, cart_id);
-    await createOrderProduct(order_id, cartProducts);
+    const order = await createOrder(userId);
+    const orderId = order.id;
+    await checkoutCart(orderId, cartId);
+    await createOrderProduct(orderId, cartProducts);
     res.status(200).json(order);
   } catch (err) {
     return next(err);
@@ -392,7 +393,6 @@ export const fetchDisplayProductsForUser = async (req: Request, res: Response, n
 
   try {
     const products = await findProductsWithCustomization(userId, limit, offset);
-    console.log(products);
     const enrichedProducts = await Promise.all(
       products.map(async (row) => {
         const product: UserProductWithCustomization = row.product;

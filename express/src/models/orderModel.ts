@@ -9,7 +9,7 @@ export const createOrder = async (user_id: number) => {
     const result = await client.query(
       `INSERT INTO orders (user_id) 
         VALUES ($1)
-        RETURNING id,user_id,created_at,updated_at`,
+        RETURNING id`,
       [user_id],
     );
     return result.rows[0];
@@ -19,25 +19,27 @@ export const createOrder = async (user_id: number) => {
 };
 
 type OrderProducts = {
-  product_id: number;
+  productId: number;
+  customizationId?: number;
   quantity: number;
   price: number;
 };
 
 export const createOrderProduct = async (order_id: number, orderProducts: OrderProducts[]) => {
   const client: PoolClient = await pool.connect();
+
   try {
     await client.query("BEGIN");
 
     await Promise.all(
       orderProducts
-        .filter((product) => product.quantity > 0)
-        .map((product) =>
+        .filter((p) => p.quantity > 0)
+        .map((p) =>
           client.query(
-            `INSERT INTO order_products (order_id,product_id,quantity,price)
-            VALUES ($1,$2,$3,$4)
+            `INSERT INTO order_products (order_id,product_id,customization_id,quantity,price)
+            VALUES ($1,$2,$3,$4,$5)
             RETURNING id,order_id,product_id,quantity,price,created_at,updated_at`,
-            [order_id, product.product_id, product.quantity, product.price],
+            [order_id, p.productId, p.customizationId, p.quantity, p.price],
           ),
         ),
     );

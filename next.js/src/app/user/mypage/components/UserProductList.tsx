@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ProductList } from "@/app/company/productlist/components/ProductList";
 import { API_BASE_URL } from "@/components/lib/api";
 import { UserProductWithCustomization } from "@/types/user";
 import { Container, Grid, Typography } from "@mui/material";
@@ -37,8 +36,6 @@ export const UserProductList = () => {
 
     void fetchProducts();
   }, [page]);
-
-  console.log(products);
 
   return (
     <Container maxWidth="lg" sx={{ padding: 2, py: 1 }}>

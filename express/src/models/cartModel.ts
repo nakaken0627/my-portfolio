@@ -103,15 +103,16 @@ export const deleteCartAllProducts = async (cartId: number) => {
   }
 };
 
-export const checkoutCart = async (order_id: number, cart_id: number) => {
+export const checkoutCart = async (orderId: number, cartId: number) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
       `UPDATE carts
         SET is_checkedout = true,order_id =$1
         WHERE id = $2
-        RETURNING id,user_id,is_checkedout,order_id,created_at,updated_at`,
-      [order_id, cart_id],
+        RETURNING *
+      `,
+      [orderId, cartId],
     );
     return result.rows[0];
   } finally {

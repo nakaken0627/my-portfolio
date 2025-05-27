@@ -34,6 +34,7 @@ export const UserProductItem = ({ id, product }: Props) => {
   const DrawerProps = {
     openDrawer: openDrawer,
     handleDrawerClose: handleDrawerClose,
+    productId: product.id,
     customization: product.customization,
   };
 

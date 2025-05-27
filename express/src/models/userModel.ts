@@ -78,7 +78,12 @@ export const findProductsWithCustomization = async (userId: number, limit: numbe
         SELECT 
           (to_jsonb(p) || jsonb_build_object('company_name', c.name)) AS product,
           to_jsonb(pc) AS customization
-        FROM products p
+        FROM (
+          SELECT * 
+          FROM products
+          ORDER BY id
+          LIMIT $2 OFFSET $3
+        ) p
         INNER JOIN companies c
         ON c.id = p.company_id
         LEFT JOIN product_customizations pc
@@ -87,7 +92,6 @@ export const findProductsWithCustomization = async (userId: number, limit: numbe
           AND (pc.start_date IS NULL OR pc.start_date <= CURRENT_DATE)
           AND (pc.end_date IS NULL OR pc.end_date >= CURRENT_DATE)
         ORDER BY p.id
-        LIMIT $2 OFFSET $3
       `,
       [userId, limit, offset],
     );
