@@ -1,29 +1,14 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { API_BASE_URL } from "@/components/lib/api";
 import { Pagination, Stack } from "@mui/material";
 
 type Props = {
   page: number;
   setPage: (page: number) => void;
   limit: number;
+  totalCount: number;
 };
 
-export const UserPagiNation = ({ page, setPage, limit }: Props) => {
-  const [totalCount, setTotalCount] = useState<number>(0);
+export const UserPagiNation = ({ page, setPage, limit, totalCount }: Props) => {
   const totalPages = Math.ceil(totalCount / limit);
-
-  useEffect(() => {
-    const fetchTotalProductsNum = async () => {
-      const response = await fetch(`${API_BASE_URL}/api/user/products/count`, {
-        method: "GET",
-      });
-      const data: { count: number } = await response.json();
-      setTotalCount(data.count);
-    };
-    void fetchTotalProductsNum();
-  }, []);
 
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,

@@ -440,6 +440,7 @@ export const fetchDisplayProductsForUser = async (req: Request, res: Response, n
   const offset = (page - 1) * limit;
 
   try {
+    const total: { count: number } = await countAllProducts();
     const products = await findProductsWithCustomization(userId, limit, offset);
     const enrichedProducts = await Promise.all(
       products.map(async (row) => {
@@ -487,7 +488,7 @@ export const fetchDisplayProductsForUser = async (req: Request, res: Response, n
       return acc;
     }, {});
     const data = Object.values(groupedProducts);
-    res.status(200).json(data);
+    res.status(200).json({ data, total: total.count });
   } catch (err) {
     next(err);
   }

@@ -8,11 +8,17 @@ import { Container, Grid, Typography } from "@mui/material";
 import { UserPagiNation } from "./UserPagiNation";
 import { UserProductItem } from "./UserProductItem";
 
+type Transform = {
+  data: UserProductWithCustomization[];
+  total: number;
+};
+
 const limit = 4; //商品の表示数を指定
 
 export const UserProductList = () => {
   const [products, setProducts] = useState<UserProductWithCustomization[]>([]);
   const [page, setPage] = useState(1);
+  const [totalCount, setTotalCount] = useState<number>(0);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -27,8 +33,9 @@ export const UserProductList = () => {
         if (!response.ok) {
           throw new Error("[UserProductList]fetchProductsでエラー発生");
         }
-        const data: UserProductWithCustomization[] = await response.json();
-        setProducts(data);
+        const result: Transform = await response.json();
+        setProducts(result.data);
+        setTotalCount(result.total);
       } catch (err) {
         console.error(err);
       }
@@ -52,7 +59,12 @@ export const UserProductList = () => {
           </Grid>
         ))}
       </Grid>
-      <UserPagiNation page={page} setPage={setPage} limit={limit} />
+      <UserPagiNation
+        page={page}
+        setPage={setPage}
+        limit={limit}
+        totalCount={totalCount}
+      />
     </Container>
   );
 };
