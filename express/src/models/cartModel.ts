@@ -49,9 +49,9 @@ export const getCartAllProducts = async (cart_id: number) => {
 };
 
 export const createOrUpdateCartProduct = async (
-  cart_id: number,
+  cartId: number,
   quantity: number,
-  product_id: number,
+  productId: number,
   customizationId?: number,
 ) => {
   const client: PoolClient = await pool.connect();
@@ -63,15 +63,16 @@ export const createOrUpdateCartProduct = async (
         ON CONFLICT (cart_id,product_id,customization_id)  
         DO UPDATE SET quantity = EXCLUDED.quantity
         RETURNING id`,
-      [cart_id, quantity, product_id, customizationId || null],
+      [cartId, quantity, productId, customizationId || null],
     );
+    // console.log(cartId, quantity, productId, customizationId);
     return result.rows[0];
   } finally {
     client.release();
   }
 };
 
-export const deleteCartProduct = async (cart_id: number, product_id: number, customizationId: number) => {
+export const deleteCartProduct = async (cartId: number, productId: number, customizationId: number) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
@@ -79,8 +80,8 @@ export const deleteCartProduct = async (cart_id: number, product_id: number, cus
         WHERE cart_id = $1
         AND product_id = $2
         AND customization_id IS NOT DISTINCT FROM $3
-        RETURNING *`,
-      [cart_id, product_id, customizationId || null],
+        RETURNING cart_id, product_id, customization_id`,
+      [cartId, productId, customizationId || null],
     );
     return result.rows[0];
   } finally {

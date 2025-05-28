@@ -467,18 +467,18 @@ export const fetchAllProductsForUser = async (req: Request, res: Response, next:
           description: product.description,
           customization: [],
         };
+      }
 
-        if (customization) {
-          acc[product.id].customization.push({
-            id: customization.id,
-            model_number: customization.model_number,
-            name: customization.name,
-            price: customization.price,
-            description: customization.description,
-            start_date: customization.start_date,
-            end_date: customization.end_date,
-          });
-        }
+      if (customization) {
+        acc[product.id].customization.push({
+          id: customization.id,
+          model_number: customization.model_number,
+          name: customization.name,
+          price: customization.price,
+          description: customization.description,
+          start_date: customization.start_date,
+          end_date: customization.end_date,
+        });
       }
       return acc;
     }, {});

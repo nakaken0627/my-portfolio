@@ -39,7 +39,7 @@ export const CurrentCart = () => {
 
   type CartProduct = {
     productId: number;
-    customizationId?: number | null;
+    customizationId: number | null;
     quantity: number;
   };
 
@@ -94,6 +94,7 @@ export const CurrentCart = () => {
               (item) => item.id === cartProduct.productId,
             );
             if (!product) return null;
+
             const custom =
               cartProduct.customizationId !== null
                 ? product.customization.find(
