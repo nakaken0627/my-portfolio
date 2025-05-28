@@ -24,7 +24,7 @@ const s3 = new S3Client({
 
 export const uploadImage = async (imageFile: Express.Multer.File) => {
   const imageName = randomImageName();
-  const buffer = await sharp(imageFile.buffer).resize({ height: 1920, width: 1080, fit: "contain" }).toBuffer();
+  const buffer = await sharp(imageFile.buffer).resize({ height: 1080, width: 1080, fit: "contain" }).toBuffer();
 
   const command = new PutObjectCommand({
     Bucket: bucketName,

@@ -25,7 +25,12 @@ import {
   getUserIds,
 } from "../models/companyModel.js";
 import { createOrder, createOrderProduct } from "../models/orderModel.js";
-import { findProductsForUser, orderedProductList } from "../models/userModel.js";
+import {
+  countAllProducts,
+  findProductsForUser,
+  findProductsWithCustomization,
+  orderedProductList,
+} from "../models/userModel.js";
 import { deleteImage, getSignedImageUrl, uploadImage } from "../services/s3Service.js";
 
 export const findProductsForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -358,6 +363,104 @@ export const getUserList = async (req: Request, res: Response, next: NextFunctio
   try {
     const result = await getUserIds();
     res.status(200).json(result);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+type UserProductWithCustomization = {
+  id: number;
+  name: string;
+  company_name: string;
+  model_number: string;
+  price: number;
+  description: string;
+  image_name?: string;
+  imageUrl?: string | null;
+  customization: UserProductCustomization[];
+};
+
+type UserProductCustomization = {
+  id: number;
+  model_number: string;
+  name: string;
+  price: number;
+  description: string;
+  start_date: string;
+  end_date: string;
+};
+
+type GroupedUserProduct = Record<number, UserProductWithCustomization>;
+
+export const fetchDisplayProductsForUser = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) return;
+
+  const userId = req.user.id;
+
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 4;
+  const offset = (page - 1) * limit;
+
+  try {
+    const total: { count: number } = await countAllProducts();
+    const products = await findProductsWithCustomization(userId, limit, offset);
+
+    const enrichedProducts = await Promise.all(
+      products.map(async (row) => {
+        const product: UserProductWithCustomization = row.product;
+        const customization: UserProductCustomization = row.customization;
+
+        let imageUrl: string | null = null;
+
+        if (product.image_name) {
+          imageUrl = await getSignedImageUrl(product.image_name);
+        }
+        const productWithUrl = { ...product, imageUrl };
+        return { productWithUrl, customization };
+      }),
+    );
+
+    const groupedProducts = enrichedProducts.reduce<GroupedUserProduct>((acc, row) => {
+      const product: UserProductWithCustomization = row.productWithUrl;
+      const customization: UserProductCustomization = row.customization;
+
+      if (!acc[product.id]) {
+        acc[product.id] = {
+          id: product.id,
+          name: product.name,
+          company_name: product.company_name,
+          model_number: product.model_number,
+          price: product.price,
+          description: product.description,
+          image_name: product.image_name,
+          imageUrl: product.imageUrl,
+          customization: [],
+        };
+      }
+      if (customization) {
+        acc[product.id].customization.push({
+          id: customization.id,
+          model_number: customization.model_number,
+          name: customization.name,
+          price: customization.price,
+          description: customization.description,
+          start_date: customization.start_date,
+          end_date: customization.end_date,
+        });
+      }
+      return acc;
+    }, {});
+    const data = Object.values(groupedProducts);
+    res.status(200).json({ data, total: total.count });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getTotalProductsCount = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const data = await countAllProducts();
+    res.status(200).json(data);
   } catch (err) {
     return next(err);
   }
