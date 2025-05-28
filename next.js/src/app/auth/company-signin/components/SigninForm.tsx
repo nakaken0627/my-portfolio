@@ -9,10 +9,13 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   Paper,
   TextField,
   Typography,
 } from "@mui/material";
+
+import { GuestLoginFunc } from "../components/GuestLoginFunc";
 
 export const SigninForm = () => {
   const [inputCompanyName, setInputCompanyName] = useState("");
@@ -104,6 +107,8 @@ export const SigninForm = () => {
             新規登録はこちら
           </Link>
         </Typography>
+        <Divider sx={{ my: 3, opacity: 0.8 }}></Divider>
+        <GuestLoginFunc />
       </Paper>
     </Container>
   );
