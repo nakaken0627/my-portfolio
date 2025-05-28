@@ -171,11 +171,59 @@ export const checkoutUserCart = async (req: Request, res: Response, next: NextFu
   }
 };
 
+type OrderProduct = {
+  id: number;
+  name: string;
+  company_name: string;
+  model_number: string;
+  price: number;
+  quantity: number;
+};
+
+type OrderCustom = {
+  id: number;
+  model_number: string;
+  name: string;
+  price: number;
+};
+
+type OrderedRow = {
+  order_id: number;
+  product: OrderProduct;
+  customization: OrderCustom;
+};
+
+type Transformed = {
+  orderId: number;
+  products: Array<OrderProduct & { customization: OrderCustom | null }>;
+};
+
 export const orderHistory = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
-  const user_id = req.user.id;
+  const userId = req.user.id;
   try {
-    const data = await orderedProductList(user_id);
+    const rows: OrderedRow[] = await orderedProductList(userId);
+    const grouped: Record<number, Transformed["products"]> = {};
+
+    for (const row of rows) {
+      const { order_id, product, customization } = row;
+
+      if (!grouped[order_id]) {
+        grouped[order_id] = [];
+      }
+
+      grouped[order_id].push({
+        ...product,
+        customization: customization ?? null,
+      });
+    }
+    const data = Object.entries(grouped)
+      .sort((a, b) => Number(b[0]) - Number(a[0]))
+      .map(([orderId, products]) => ({
+        orderId: Number(orderId),
+        products,
+      }));
+
     res.status(200).json(data);
   } catch (err) {
     return next(err);
