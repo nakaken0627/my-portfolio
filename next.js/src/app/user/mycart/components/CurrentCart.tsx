@@ -81,56 +81,238 @@ export const CurrentCart = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 1 }}>
+    <Container maxWidth="lg" sx={{ py: 2 }}>
       <Typography variant="h4" gutterBottom>
         カート
       </Typography>
-      <Paper elevation={3} sx={{ p: 3 }}>
+      <Paper elevation={3} sx={{ p: 3, backgroundColor: "#f1f8e9" }}>
         {cartProducts.length === 0 ? (
           <Typography>カートが空です</Typography>
         ) : (
-          cartProducts.map((cartProduct) => {
-            const product = productWithCustomList.find(
-              (item) => item.id === cartProduct.productId,
-            );
-            if (!product) return null;
+          <Box sx={{ overflowY: "auto", overflowX: "auto" }}>
+            <Grid
+              container
+              spacing={2}
+              alignItems="center"
+              sx={{
+                fontWeight: "bold",
+                mb: 1,
+                px: 2,
+                py: 1,
+                minWidth: 1000,
+                overflowY: "auto",
+                overflowX: "auto",
+              }}
+            >
+              <Grid
+                size={{ xs: 2 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                型番
+              </Grid>
+              <Grid
+                size={{ xs: 2 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                商品名
+              </Grid>
+              <Grid
+                size={{ xs: 1 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                種別
+              </Grid>
+              <Grid
+                size={{ xs: 2 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                価格
+              </Grid>
+              <Grid
+                size={{ xs: 2 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                数量
+              </Grid>
+              <Grid
+                size={{ xs: 2 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                小計
+              </Grid>
+              <Grid
+                size={{ xs: 1 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                操作
+              </Grid>
+            </Grid>
 
-            const custom =
-              cartProduct.customizationId !== null
+            {cartProducts.map((cartProduct) => {
+              const product = productWithCustomList.find(
+                (item) => item.id === cartProduct.productId,
+              );
+              if (!product) return null;
+
+              const custom = cartProduct.customizationId
                 ? product.customization.find(
                     (c) => c.id === cartProduct.customizationId,
                   )
                 : null;
 
-            const displayItem = custom ?? product;
-
-            return (
-              <Box
-                key={`${String(cartProduct.productId)}-${String(cartProduct.customizationId)}`}
-                sx={{ mb: 3 }}
-              >
+              return (
                 <Grid
                   container
-                  alignItems="center"
+                  key={`${String(cartProduct.productId)}-${String(cartProduct.customizationId ?? "null")}`}
                   spacing={2}
-                  sx={{ backgroundColor: "#E3F2FD", p: 2, borderRadius: 2 }}
+                  alignItems="center"
+                  sx={{
+                    backgroundColor: "#e8f5e9",
+                    borderRadius: 2,
+                    mb: 1,
+                    px: 2,
+                    py: 1,
+                    minWidth: 1000,
+                    overflowY: "auto",
+                    overflowX: "auto",
+                  }}
                 >
-                  <Grid size={{ xs: 12, sm: 2 }}>
-                    <Typography sx={{ ml: 2 }}>
-                      {displayItem.model_number}
-                    </Typography>
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 3 }}>
-                    <Typography>{displayItem.name}</Typography>
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 1 }}>
+                  <Grid
+                    size={{ xs: 2 }}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
                     <Typography>
-                      ¥{Math.round(displayItem.price).toLocaleString()}
+                      {custom?.model_number ?? product.model_number}
                     </Typography>
                   </Grid>
-                  <Grid size={{ xs: 12, sm: 3 }}>
-                    <Box display="flex" alignItems="center">
+                  <Grid
+                    size={{ xs: 2 }}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    <Typography>{custom?.name ?? product.name}</Typography>
+                  </Grid>
+                  <Grid
+                    size={{ xs: 1 }}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    <Typography>{custom ? `個別品` : "共通品"}</Typography>
+                  </Grid>
+                  <Grid
+                    size={{ xs: 2 }}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    <Typography>
+                      ¥
+                      {Math.round(
+                        custom?.price ?? product.price,
+                      ).toLocaleString()}
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    size={{ xs: 2 }}
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
                       <Button
+                        size="small"
+                        sx={{ minWidth: 32, px: 1 }}
                         onClick={() =>
                           reduceProduct(product.id, custom?.id ?? null)
                         }
@@ -149,7 +331,8 @@ export const CurrentCart = () => {
                         type="number"
                         size="small"
                         sx={{
-                          width: 80,
+                          mx: 0.5,
+                          width: 50,
                           "& input": {
                             textAlign: "center",
                             padding: 0,
@@ -177,6 +360,8 @@ export const CurrentCart = () => {
                         }}
                       />
                       <Button
+                        size="small"
+                        sx={{ minWidth: 32, px: 1 }}
                         onClick={() =>
                           addProduct(product.id, custom?.id ?? null)
                         }
@@ -185,7 +370,18 @@ export const CurrentCart = () => {
                       </Button>
                     </Box>
                   </Grid>
-                  <Grid size={{ xs: 12, sm: 2 }}>
+                  <Grid
+                    size={{ xs: 2 }}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
                     <Typography>
                       ¥
                       {calcProductTotalAmount(
@@ -194,10 +390,21 @@ export const CurrentCart = () => {
                       ).toLocaleString()}
                     </Typography>
                   </Grid>
-                  <Grid size={{ xs: 12, sm: 1 }}>
+                  <Grid
+                    size={{ xs: 1 }}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
                     <Button
                       color="error"
-                      sx={{ mr: 2 }}
+                      size="small"
                       onClick={() =>
                         deleteProduct(product.id, custom?.id ?? null)
                       }
@@ -206,11 +413,12 @@ export const CurrentCart = () => {
                     </Button>
                   </Grid>
                 </Grid>
-              </Box>
-            );
-          })
+              );
+            })}
+          </Box>
         )}
-        <Divider sx={{ my: 4 }} />
+
+        <Divider sx={{ my: 3 }} />
         <Box display="flex" justifyContent="flex-end">
           <Typography variant="h6">
             合計: ¥{calcCartTotalAmount().toLocaleString()}
@@ -219,9 +427,15 @@ export const CurrentCart = () => {
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Button
             variant="contained"
-            color="primary"
+            sx={{
+              backgroundColor: "#81c784",
+              px: 4,
+              py: 1.5,
+              "&:hover": {
+                backgroundColor: "#66bb6a",
+              },
+            }}
             onClick={handleCheckout}
-            sx={{ px: 4, py: 1.5 }}
           >
             チェックアウト
           </Button>
