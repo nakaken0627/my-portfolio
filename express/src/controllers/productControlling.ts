@@ -1,15 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 
 import {
-  changeCartProduct,
   checkoutCart,
   createCart,
-  createCartProduct,
+  createOrUpdateCartProduct,
   deleteCartAllProducts,
   deleteCartProduct,
-  findCartProduct,
   getCart,
-  getCartALLProducts,
+  getCartAllProducts,
 } from "../models/cartModel.js";
 import {
   addCompanyProduct,
@@ -27,7 +25,7 @@ import {
 import { createOrder, createOrderProduct } from "../models/orderModel.js";
 import {
   countAllProducts,
-  findProductsForUser,
+  findAllProductsWithCustomization,
   findProductsWithCustomization,
   orderedProductList,
 } from "../models/userModel.js";
@@ -90,15 +88,6 @@ export const deleteProductsForCompany = async (req: Request, res: Response, next
   }
 };
 
-export const findProductsFromUser = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const data = await findProductsForUser();
-    res.status(200).json(data);
-  } catch (err) {
-    return next(err);
-  }
-};
-
 export const getOrCreateCart = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
   const userId = req.user.id;
@@ -118,38 +107,38 @@ export const getOrCreateCart = async (req: Request, res: Response, next: NextFun
 export const getUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
   const cartId = Number(req.query.cartId);
   try {
-    const data = await getCartALLProducts(cartId);
-    if (!data) {
+    const rows = await getCartAllProducts(cartId);
+    if (!rows) {
       res.status(404).json({ message: "データが見つかりません" });
       return;
     }
+    const data = rows.map((row) => {
+      return {
+        productId: row.product_id,
+        customizationId: row.customization_id,
+        quantity: row.quantity,
+      };
+    });
     res.status(200).json(data);
   } catch (err) {
     return next(err);
   }
 };
 
-export const createOrChangeUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
-  const product_id = Number(req.params.productId);
-  const { cart_id, quantity } = req.body;
+export const createOrUpdateUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
+  const { cartId, productId, customizationId, quantity } = req.body;
   try {
-    const data = await findCartProduct(cart_id, product_id);
-    if (!data) {
-      const newData = await createCartProduct(cart_id, product_id, quantity);
-      res.status(200).json(newData);
-    } else {
-      const changeData = await changeCartProduct(cart_id, product_id, quantity);
-      res.status(200).json(changeData);
-    }
+    const data = await createOrUpdateCartProduct(cartId, quantity, productId, customizationId);
+    res.status(200).json(data);
   } catch (err) {
     return next(err);
   }
 };
 
 export const deleteUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
-  const { cart_id, product_id } = req.body;
+  const { cartId, productId, customizationId } = req.body;
   try {
-    const data = await deleteCartProduct(cart_id, product_id);
+    const data = await deleteCartProduct(cartId, productId, customizationId);
     res.status(200).json(data);
   } catch (err) {
     return next(err);
@@ -157,9 +146,9 @@ export const deleteUserCartProduct = async (req: Request, res: Response, next: N
 };
 
 export const deleteUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
-  const { cart_id } = req.body;
+  const { cartId } = req.body;
   try {
-    const data = await deleteCartAllProducts(cart_id);
+    const data = await deleteCartAllProducts(cartId);
     res.status(200).json(data);
   } catch (err) {
     return next(err);
@@ -168,35 +157,135 @@ export const deleteUserCartALLProducts = async (req: Request, res: Response, nex
 
 export const checkoutUserCart = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
-  const user_id = req.user.id;
-  const { cart_id, cartProducts } = req.body;
+  const userId = req.user.id;
+  const { cartId, cartProducts } = req.body;
+
   try {
-    const order = await createOrder(user_id);
-    const order_id = order.id;
-    await checkoutCart(order_id, cart_id);
-    await createOrderProduct(order_id, cartProducts);
+    const order = await createOrder(userId);
+    const orderId = order.id;
+    await checkoutCart(orderId, cartId);
+    await createOrderProduct(orderId, cartProducts);
     res.status(200).json(order);
   } catch (err) {
     return next(err);
   }
 };
 
+type OrderProductForUser = {
+  id: number;
+  name: string;
+  company_name: string;
+  model_number: string;
+  price: number;
+  quantity: number;
+};
+
+type OrderCustomForUser = {
+  id: number;
+  model_number: string;
+  name: string;
+  price: number;
+};
+
+type OrderedRowForUser = {
+  order_id: number;
+  product: OrderProductForUser;
+  customization: OrderCustomForUser;
+};
+
+type TransformedForUser = {
+  orderId: number;
+  products: Array<OrderProductForUser & { customization: OrderCustomForUser | null }>;
+};
+
 export const orderHistory = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
-  const user_id = req.user.id;
+  const userId = req.user.id;
   try {
-    const data = await orderedProductList(user_id);
+    const rows: OrderedRowForUser[] = await orderedProductList(userId);
+    const grouped: Record<number, TransformedForUser["products"]> = {};
+
+    for (const row of rows) {
+      const { order_id, product, customization } = row;
+
+      if (!grouped[order_id]) {
+        grouped[order_id] = [];
+      }
+
+      grouped[order_id].push({
+        ...product,
+        customization: customization ?? null,
+      });
+    }
+    const data = Object.entries(grouped)
+      .sort((a, b) => Number(b[0]) - Number(a[0]))
+      .map(([orderId, products]) => ({
+        orderId: Number(orderId),
+        products,
+      }));
+
     res.status(200).json(data);
   } catch (err) {
     return next(err);
   }
 };
 
+type OrderProductForCompany = {
+  id: number;
+  orderProductId: number;
+  name: string;
+  userName: string;
+  model_number: string;
+  price: number;
+  quantity: number;
+  custom: OrderCustomForCompany | null;
+};
+
+type OrderCustomForCompany = {
+  id: number;
+  model_number: string;
+  name: string;
+  price: number;
+};
+
+type OrderedRowForCompany = {
+  order_id: number;
+  product: OrderProductForCompany;
+  customization: OrderCustomForCompany;
+};
+
+type TransformedForCompany = {
+  orderId: number;
+  products: OrderProductForCompany[];
+};
+
 export const orderListForCompany = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
-  const company_id = req.user.id;
+  const companyId = req.user.id;
+  const { is_confirmed } = req.query;
+  const isConfirmedBool = is_confirmed === "true" ? true : false;
   try {
-    const data = await getMyOrderList(company_id);
+    const rows: OrderedRowForCompany[] = await getMyOrderList(isConfirmedBool, companyId);
+    const grouped: Record<number, TransformedForCompany["products"]> = {};
+
+    for (const row of rows) {
+      const { order_id, product, customization } = row;
+
+      if (!grouped[order_id]) {
+        grouped[order_id] = [];
+      }
+
+      grouped[order_id].push({
+        ...product,
+        custom: customization ?? null,
+      });
+    }
+
+    const data = Object.entries(grouped).map(([orderId, products]) => ({
+      orderId: Number(orderId),
+      products,
+    }));
+
     res.status(200).json(data);
   } catch (err) {
     return next(err);
@@ -404,7 +493,6 @@ export const fetchDisplayProductsForUser = async (req: Request, res: Response, n
   try {
     const total: { count: number } = await countAllProducts();
     const products = await findProductsWithCustomization(userId, limit, offset);
-
     const enrichedProducts = await Promise.all(
       products.map(async (row) => {
         const product: UserProductWithCustomization = row.product;
@@ -452,6 +540,50 @@ export const fetchDisplayProductsForUser = async (req: Request, res: Response, n
     }, {});
     const data = Object.values(groupedProducts);
     res.status(200).json({ data, total: total.count });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const fetchAllProductsForUser = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.user) return;
+  const userId = req.user.id;
+  try {
+    const products = await findAllProductsWithCustomization(userId);
+
+    const groupedProducts = products.reduce<GroupedUserProduct>((acc, row) => {
+      const product: UserProductWithCustomization = row.product;
+      const customization: UserProductCustomization = row.customization;
+
+      if (!product) return acc;
+
+      if (!acc[product.id]) {
+        acc[product.id] = {
+          id: product.id,
+          name: product.name,
+          company_name: product.company_name,
+          model_number: product.model_number,
+          price: product.price,
+          description: product.description,
+          customization: [],
+        };
+      }
+
+      if (customization) {
+        acc[product.id].customization.push({
+          id: customization.id,
+          model_number: customization.model_number,
+          name: customization.name,
+          price: customization.price,
+          description: customization.description,
+          start_date: customization.start_date,
+          end_date: customization.end_date,
+        });
+      }
+      return acc;
+    }, {});
+    const data = Object.values(groupedProducts);
+    res.status(200).json(data);
   } catch (err) {
     next(err);
   }

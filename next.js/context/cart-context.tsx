@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { API_BASE_URL } from "@/components/lib/api";
+import { DefaultProductWithCustomization } from "@/types/company";
 
 type User = {
   id: number;
@@ -16,34 +17,39 @@ type User = {
 };
 
 type CartProduct = {
-  product_id: number;
+  productId: number;
+  customizationId: number | null;
   quantity: number;
-};
-
-type Product = {
-  product_name: string;
-  id: number;
-  model_number: string;
-  price: number;
-  description: string;
-  company_name: string;
 };
 
 type CartContent = {
   myUser: User | null;
   cartId: { id: number } | null;
-  productList: Product[];
+  productWithCustomList: DefaultProductWithCustomization[];
   cartProducts: CartProduct[];
   setCartProducts: Dispatch<SetStateAction<CartProduct[]>>;
   getCartLatestData: () => Promise<void>;
-  addProduct: (productId: number) => Promise<void>;
-  reduceProduct: (productId: number) => Promise<void>;
-  deleteProduct: (productId: number) => Promise<void>;
+  addProduct: (
+    productId: number,
+    customizationID: number | null,
+  ) => Promise<void>;
+  reduceProduct: (
+    productId: number,
+    customizationID: number | null,
+  ) => Promise<void>;
+  deleteProduct: (
+    productId: number,
+    customizationID: number | null,
+  ) => Promise<void>;
   handleQuantityChange: (
-    targetProductId: number,
+    ProductId: number,
+    customizationID: number | null,
     newQuantity: number,
   ) => Promise<void>;
-  calcProductTotalAmount: (productId: number) => number;
+  calcProductTotalAmount: (
+    productId: number,
+    customizationID: number | null,
+  ) => number;
   calcCartTotalAmount: () => number;
 };
 
@@ -56,7 +62,9 @@ export const CartContextProvider = ({
 }) => {
   const [myUser, setMyUser] = useState<User | null>(null);
   const [cartId, setCartId] = useState<{ id: number } | null>(null);
-  const [productList, setProductList] = useState<Product[]>([]);
+  const [productWithCustomList, setProductWithCustomList] = useState<
+    DefaultProductWithCustomization[]
+  >([]);
   const [cartProducts, setCartProducts] = useState<CartProduct[]>([]);
 
   const fetchMyUser = async () => {
@@ -100,8 +108,8 @@ export const CartContextProvider = ({
       if (!response.ok) {
         throw new Error("[cart-context]fetchProductsでエラー発生");
       }
-      const data: Product[] = await response.json();
-      setProductList(data);
+      const data: DefaultProductWithCustomization[] = await response.json();
+      setProductWithCustomList(data);
     } catch (err) {
       console.error(err);
     }
@@ -125,17 +133,23 @@ export const CartContextProvider = ({
     }
   }, [cartId]);
 
-  const sendCartLatestData = async (productId: number, quantity: number) => {
+  const sendCartLatestData = async (
+    productId: number,
+    customizationId: number | null,
+    quantity: number,
+  ) => {
     if (!cartId) return;
     try {
-      await fetch(`${API_BASE_URL}/api/cart/product/${String(productId)}`, {
+      await fetch(`${API_BASE_URL}/api/cart/product`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          cart_id: cartId.id,
-          quantity: quantity,
+          cartId: cartId.id,
+          productId,
+          customizationId,
+          quantity,
         }),
       });
     } catch (err) {
@@ -143,7 +157,10 @@ export const CartContextProvider = ({
     }
   };
 
-  const sendCartDeleteProduct = async (productId: number) => {
+  const sendCartDeleteProduct = async (
+    productId: number,
+    customizationId: number | null,
+  ) => {
     if (!cartId) return;
     try {
       await fetch(`${API_BASE_URL}/api/cart/products`, {
@@ -152,8 +169,9 @@ export const CartContextProvider = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          cart_id: cartId.id,
-          product_id: productId,
+          cartId: cartId.id,
+          productId,
+          customizationId,
         }),
       });
     } catch (err) {
@@ -161,86 +179,205 @@ export const CartContextProvider = ({
     }
   };
 
-  const addProduct = async (addProductId: number) => {
+  const isSameProduct = (
+    aProductId: number,
+    aCustomizationId: number | null,
+    bProductId: number,
+    bCustomizationId: number | null,
+  ): boolean => {
+    return (
+      aProductId === bProductId &&
+      ((aCustomizationId === null && bCustomizationId === null) ||
+        aCustomizationId === bCustomizationId)
+    );
+  };
+
+  const addProduct = async (
+    addProductId: number,
+    addCustomizationId: number | null,
+  ) => {
     let newQuantity = 1;
 
+    // console.log(cartProducts);
+
     setCartProducts((prev) => {
-      const existingProduct = prev.find(
-        (cartItem) => cartItem.product_id === addProductId,
-      );
+      const existingProduct = prev.find((cartItem) => {
+        // console.log(cartItem);
+        return isSameProduct(
+          cartItem.productId,
+          cartItem.customizationId,
+          addProductId,
+          addCustomizationId,
+        );
+        // console.log("比較対象:", {
+        //   id1: cartItem.productId,
+        //   customizationId1: cartItem.customizationId,
+        //   id2: addProductId,
+        //   customizationId2: addCustomizationId,
+        // });
+      });
+
+      // console.log(existingProduct);
+
       newQuantity = existingProduct ? existingProduct.quantity + 1 : 1;
 
       const updateCart = existingProduct
-        ? prev.map((item) =>
-            item.product_id === addProductId
+        ? prev.map((item) => {
+            return isSameProduct(
+              item.productId,
+              item.customizationId,
+              addProductId,
+              addCustomizationId,
+            )
               ? { ...item, quantity: item.quantity + 1 }
-              : item,
-          )
-        : [...prev, { product_id: addProductId, quantity: 1 }];
-
+              : item;
+          })
+        : [
+            ...prev,
+            {
+              productId: addProductId,
+              customizationId: addCustomizationId,
+              quantity: 1,
+            },
+          ];
       return updateCart;
     });
 
-    await sendCartLatestData(addProductId, newQuantity);
+    await sendCartLatestData(addProductId, addCustomizationId, newQuantity);
   };
 
-  const reduceProduct = async (reduceProductId: number) => {
+  const reduceProduct = async (
+    reduceProductId: number,
+    reduceCustomizationId: number | null,
+  ) => {
+    let newQuantity = 0;
+
     setCartProducts((prev) => {
-      return prev.map((item) =>
-        item.product_id === reduceProductId
-          ? { ...item, quantity: Math.max(item.quantity - 1, 0) }
-          : item,
-      );
+      const updatedCart = prev.map((item) => {
+        if (
+          isSameProduct(
+            item.productId,
+            item.customizationId,
+            reduceProductId,
+            reduceCustomizationId,
+          )
+        ) {
+          if (typeof item.quantity === "number") {
+            newQuantity = Math.max(item.quantity - 1, 0);
+            return { ...item, quantity: newQuantity };
+          }
+        }
+
+        return item;
+      });
+      return updatedCart;
     });
-    const targetItem = cartProducts.find(
-      (item) => item.product_id === reduceProductId,
+    await sendCartLatestData(
+      reduceProductId,
+      reduceCustomizationId,
+      newQuantity,
     );
-    if (targetItem) {
-      const newQuantity = Math.max(targetItem.quantity - 1, 0);
-      await sendCartLatestData(reduceProductId, newQuantity);
-    }
   };
 
-  const deleteProduct = async (deleteProductId: number) => {
+  const deleteProduct = async (
+    deleteProductId: number,
+    deleteCustomizationId: number | null,
+  ) => {
     setCartProducts((prev) => {
-      return prev.filter((item) => item.product_id !== deleteProductId);
+      return prev.filter((item) => {
+        return !isSameProduct(
+          item.productId,
+          item.customizationId,
+          deleteProductId,
+          deleteCustomizationId,
+        );
+
+        return true;
+      });
     });
-    await sendCartDeleteProduct(deleteProductId);
+    // setCartProducts((prev) => {
+    //   return prev.filter((item) => {
+    //     if (deleteCustomizationId === null) {
+    //       return item.productId !== deleteProductId;
+    //     } else {
+    //       return !(
+    //         item.productId === deleteProductId &&
+    //         item.customizationId === deleteCustomizationId
+    //       );
+    //     }
+    //   });
+    // });
+    await sendCartDeleteProduct(deleteProductId, deleteCustomizationId);
   };
 
   const handleQuantityChange = async (
     targetProductId: number,
+    targetCustomizationId: number | null,
     newQuantity: number,
   ) => {
     if (newQuantity < 0) return;
     setCartProducts((prev) => {
       return prev.map((item) =>
-        item.product_id === targetProductId
+        item.productId === targetProductId &&
+        item.customizationId === targetCustomizationId
           ? { ...item, quantity: newQuantity }
           : item,
       );
     });
-    await sendCartLatestData(targetProductId, newQuantity);
+    await sendCartLatestData(
+      targetProductId,
+      targetCustomizationId,
+      newQuantity,
+    );
   };
 
-  const calcProductTotalAmount = (productId: number) => {
-    const product = productList.find((item) => item.id === productId);
-    const cartItem = cartProducts.find((item) => item.product_id === productId);
+  const calcProductTotalAmount = (
+    productId: number,
+    customizationId: number | null,
+  ) => {
+    const product = productWithCustomList.find((item) => item.id === productId);
+    if (!product) return 0;
+
+    const cartItem = cartProducts.find(
+      (item) =>
+        item.productId === productId &&
+        (item.customizationId ?? null) === customizationId,
+    );
     const quantity = cartItem?.quantity ?? 0; //quantityがundefinedになる可能性を排除する
-    return product ? product.price * quantity : 0;
+
+    if (customizationId === null) {
+      return product.price * quantity;
+    }
+
+    const customization = product.customization.find(
+      (custom) => custom.id === customizationId,
+    );
+    if (!customization) return 0;
+    return customization.price * quantity;
   };
 
   const calcCartTotalAmount = () => {
     return cartProducts.reduce((total, item) => {
-      const product = productList.find((p) => p.id === item.product_id);
-      return product ? total + product.price * item.quantity : total;
+      const product = productWithCustomList.find(
+        (p) => p.id === item.productId,
+      );
+      if (!product) return total;
+
+      const custom =
+        item.customizationId !== null
+          ? product.customization.find((c) => c.id === item.customizationId)
+          : null;
+
+      const targetPrice = custom ? custom.price : product.price;
+
+      return total + targetPrice * item.quantity;
     }, 0);
   };
 
   const contextValue = {
     myUser,
     cartId,
-    productList,
+    productWithCustomList,
     cartProducts,
     setCartProducts,
     getCartLatestData,
