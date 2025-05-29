@@ -20,26 +20,50 @@ import {
   Typography,
 } from "@mui/material";
 
-type OrderList = {
+type OrderProductForCompany = {
   id: number;
-  company_id: number;
-  order_id: number;
+  order_product_id: number;
+  name: string;
   user_name: string;
-  model_number: number;
-  product_id: number;
-  product_name: string;
+  model_number: string;
+  price: number;
   quantity: number;
+};
+
+type OrderCustomForCompany = {
+  id: number;
+  model_number: string;
+  name: string;
   price: number;
 };
 
-type GroupedOrderList = Record<number, OrderList[]>;
+type TransformedForCompany = {
+  orderId: number;
+  products: (OrderProductForCompany & {
+    customization: OrderCustomForCompany | null;
+  })[];
+};
+
+// type OrderList = {
+//   id: number;
+//   company_id: number;
+//   order_id: number;
+//   user_name: string;
+//   model_number: number;
+//   product_id: number;
+//   product_name: string;
+//   quantity: number;
+//   price: number;
+// };
+
+// type GroupedOrderList = Record<number, OrderList[]>;
 
 export const DisplayOrderList = () => {
   const companyContext = useContext(CompanyContext);
-  const [orderList, setOrderList] = useState<OrderList[]>([]);
-  const [groupedOrderList, setGroupedOrderList] = useState<GroupedOrderList>(
-    {},
-  );
+  const [orderList, setOrderList] = useState<TransformedForCompany[]>([]);
+  // const [groupedOrderList, setGroupedOrderList] = useState<GroupedOrderList>(
+  //   {},
+  // );
   const [confirmedIds, setConfirmedIds] = useState<number[]>([]);
 
   const { myCompany } = companyContext ?? {};
@@ -50,24 +74,34 @@ export const DisplayOrderList = () => {
         method: "GET",
         credentials: "include",
       });
-      const data: OrderList[] = await res.json();
+      const data: TransformedForCompany[] = await res.json();
       setOrderList(data);
 
-      const groupedOrders = data.reduce<GroupedOrderList>((acc, item) => {
-        acc[item.order_id] ??= [];
-        acc[item.order_id].push(item);
-        return acc;
-      }, {});
-      setGroupedOrderList(groupedOrders);
+      // const groupedOrders = data.reduce<GroupedOrderList>((acc, item) => {
+      //   acc[item.order_id] ??= [];
+      //   acc[item.order_id].push(item);
+      //   return acc;
+      // }, {});
+      // setGroupedOrderList(groupedOrders);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const orderTotalAmount = (order_id: number, items: OrderList[]) =>
-    items
-      .filter((item) => item.order_id === order_id)
-      .reduce((total, product) => total + product.price * product.quantity, 0);
+  const orderTotalAmount = (
+    data: (OrderProductForCompany & {
+      customization: OrderCustomForCompany | null;
+    })[],
+  ) => {
+    // .filter((item) => item.order_id === order_id)
+
+    return data.reduce((total, p) => {
+      const custom = p.customization;
+      return custom
+        ? total + custom.price * p.quantity
+        : total + p.price * p.quantity;
+    }, 0);
+  };
 
   const handleCheckBoxStatus = (id: number) => {
     setConfirmedIds((prev) =>
@@ -93,7 +127,9 @@ export const DisplayOrderList = () => {
     if (confirmedIds.length > 0) {
       setConfirmedIds([]);
     } else {
-      const idArray = orderList.map((item) => item.id);
+      const idArray = orderList.flatMap((item) =>
+        item.products.map((i) => i.order_product_id),
+      );
       setConfirmedIds(idArray);
     }
   };
@@ -131,12 +167,12 @@ export const DisplayOrderList = () => {
         </Grid>
       </Grid>
 
-      {Object.entries(groupedOrderList).map(([order_id, items]) => {
-        const totalAmount = orderTotalAmount(Number(order_id), items);
+      {orderList.map((o) => {
+        const totalAmount = orderTotalAmount(o.products);
 
         return (
           <Card
-            key={order_id}
+            key={o.orderId}
             sx={{
               mb: 4,
               border: totalAmount >= 50000 ? "2px solid red" : "1px solid #ccc",
@@ -145,7 +181,7 @@ export const DisplayOrderList = () => {
           >
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                オーダーID: {order_id}
+                オーダーID: {o.orderId}
               </Typography>
               <Typography variant="subtitle1" gutterBottom>
                 合計金額: ¥{totalAmount.toLocaleString()}
@@ -164,31 +200,36 @@ export const DisplayOrderList = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {items.map((item) => (
+                    {o.products.map((p) => (
                       <TableRow
-                        key={`${String(item.order_id)}-${String(item.product_id)}`}
+                        key={`${String(p.id)}-${String(p.customization?.id)}`}
                       >
                         <TableCell>
                           <Checkbox
-                            checked={confirmedIds.includes(item.id)}
+                            checked={confirmedIds.includes(p.order_product_id)}
                             onChange={() => {
-                              handleCheckBoxStatus(item.id);
+                              handleCheckBoxStatus(p.order_product_id);
                             }}
                           />
                         </TableCell>
-                        <TableCell>{item.model_number}</TableCell>
-                        <TableCell>{item.product_name}</TableCell>
                         <TableCell>
-                          ¥{Math.round(item.price).toLocaleString()}
+                          {p.customization?.model_number ?? p.model_number}
                         </TableCell>
-                        <TableCell>{item.quantity}</TableCell>
+                        <TableCell>{p.customization?.name ?? p.name}</TableCell>
                         <TableCell>
                           ¥
                           {Math.round(
-                            item.price * item.quantity,
+                            p.customization?.price ?? p.price,
                           ).toLocaleString()}
                         </TableCell>
-                        <TableCell>{item.user_name}</TableCell>
+                        <TableCell>{p.quantity}</TableCell>
+                        <TableCell>
+                          ¥
+                          {Math.round(
+                            (p.customization?.price ?? p.price) * p.quantity,
+                          ).toLocaleString()}
+                        </TableCell>
+                        <TableCell>{p.user_name}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

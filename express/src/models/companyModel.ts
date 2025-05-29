@@ -112,26 +112,25 @@ export const getMyOrderList = async (company_id: number) => {
   try {
     const result = await client.query(
       `
-      SELECT
-      	ORDER_PRODUCTS.ID AS ID,
-        COMPANY_ID,
-        ORDER_ID,
-      	USERS.NAME AS user_name,
-        MODEL_NUMBER,
-        PRODUCTS.ID AS PRODUCT_ID,
-        PRODUCTS.NAME AS PRODUCT_NAME,
-        QUANTITY,
-        ORDER_PRODUCTS.PRICE
+      SELECT 
+        o.id AS order_id,
+        (to_jsonb(p) || jsonb_build_object
+          ('user_id',u.name,'quantity',op.quantity,'order_product_id',op.id))
+          AS product,
+        to_jsonb(pc) AS customization
       FROM
-        ORDER_PRODUCTS
-        INNER JOIN ORDERS ON ORDER_PRODUCTS.ORDER_ID = ORDERS.ID
-        INNER JOIN USERS ON ORDERS.USER_ID = USERS.ID
-        INNER JOIN PRODUCTS ON ORDER_PRODUCTS.PRODUCT_ID = PRODUCTS.ID
-      WHERE
-        IS_CONFIRMED = FALSE
-        AND PRODUCTS.COMPANY_ID = $1
-      ORDER BY
-        ORDER_ID
+        orders o
+      INNER JOIN users u 
+        ON u.id = o.user_id
+      INNER JOIN order_products op
+        ON op.order_id = o.id
+      INNER JOIN products p
+        ON p.id = op.product_id
+      LEFT JOIN product_customizations pc
+        ON pc.id = op.customization_id
+      WHERE op.is_confirmed = false
+      AND p.company_id = $1
+      ORDER BY o.id
       `,
       [company_id],
     );

@@ -171,7 +171,7 @@ export const checkoutUserCart = async (req: Request, res: Response, next: NextFu
   }
 };
 
-type OrderProduct = {
+type OrderProductForUser = {
   id: number;
   name: string;
   company_name: string;
@@ -180,30 +180,30 @@ type OrderProduct = {
   quantity: number;
 };
 
-type OrderCustom = {
+type OrderCustomForUser = {
   id: number;
   model_number: string;
   name: string;
   price: number;
 };
 
-type OrderedRow = {
+type OrderedRowForUser = {
   order_id: number;
-  product: OrderProduct;
-  customization: OrderCustom;
+  product: OrderProductForUser;
+  customization: OrderCustomForUser;
 };
 
-type Transformed = {
+type TransformedForUser = {
   orderId: number;
-  products: Array<OrderProduct & { customization: OrderCustom | null }>;
+  products: Array<OrderProductForUser & { customization: OrderCustomForUser | null }>;
 };
 
 export const orderHistory = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
   const userId = req.user.id;
   try {
-    const rows: OrderedRow[] = await orderedProductList(userId);
-    const grouped: Record<number, Transformed["products"]> = {};
+    const rows: OrderedRowForUser[] = await orderedProductList(userId);
+    const grouped: Record<number, TransformedForUser["products"]> = {};
 
     for (const row of rows) {
       const { order_id, product, customization } = row;
@@ -230,11 +230,59 @@ export const orderHistory = async (req: Request, res: Response, next: NextFuncti
   }
 };
 
+type OrderProductForCompany = {
+  id: number;
+  order_product_id: number;
+  name: string;
+  user_name: string;
+  model_number: string;
+  price: number;
+  quantity: number;
+};
+
+type OrderCustomForCompany = {
+  id: number;
+  model_number: string;
+  name: string;
+  price: number;
+};
+
+type OrderedRowForCompany = {
+  order_id: number;
+  product: OrderProductForCompany;
+  customization: OrderCustomForCompany;
+};
+
+type TransformedForCompany = {
+  orderId: number;
+  products: Array<OrderProductForCompany & { customization: OrderCustomForCompany | null }>;
+};
+
 export const orderListForCompany = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
   const company_id = req.user.id;
   try {
-    const data = await getMyOrderList(company_id);
+    const rows: OrderedRowForCompany[] = await getMyOrderList(company_id);
+    const grouped: Record<number, TransformedForCompany["products"]> = {};
+
+    for (const row of rows) {
+      const { order_id, product, customization } = row;
+
+      if (!grouped[order_id]) {
+        grouped[order_id] = [];
+      }
+
+      grouped[order_id].push({
+        ...product,
+        customization: customization ?? null,
+      });
+    }
+
+    const data = Object.entries(grouped).map(([orderId, products]) => ({
+      orderId: Number(orderId),
+      products,
+    }));
+
     res.status(200).json(data);
   } catch (err) {
     return next(err);
