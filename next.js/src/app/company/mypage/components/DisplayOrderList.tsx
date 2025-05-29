@@ -20,81 +20,51 @@ import {
   Typography,
 } from "@mui/material";
 
-type OrderProductForCompany = {
+type OrderProduct = {
   id: number;
-  order_product_id: number;
+  orderProductId: number;
   name: string;
-  user_name: string;
+  userName: string;
   model_number: string;
   price: number;
   quantity: number;
+  customization: {
+    id: number;
+    model_number: string;
+    name: string;
+    price: number;
+  } | null;
 };
 
-type OrderCustomForCompany = {
-  id: number;
-  model_number: string;
-  name: string;
-  price: number;
-};
-
-type TransformedForCompany = {
+type Transformed = {
   orderId: number;
-  products: (OrderProductForCompany & {
-    customization: OrderCustomForCompany | null;
-  })[];
+  products: OrderProduct[];
 };
-
-// type OrderList = {
-//   id: number;
-//   company_id: number;
-//   order_id: number;
-//   user_name: string;
-//   model_number: number;
-//   product_id: number;
-//   product_name: string;
-//   quantity: number;
-//   price: number;
-// };
-
-// type GroupedOrderList = Record<number, OrderList[]>;
 
 export const DisplayOrderList = () => {
   const companyContext = useContext(CompanyContext);
-  const [orderList, setOrderList] = useState<TransformedForCompany[]>([]);
-  // const [groupedOrderList, setGroupedOrderList] = useState<GroupedOrderList>(
-  //   {},
-  // );
+  const [orderList, setOrderList] = useState<Transformed[]>([]);
   const [confirmedIds, setConfirmedIds] = useState<number[]>([]);
 
   const { myCompany } = companyContext ?? {};
 
   const fetchMyOrderList = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/company/orders`, {
-        method: "GET",
-        credentials: "include",
-      });
-      const data: TransformedForCompany[] = await res.json();
+      const res = await fetch(
+        `${API_BASE_URL}/api/company/orders?is_confirmed=false`,
+        {
+          method: "GET",
+          credentials: "include",
+        },
+      );
+      const data: Transformed[] = await res.json();
       setOrderList(data);
-
-      // const groupedOrders = data.reduce<GroupedOrderList>((acc, item) => {
-      //   acc[item.order_id] ??= [];
-      //   acc[item.order_id].push(item);
-      //   return acc;
-      // }, {});
-      // setGroupedOrderList(groupedOrders);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const orderTotalAmount = (
-    data: (OrderProductForCompany & {
-      customization: OrderCustomForCompany | null;
-    })[],
-  ) => {
-    // .filter((item) => item.order_id === order_id)
-
+  const orderTotalAmount = (data: OrderProduct[]) => {
     return data.reduce((total, p) => {
       const custom = p.customization;
       return custom
@@ -128,7 +98,7 @@ export const DisplayOrderList = () => {
       setConfirmedIds([]);
     } else {
       const idArray = orderList.flatMap((item) =>
-        item.products.map((i) => i.order_product_id),
+        item.products.map((i) => i.orderProductId),
       );
       setConfirmedIds(idArray);
     }
@@ -206,9 +176,9 @@ export const DisplayOrderList = () => {
                       >
                         <TableCell>
                           <Checkbox
-                            checked={confirmedIds.includes(p.order_product_id)}
+                            checked={confirmedIds.includes(p.orderProductId)}
                             onChange={() => {
-                              handleCheckBoxStatus(p.order_product_id);
+                              handleCheckBoxStatus(p.orderProductId);
                             }}
                           />
                         </TableCell>
@@ -229,7 +199,7 @@ export const DisplayOrderList = () => {
                             (p.customization?.price ?? p.price) * p.quantity,
                           ).toLocaleString()}
                         </TableCell>
-                        <TableCell>{p.user_name}</TableCell>
+                        <TableCell>{p.userName}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

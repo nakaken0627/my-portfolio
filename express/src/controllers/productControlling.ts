@@ -232,12 +232,13 @@ export const orderHistory = async (req: Request, res: Response, next: NextFuncti
 
 type OrderProductForCompany = {
   id: number;
-  order_product_id: number;
+  orderProductId: number;
   name: string;
-  user_name: string;
+  userName: string;
   model_number: string;
   price: number;
   quantity: number;
+  custom: OrderCustomForCompany | null;
 };
 
 type OrderCustomForCompany = {
@@ -255,14 +256,16 @@ type OrderedRowForCompany = {
 
 type TransformedForCompany = {
   orderId: number;
-  products: Array<OrderProductForCompany & { customization: OrderCustomForCompany | null }>;
+  products: OrderProductForCompany[];
 };
 
 export const orderListForCompany = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
-  const company_id = req.user.id;
+  const companyId = req.user.id;
+  const { is_confirmed } = req.query;
+  const isConfirmedBool = is_confirmed === "true" ? true : false;
   try {
-    const rows: OrderedRowForCompany[] = await getMyOrderList(company_id);
+    const rows: OrderedRowForCompany[] = await getMyOrderList(isConfirmedBool, companyId);
     const grouped: Record<number, TransformedForCompany["products"]> = {};
 
     for (const row of rows) {
@@ -274,7 +277,7 @@ export const orderListForCompany = async (req: Request, res: Response, next: Nex
 
       grouped[order_id].push({
         ...product,
-        customization: customization ?? null,
+        custom: customization ?? null,
       });
     }
 

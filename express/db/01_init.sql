@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS cart_products (
   quantity INTEGER NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE (cart_id, product_id)
+  UNIQUE (cart_id, product_id,customization_id)
 );
 
 CREATE TABLE IF NOT EXISTS orders (
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS order_products (
   is_confirmed BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE (order_id, product_id)
+  UNIQUE (order_id, product_id,customization_id)
 );
 
 CREATE TABLE IF NOT EXISTS product_customizations(
