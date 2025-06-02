@@ -46,8 +46,6 @@ export const ConfirmedList = () => {
 
   const { myCompany } = companyContext ?? {};
 
-  console.log(orderList);
-
   const fetchConfirmedOrderList = async () => {
     try {
       const res = await fetch(
