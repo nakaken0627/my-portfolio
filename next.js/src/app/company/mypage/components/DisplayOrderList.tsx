@@ -1,8 +1,9 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { API_BASE_URL } from "@/components/lib/api";
 import { CompanyContext } from "@/context/company-context";
+import { OrderProduct } from "@/types/company";
 import {
   Button,
   Card,
@@ -19,50 +20,20 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-
-type OrderProduct = {
-  id: number;
-  orderProductId: number;
-  name: string;
-  userName: string;
-  model_number: string;
-  price: number;
-  quantity: number;
-  customization: {
-    id: number;
-    model_number: string;
-    name: string;
-    price: number;
-  } | null;
-};
-
-type Transformed = {
-  orderId: number;
-  products: OrderProduct[];
-};
+import { useCompany } from "hooks/company/useCompany";
 
 export const DisplayOrderList = () => {
   const companyContext = useContext(CompanyContext);
-  const [orderList, setOrderList] = useState<Transformed[]>([]);
   const [confirmedIds, setConfirmedIds] = useState<number[]>([]);
 
-  const { myCompany } = companyContext ?? {};
-
-  const fetchMyOrderList = async () => {
-    try {
-      const res = await fetch(
-        `${API_BASE_URL}/api/company/orders?is_confirmed=false`,
-        {
-          method: "GET",
-          credentials: "include",
-        },
-      );
-      const data: Transformed[] = await res.json();
-      setOrderList(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const { data, isError, isLoading } = useCompany(
+    `${API_BASE_URL}/api/company/orders?is_confirmed=false`,
+  );
+  if (!data) {
+    return <Typography>データを取得中です...</Typography>;
+  }
+  if (isError) return <div>failed to load</div>;
+  if (isLoading) return <div>loading...</div>;
 
   const orderTotalAmount = (data: OrderProduct[]) => {
     return data.reduce((total, p) => {
@@ -87,7 +58,6 @@ export const DisplayOrderList = () => {
         body: JSON.stringify({ confirmedIds }),
       });
       setConfirmedIds([]);
-      await fetchMyOrderList();
     } catch (err) {
       console.error(err);
     }
@@ -97,16 +67,12 @@ export const DisplayOrderList = () => {
     if (confirmedIds.length > 0) {
       setConfirmedIds([]);
     } else {
-      const idArray = orderList.flatMap((item) =>
+      const idArray = data.flatMap((item) =>
         item.products.map((i) => i.orderProductId),
       );
       setConfirmedIds(idArray);
     }
   };
-
-  useEffect(() => {
-    void fetchMyOrderList();
-  }, [myCompany]);
 
   if (!companyContext) return <Typography>Loading...</Typography>;
 
@@ -137,7 +103,7 @@ export const DisplayOrderList = () => {
         </Grid>
       </Grid>
 
-      {orderList.map((o) => {
+      {data.map((o) => {
         const totalAmount = orderTotalAmount(o.products);
 
         return (

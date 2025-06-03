@@ -42,7 +42,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     }
     if (!getCompany) {
       return res.status(401).json({
-        message: "認証に失敗しました",
+        message: "ログインに失敗しました",
         error: info?.massage || "認証が無効です",
       });
     }

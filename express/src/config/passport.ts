@@ -10,10 +10,10 @@ import pool from "./database.js";
 //companyの認証のためローカル戦略を使って定義
 passport.use(
   "company-local",
-  new LocalStrategy(async (username: string, password: string, done) => {
+  new LocalStrategy(async (name: string, password: string, done) => {
     try {
       //ユーザー名がDBの値と一致するか確認、不一致の場合はメッセージを返す
-      const result = await pool.query("SELECT * FROM companies WHERE name = $1", [username]);
+      const result = await pool.query("SELECT * FROM companies WHERE name = $1", [name]);
       const company = result.rows[0];
       if (!company) {
         return done(null, false, { message: "ユーザー名が間違っています" });

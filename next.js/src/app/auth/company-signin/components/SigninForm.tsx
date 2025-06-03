@@ -1,115 +1,91 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import Link from "next/link";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/components/lib/api";
-import {
-  Alert,
-  Box,
-  Button,
-  Container,
-  Divider,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { validationSchema } from "@/utils/loginValidationSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Box, Button, TextField } from "@mui/material";
+import { useLoginSWR } from "hooks/company/useLoginSWR";
 
-import { GuestLoginFunc } from "../components/GuestLoginFunc";
+type LoginData = {
+  username: string;
+  password: string;
+};
+
+type CustomError = Error & {
+  info?: { message: string };
+};
 
 export const SigninForm = () => {
-  const [inputCompanyName, setInputCompanyName] = useState("");
-  const [inputCompanyPassword, setInputCompanyPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const { handleSubmit, control } = useForm({
+    mode: "onChange",
+    defaultValues: { username: "", password: "" },
+    resolver: zodResolver(validationSchema),
+  });
 
   const router = useRouter();
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setError(null);
+  const { trigger, isMutating } = useLoginSWR(
+    `${API_BASE_URL}/auth/company/login`,
+  );
 
+  const onSubmit: SubmitHandler<LoginData> = async (inputData: LoginData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/company/login`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: inputCompanyName,
-          password: inputCompanyPassword,
-        }),
-      });
-
-      const data: { message: string } = await response.json();
-
-      if (response.ok) {
-        router.push("/company/mypage");
-      } else {
-        setError(data.message || "ログインに失敗しました");
-      }
+      await trigger(inputData);
+      router.push("/company/mypage");
     } catch (err) {
-      setError("ネットワークエラーが発生しました");
-      console.error(err);
+      const error = err as CustomError;
+      const msg = error.info?.message ?? "";
+      alert(msg || "ログインに失敗しました");
     }
   };
 
   return (
-    <Container maxWidth="sm" sx={{ pt: 5 }}>
-      <Paper elevation={4} sx={{ padding: 4, marginTop: 8 }}>
-        <Typography variant="h5" component="h1" gutterBottom align="center">
-          企業ログイン
-        </Typography>
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
-        <Box component="form" onSubmit={handleSubmit} noValidate>
+    <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+      <Controller
+        name="username"
+        control={control}
+        rules={{ required: true }}
+        render={({ field, fieldState: { error } }) => (
           <TextField
+            {...field}
             margin="normal"
             fullWidth
-            required
-            id="companyName"
+            id="username"
             label="企業ID"
-            value={inputCompanyName}
-            onChange={(e) => {
-              setInputCompanyName(e.target.value);
-            }}
+            error={!!error}
+            helperText={error?.message}
           />
+        )}
+      />
+
+      <Controller
+        name="password"
+        control={control}
+        rules={{ required: true }}
+        render={({ field, fieldState: { error } }) => (
           <TextField
+            {...field}
             margin="normal"
             fullWidth
-            required
             id="companyPassword"
             label="パスワード"
             type="password"
-            value={inputCompanyPassword}
-            onChange={(e) => {
-              setInputCompanyPassword(e.target.value);
-            }}
+            error={!!error}
+            helperText={error?.message}
           />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            ログイン
-          </Button>
-        </Box>
-        <Typography variant="body2" align="center">
-          アカウントをお持ちでない方は{" "}
-          <Link
-            href="/auth/company-signup"
-            style={{ color: "#1976d2", textDecoration: "none" }}
-          >
-            新規登録はこちら
-          </Link>
-        </Typography>
-        <Divider sx={{ my: 3, opacity: 0.8 }}></Divider>
-        <GuestLoginFunc />
-      </Paper>
-    </Container>
+        )}
+      />
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{ mt: 3, mb: 2 }}
+        disabled={isMutating}
+      >
+        ログイン
+      </Button>
+    </Box>
   );
 };
