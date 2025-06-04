@@ -1,39 +1,39 @@
 import { NextFunction, Request, Response } from "express";
 
-import passport from "../config/passport.js";
-import { createCompany, findByCompanyName } from "../models/companyModel.js";
+// import { createCompany, findByCompanyName } from "../../models/companyModel.js";
+import passport from "../../shared/config/passport.js";
 
-export const signup = async (req: Request, res: Response, next: NextFunction) => {
-  const { companyName, companyPassword } = req.body;
+// export const signup = async (req: Request, res: Response, next: NextFunction) => {
+//   const { companyName, companyPassword } = req.body;
 
-  try {
-    //ユーザーが存在しているかを確認
-    const existingCompany = await findByCompanyName(companyName);
-    if (existingCompany) {
-      res.status(409).json({ message: "企業名はすでに登録されています" });
-      return;
-    }
-    //ユーザー登録
-    const newCompany = await createCompany(companyName, companyPassword);
+//   try {
+//     //ユーザーが存在しているかを確認
+//     const existingCompany = await findByCompanyName(companyName);
+//     if (existingCompany) {
+//       res.status(409).json({ message: "企業名はすでに登録されています" });
+//       return;
+//     }
+//     //ユーザー登録
+//     const newCompany = await createCompany(companyName, companyPassword);
 
-    // サインアップ後に自動的にログインする
-    req.login(newCompany, (err) => {
-      if (err) {
-        return next(err);
-      }
-      res.status(201).json({
-        message: "登録成功",
-        company: {
-          id: newCompany.id,
-          companyName: newCompany.name,
-        },
-      });
-    });
-  } catch (err) {
-    res.status(500).json({ message: "サーバエラー" });
-    console.error(err);
-  }
-};
+//     // サインアップ後に自動的にログインする
+//     req.login(newCompany, (err) => {
+//       if (err) {
+//         return next(err);
+//       }
+//       res.status(201).json({
+//         message: "登録成功",
+//         company: {
+//           id: newCompany.id,
+//           companyName: newCompany.name,
+//         },
+//       });
+//     });
+//   } catch (err) {
+//     res.status(500).json({ message: "サーバエラー" });
+//     console.error(err);
+//   }
+// };
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate("company-local", (error: Error, getCompany: any, info: any) => {
@@ -42,7 +42,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     }
     if (!getCompany) {
       return res.status(401).json({
-        message: "認証に失敗しました",
+        message: "ログインに失敗しました",
         error: info?.massage || "認証が無効です",
       });
     }

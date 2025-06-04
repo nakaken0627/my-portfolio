@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-import passport from "../config/passport.js";
-import { createUser, findByUsername } from "../models/userModel.js";
+import { createUser, findByUsername } from "../../.models/userModel.js";
+import passport from "../../shared/config/passport.js";
 
 export const signup = async (req: Request, res: Response, next: NextFunction) => {
   const { username, password } = req.body;
@@ -40,7 +40,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     }
     if (!getUser) {
       return res.status(401).json({
-        message: "認証に失敗しました",
+        message: "ログインに失敗しました",
         error: info.message || "認証が無効です",
       });
     }
@@ -49,7 +49,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         return next(err);
       }
       return res.status(200).json({
-        message: "認証に成功しました",
+        message: "ログインに成功しました",
         user: {
           id: getUser.id,
           name: getUser.name,

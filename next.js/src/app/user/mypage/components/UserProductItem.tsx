@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Image from "next/image";
+import { CartContext } from "@/context/cart-context";
 import { UserProductWithCustomization } from "@/types/user";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
@@ -13,7 +14,14 @@ type Props = {
 };
 
 export const UserProductItem = ({ id, product }: Props) => {
+  const cartContext = useContext(CartContext);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+
+  if (!cartContext) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  const { addProduct } = cartContext;
 
   const handleDrawerOpen = () => {
     setOpenDrawer(true);
@@ -26,6 +34,7 @@ export const UserProductItem = ({ id, product }: Props) => {
   const DrawerProps = {
     openDrawer: openDrawer,
     handleDrawerClose: handleDrawerClose,
+    productId: product.id,
     customization: product.customization,
   };
 
@@ -117,6 +126,7 @@ export const UserProductItem = ({ id, product }: Props) => {
                 fullWidth
                 startIcon={<AddShoppingCartIcon />}
                 sx={{ px: 3, whiteSpace: "nowrap" }}
+                onClick={() => addProduct(product.id, null)}
               >
                 カートへ
               </Button>
