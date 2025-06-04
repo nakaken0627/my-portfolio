@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@/components/lib/api";
 import { OrderTransformed } from "@/types/company";
 import useSWR from "swr";
 
@@ -9,8 +10,11 @@ const fetcher = async (url: string): Promise<OrderTransformed[]> => {
   return result;
 };
 
-export const useCompany = (url: string) => {
-  const { data, error, isLoading } = useSWR<OrderTransformed[]>(url, fetcher);
+export const useFetchOrderList = () => {
+  const { data, error, isLoading } = useSWR<OrderTransformed[]>(
+    `${API_BASE_URL}/api/company/orders?is_confirmed=false`,
+    fetcher,
+  );
 
   return {
     data,

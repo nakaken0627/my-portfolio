@@ -20,15 +20,13 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useCompany } from "hooks/company/useCompany";
+import { useFetchOrderList } from "hooks/company/useFetchOrderList";
 
 export const DisplayOrderList = () => {
   const companyContext = useContext(CompanyContext);
   const [confirmedIds, setConfirmedIds] = useState<number[]>([]);
 
-  const { data, isError, isLoading } = useCompany(
-    `${API_BASE_URL}/api/company/orders?is_confirmed=false`,
-  );
+  const { data, isError, isLoading } = useFetchOrderList();
   if (!data) {
     return <Typography>データを取得中です...</Typography>;
   }

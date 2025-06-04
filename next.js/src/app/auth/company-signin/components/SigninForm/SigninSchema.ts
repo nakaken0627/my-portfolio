@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const validationSchema = z.object({
+export const SigninSchema = z.object({
   username: z.string().nonempty("IDは必須です"),
   password: z
     .string()

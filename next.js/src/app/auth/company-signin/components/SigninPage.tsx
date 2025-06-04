@@ -1,8 +1,8 @@
 import { Container, Divider, Paper, Typography } from "@mui/material";
 
 import { GuestLoginFunc } from "./GuestLoginFunc";
-import { RouteForNewUser } from "./RouteForNewUser";
-import { SigninForm } from "./SigninForm";
+import { RouteForSignup } from "./RouteForSignup";
+import { SigninForm } from "./SigninForm/SigninForm";
 
 export const SigninPage = () => {
   return (
@@ -13,7 +13,7 @@ export const SigninPage = () => {
         </Typography>
         <SigninForm />
 
-        <RouteForNewUser />
+        <RouteForSignup />
         <Divider sx={{ my: 3, opacity: 0.8 }}></Divider>
         <GuestLoginFunc />
       </Paper>
