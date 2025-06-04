@@ -51,7 +51,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         return next(error);
       }
       return res.status(200).json({
-        massage: "ログインに成功しました",
+        massage: "認証に成功しました",
         company: {
           id: getCompany.id,
           name: getCompany.name,

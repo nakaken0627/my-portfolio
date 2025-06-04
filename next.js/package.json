@@ -16,12 +16,16 @@
     "@emotion/cache": "^11.14.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@hookform/resolvers": "^5.0.1",
     "@mui/icons-material": "^7.0.2",
     "@mui/material": "^7.0.2",
     "@mui/material-nextjs": "^7.0.2",
     "next": "^15.3.1",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "react-hook-form": "^7.57.0",
+    "swr": "^2.3.3",
+    "zod": "^3.25.49"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

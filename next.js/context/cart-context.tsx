@@ -198,26 +198,15 @@ export const CartContextProvider = ({
   ) => {
     let newQuantity = 1;
 
-    // console.log(cartProducts);
-
     setCartProducts((prev) => {
       const existingProduct = prev.find((cartItem) => {
-        // console.log(cartItem);
         return isSameProduct(
           cartItem.productId,
           cartItem.customizationId,
           addProductId,
           addCustomizationId,
         );
-        // console.log("比較対象:", {
-        //   id1: cartItem.productId,
-        //   customizationId1: cartItem.customizationId,
-        //   id2: addProductId,
-        //   customizationId2: addCustomizationId,
-        // });
       });
-
-      // console.log(existingProduct);
 
       newQuantity = existingProduct ? existingProduct.quantity + 1 : 1;
 
@@ -291,22 +280,8 @@ export const CartContextProvider = ({
           deleteProductId,
           deleteCustomizationId,
         );
-
-        return true;
       });
     });
-    // setCartProducts((prev) => {
-    //   return prev.filter((item) => {
-    //     if (deleteCustomizationId === null) {
-    //       return item.productId !== deleteProductId;
-    //     } else {
-    //       return !(
-    //         item.productId === deleteProductId &&
-    //         item.customizationId === deleteCustomizationId
-    //       );
-    //     }
-    //   });
-    // });
     await sendCartDeleteProduct(deleteProductId, deleteCustomizationId);
   };
 
