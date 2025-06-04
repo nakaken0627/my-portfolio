@@ -24,8 +24,8 @@ import { SignoutFunc } from "../company/SignoutFunc";
 
 const navLinks = [
   { href: "/company/mypage", label: "Mypage" },
-  { href: "/company/confirmedorderlist", label: "Confirmed Orders" },
-  { href: "/company/productlist", label: "Product List" },
+  { href: "/company/orders", label: "Confirmed Orders" },
+  { href: "/company/products", label: "Product List" },
 ];
 
 export const CompanyNav = () => {
