@@ -8,7 +8,7 @@ import {
   deleteCartProduct,
   getCart,
   getCartAllProducts,
-} from "../models/cartModel.js";
+} from "../.models/cartModel.js";
 import {
   addCompanyProduct,
   addCustomProduct,
@@ -16,40 +16,41 @@ import {
   deleteCompanyProduct,
   deleteCustomCompanyProduct,
   deleteCustomCompanyProducts,
-  fetchMergedCompanyProducts,
-  findCompanyProducts,
+  // fetchMergedCompanyProducts,
+  // findCompanyProducts,//使ってなさそう
   getConfirmedOrderList,
   getMyOrderList,
   getUserIds,
-} from "../models/companyModel.js";
-import { createOrder, createOrderProduct } from "../models/orderModel.js";
+} from "../.models/companyModel.js";
+import { createOrder, createOrderProduct } from "../.models/orderModel.js";
 import {
   countAllProducts,
   findAllProductsWithCustomization,
   findProductsWithCustomization,
   orderedProductList,
-} from "../models/userModel.js";
-import { deleteImage, getSignedImageUrl, uploadImage } from "../services/s3Service.js";
+} from "../.models/userModel.js";
+import { deleteImage, getSignedImageUrl, uploadImage } from "../infrastructure/s3/s3Service.js";
 
-export const findProductsForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  if (!req.isAuthenticated()) {
-    res.status(401).json({ message: "認証に失敗しました" });
-    return;
-  }
+// //使ってなさそう
+// export const findProductsForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+//   if (!req.isAuthenticated()) {
+//     res.status(401).json({ message: "認証に失敗しました" });
+//     return;
+//   }
 
-  const companyId = req.user.id;
+//   const companyId = req.user.id;
 
-  if (!companyId) {
-    res.status(400).json({ message: "会社IDが見つかりません" });
-    return;
-  }
-  try {
-    const products = await findCompanyProducts(companyId);
-    res.status(200).json(products);
-  } catch (err) {
-    return next(err);
-  }
-};
+//   if (!companyId) {
+//     res.status(400).json({ message: "会社IDが見つかりません" });
+//     return;
+//   }
+//   try {
+//     const products = await findCompanyProducts(companyId);
+//     res.status(200).json(products);
+//   } catch (err) {
+//     return next(err);
+//   }
+// };
 
 export const addProductForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   if (!req.body || !req.user || !req.file) return;
@@ -313,91 +314,91 @@ export const confirmedOrderList = async (req: Request, res: Response, next: Next
   }
 };
 
-type DefaultProductWithCustomization = {
-  id: number;
-  name: string;
-  model_number: string;
-  price: number;
-  description: string;
-  image_name?: string;
-  imageUrl?: string | null;
-  customization: ProductCustomizations[];
-};
+// type DefaultProductWithCustomization = {
+//   id: number;
+//   name: string;
+//   model_number: string;
+//   price: number;
+//   description: string;
+//   image_name?: string;
+//   imageUrl?: string | null;
+//   customization: ProductCustomizations[];
+// };
 
-type ProductCustomizations = {
-  id: number;
-  user_name: string;
-  model_number: string;
-  name: string;
-  price: number;
-  description: string;
-  start_date: string;
-  end_date: string;
-};
+// type ProductCustomizations = {
+//   id: number;
+//   user_name: string;
+//   model_number: string;
+//   name: string;
+//   price: number;
+//   description: string;
+//   start_date: string;
+//   end_date: string;
+// };
 
-type GroupedProduct = Record<number, DefaultProductWithCustomization>;
+// type GroupedProduct = Record<number, DefaultProductWithCustomization>;
 
-export const fetchDisplayProductsByCompany = async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user) return;
-  const company_id = req.user.id;
+// export const fetchDisplayProductsByCompany = async (req: Request, res: Response, next: NextFunction) => {
+//   if (!req.user) return;
+//   const company_id = req.user.id;
 
-  try {
-    const products = await fetchMergedCompanyProducts(company_id);
+//   try {
+//     const products = await fetchMergedCompanyProducts(company_id);
 
-    const enrichedProducts = await Promise.all(
-      products.map(async (row) => {
-        const product: DefaultProductWithCustomization = row.product;
-        const customization: ProductCustomizations = row.customization;
+//     const enrichedProducts = await Promise.all(
+//       products.map(async (row) => {
+//         const product: DefaultProductWithCustomization = row.product;
+//         const customization: ProductCustomizations = row.customization;
 
-        let imageUrl: string | null = null;
+//         let imageUrl: string | null = null;
 
-        //image_nameがnullの場合、S3へのリクエストがエラーになるため存在チェックを行う
-        if (product.image_name) {
-          imageUrl = await getSignedImageUrl(product.image_name);
-        }
-        const productWithUrl = { ...product, imageUrl };
-        return { productWithUrl, customization };
-      }),
-    );
+//         //image_nameがnullの場合、S3へのリクエストがエラーになるため存在チェックを行う
+//         if (product.image_name) {
+//           imageUrl = await getSignedImageUrl(product.image_name);
+//         }
+//         const productWithUrl = { ...product, imageUrl };
+//         return { productWithUrl, customization };
+//       }),
+//     );
 
-    const groupedProducts = enrichedProducts.reduce<GroupedProduct>((acc, row) => {
-      const product = row.productWithUrl;
-      const customization = row.customization;
+//     const groupedProducts = enrichedProducts.reduce<GroupedProduct>((acc, row) => {
+//       const product = row.productWithUrl;
+//       const customization = row.customization;
 
-      if (!acc[product.id]) {
-        acc[product.id] = {
-          id: product.id,
-          name: product.name,
-          model_number: product.model_number,
-          price: product.price,
-          description: product.description,
-          image_name: product.image_name,
-          imageUrl: product.imageUrl,
-          customization: [],
-        };
-      }
-      if (customization) {
-        acc[product.id].customization.push({
-          id: customization.id,
-          user_name: customization.user_name,
-          model_number: customization.model_number,
-          name: customization.name,
-          price: customization.price,
-          description: customization.description,
-          start_date: customization.start_date,
-          end_date: customization.end_date,
-        });
-      }
-      return acc;
-    }, {});
+//       if (!acc[product.id]) {
+//         acc[product.id] = {
+//           id: product.id,
+//           name: product.name,
+//           model_number: product.model_number,
+//           price: product.price,
+//           description: product.description,
+//           image_name: product.image_name,
+//           imageUrl: product.imageUrl,
+//           customization: [],
+//         };
+//       }
+//       if (customization) {
+//         acc[product.id].customization.push({
+//           id: customization.id,
+//           user_name: customization.user_name,
+//           model_number: customization.model_number,
+//           name: customization.name,
+//           price: customization.price,
+//           description: customization.description,
+//           start_date: customization.start_date,
+//           end_date: customization.end_date,
+//         });
+//       }
+//       return acc;
+//     }, {});
 
-    const data = Object.values(groupedProducts);
+//     const data = Object.values(groupedProducts);
 
-    res.status(200).json(data);
-  } catch (err) {
-    return next(err);
-  }
-};
+//     res.status(200).json(data);
+//   } catch (err) {
+//     return next(err);
+//   }
+// };
 
 export const registerCustomProduct = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.body) return;

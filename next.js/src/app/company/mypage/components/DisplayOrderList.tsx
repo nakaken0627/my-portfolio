@@ -20,7 +20,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useCompany } from "hooks/company/useCompany";
+import { useCompany } from "hooks/company/useCompanySWR";
 
 export const DisplayOrderList = () => {
   const companyContext = useContext(CompanyContext);

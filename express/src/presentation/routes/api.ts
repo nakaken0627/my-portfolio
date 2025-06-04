@@ -1,6 +1,7 @@
 import express from "express";
 
-import { upload } from "../config/upload.js";
+import { getMyCompany } from "../../.controllers/auth/authCompanyControlling.js";
+import { getMyUser } from "../../.controllers/auth/authUserControlling.js";
 import {
   addProductForCompany,
   changStatusOfConfirm,
@@ -13,9 +14,9 @@ import {
   deleteUserCartALLProducts,
   deleteUserCartProduct,
   fetchAllProductsForUser,
-  fetchDisplayProductsByCompany,
+  // fetchDisplayProductsByCompany,
   fetchDisplayProductsForUser,
-  findProductsForCompany,
+  // findProductsForCompany,
   getOrCreateCart,
   getTotalProductsCount,
   getUserCartALLProducts,
@@ -23,9 +24,9 @@ import {
   orderHistory,
   orderListForCompany,
   registerCustomProduct,
-} from "../controllers//productControlling.js";
-import { getMyCompany } from "../controllers/authCompanyControlling.js";
-import { getMyUser } from "../controllers/authUserControlling.js";
+} from "../../.controllers/productControlling.js";
+import { upload } from "../../shared/config/upload.js";
+import { fetchDisplayProductsByCompany } from "../controllers/productController.js";
 
 //routerオブジェクトを設定
 const router = express.Router();
@@ -33,7 +34,7 @@ const router = express.Router();
 //問屋用のAPI
 router.get("/company/profile", getMyCompany);
 router.get("/company/users", getUserList);
-router.get("/company/products", findProductsForCompany);
+// router.get("/company/products", findProductsForCompany);//使ってなさそう
 router.get("/company/products/custom", fetchDisplayProductsByCompany);
 router.get("/company/orders", orderListForCompany);
 router.get("/company/orders/confirmed", confirmedOrderList);

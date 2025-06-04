@@ -32,14 +32,21 @@
     "module": "ESNext" /* Specify what module code is generated. */,
     "rootDir": "./src" /* Specify the root folder within your source files. */,
     "moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
-    "baseUrl": "./" /* Specify the base directory to resolve non-relative module names. */,
+    "baseUrl": "./src" /* Specify the base directory to resolve non-relative module names. */,
     "paths": {
       "*": ["node_modules/*"]
+      // "@/config/*": ["shared/config/*"],
+      // "@/repositories/*": ["infrastructure/repositories/*"],
+      // "@/models/*": ["domain/models/*"],
+      // "@/dto/*": ["presentation/dto/*"],
+      // "@/s3/*": ["infrastructure/s3/*"],
+      // "@/services/*": ["application/services/*"],
+      // "@/controllers/*": ["presentation/controllers/*"]
     } /* Specify a set of entries that re-map imports to additional lookup locations. */,
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     "typeRoots": [
       "./node_modules/@types",
-      "./src/@types"
+      "src/shared/@types"
     ] /* Specify multiple folders that act like './node_modules/@types'. */,
     "types": ["node"] /* Specify type package names to be included without being referenced in a source file. */,
     // "allowUmdGlobalAccess": true,                     /* Allow accessing UMD globals from modules. */
@@ -122,6 +129,13 @@
     "esm": true,
     "transpileOnly": true
   },
-  "include": ["src/**/*", "src/@types/**/*"],
+  "include": [
+    "src/**/*",
+    "src/shared/@types/**/*",
+    "src/.controllers",
+    "src/.models",
+    "src/presentation/routes",
+    "src/.routes"
+  ],
   "exclude": ["node_modules", "eslint.config.mjs"]
 }

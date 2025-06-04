@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { PoolClient } from "pg";
 
-import pool from "../config/database.js";
+import pool from "../shared/config/database.js";
 
 export type User = {
   id: number;
