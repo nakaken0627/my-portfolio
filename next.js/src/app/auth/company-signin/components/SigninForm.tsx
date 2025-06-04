@@ -3,7 +3,7 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/components/lib/api";
-import { validationSchema } from "@/utils/loginValidationSchema";
+import { loginValidationSchema } from "@/utils/loginValidationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField } from "@mui/material";
 import { useLoginSWR } from "hooks/company/useLoginSWR";
@@ -21,7 +21,7 @@ export const SigninForm = () => {
   const { handleSubmit, control } = useForm({
     mode: "onChange",
     defaultValues: { username: "", password: "" },
-    resolver: zodResolver(validationSchema),
+    resolver: zodResolver(loginValidationSchema),
   });
 
   const router = useRouter();

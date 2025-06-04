@@ -135,7 +135,8 @@
     "src/.controllers",
     "src/.models",
     "src/presentation/routes",
-    "src/.routes"
+    "src/.routes",
+    "src/.config"
   ],
   "exclude": ["node_modules", "eslint.config.mjs"]
 }
