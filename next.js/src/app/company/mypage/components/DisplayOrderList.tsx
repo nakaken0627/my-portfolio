@@ -18,8 +18,8 @@ export const DisplayOrderList = () => {
   if (!data) {
     return <Typography>データを取得中です...</Typography>;
   }
-  if (isError) return <div>failed to load</div>;
-  if (isLoading) return <div>loading...</div>;
+  if (isError) return <Typography>データを取得中に失敗しました</Typography>;
+  if (isLoading) return <Typography>データを取得中です...</Typography>;
 
   const handleCheckBoxStatus = (id: number) => {
     setConfirmedIds((prev) =>

@@ -165,6 +165,7 @@ export const confirmingOrder = async (confirmedIds: number[]) => {
   }
 };
 
+//使ってないかも
 export const getConfirmedOrderList = async (company_id: number) => {
   const client: PoolClient = await pool.connect();
   try {

@@ -5,7 +5,7 @@ export type DefaultProductWithCustomization = {
   price: number;
   description: string;
   imageUrl: string;
-  customization: ProductCustomizations[];
+  custom: ProductCustomizations[];
 };
 
 export type ProductCustomizations = {
@@ -27,7 +27,7 @@ export type OrderProduct = {
   model_number: string;
   price: number;
   quantity: number;
-  customization: {
+  custom: {
     id: number;
     model_number: string;
     name: string;
