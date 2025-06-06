@@ -321,7 +321,7 @@ type DefaultProductWithCustomization = {
   description: string;
   image_name?: string;
   imageUrl?: string | null;
-  customization: ProductCustomizations[];
+  custom: ProductCustomizations[];
 };
 
 type ProductCustomizations = {
@@ -373,11 +373,11 @@ export const fetchDisplayProductsByCompany = async (req: Request, res: Response,
           description: product.description,
           image_name: product.image_name,
           imageUrl: product.imageUrl,
-          customization: [],
+          custom: [],
         };
       }
       if (customization) {
-        acc[product.id].customization.push({
+        acc[product.id].custom.push({
           id: customization.id,
           user_name: customization.user_name,
           model_number: customization.model_number,

@@ -1,4 +1,4 @@
-export type DefaultProductWithCustomization = {
+export type ProductWithCustomization = {
   id: number;
   name: string;
   model_number: string;

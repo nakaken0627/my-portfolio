@@ -3,7 +3,7 @@
 import { useContext, useState } from "react";
 import { API_BASE_URL } from "@/components/lib/api";
 import { CompanyContext } from "@/context/company-context";
-import { DefaultProductWithCustomization } from "@/types/company";
+import { ProductWithCustomization } from "@/types/company";
 import {
   Button,
   Checkbox,
@@ -25,7 +25,7 @@ export const ProductList = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] =
-    useState<DefaultProductWithCustomization>();
+    useState<ProductWithCustomization>();
 
   if (!companyContext) return <Typography>Loading...</Typography>;
   const { companyCustomProducts, fetchCompanyCustomProducts } = companyContext;
@@ -151,7 +151,7 @@ export const ProductList = () => {
                       setSelectedProduct(p);
                     }}
                   >
-                    詳細 : {p.customization.length}
+                    詳細 : {p.custom.length}
                   </Button>
                 </TableCell>
               </TableRow>

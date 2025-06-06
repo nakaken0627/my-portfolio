@@ -1,4 +1,4 @@
-import { DefaultProductWithCustomization } from "@/types/company";
+import { ProductWithCustomization } from "@/types/company";
 import {
   Button,
   Dialog,
@@ -15,7 +15,7 @@ import { ModalTable } from "./ModalTable";
 type ModalProps = {
   open: boolean;
   onClose: () => void;
-  productWithCustoms?: DefaultProductWithCustomization;
+  productWithCustoms?: ProductWithCustomization;
 };
 
 export const ProductsDetailModal = ({
@@ -36,7 +36,7 @@ export const ProductsDetailModal = ({
         <Divider sx={{ my: 2 }} />
         <ModalForm />
         <Divider sx={{ my: 2 }} />
-        <ModalTable customs={productWithCustoms.customization} />
+        <ModalTable customs={productWithCustoms.custom} />
       </DialogContent>
 
       <DialogActions sx={{ p: 3 }}>

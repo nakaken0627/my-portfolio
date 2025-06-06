@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { AddCustomProduct } from "./AddCustomProduct";
+import { AddCustomProduct } from "./AddCustomProduct/AddCustomProduct";
 import { AddDefaultProduct } from "./AddDefaultProduct";
 
 export const RegisterSection = () => {

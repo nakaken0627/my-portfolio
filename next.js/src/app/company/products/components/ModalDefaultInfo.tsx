@@ -1,15 +1,14 @@
-import { DefaultProductWithCustomization } from "@/types/company";
+import { ProductWithCustomization } from "@/types/company";
 import { Box, Grid, Typography } from "@mui/material";
 
 type Props = {
-  product: DefaultProductWithCustomization;
+  product: ProductWithCustomization;
 };
 
 export const ModalDefaultInfo = ({ product }: Props) => {
   return (
     <Box>
       <Grid container spacing={3} alignItems="flex-start">
-        {/* 左側：商品画像 */}
         <Grid size={{ xs: 12, sm: 4 }}>
           <Box
             component="img"
@@ -25,7 +24,6 @@ export const ModalDefaultInfo = ({ product }: Props) => {
           />
         </Grid>
 
-        {/* 右側：商品名・型番・価格・説明 */}
         <Grid size={{ xs: 12, sm: 8 }}>
           <Typography variant="h6" gutterBottom>
             {product.name}
