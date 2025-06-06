@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 
 import { AddCustomProduct } from "./AddCustomProduct/AddCustomProduct";
-import { AddDefaultProduct } from "./AddDefaultProduct";
+import { AddDefaultProduct } from "./AddDefaultProduct/AddDefaultProduct";
 
 export const RegisterSection = () => {
   const [isDefaultForm, setIsDefaultForm] = useState(true);

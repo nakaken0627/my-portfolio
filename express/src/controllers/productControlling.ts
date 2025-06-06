@@ -52,15 +52,21 @@ export const findProductsForCompany = async (req: Request, res: Response, next: 
 };
 
 export const addProductForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  if (!req.body || !req.user || !req.file) return;
+  if (!req.body || !req.user) return;
 
   const company_id = String(req.user.id);
   const { model_number, name, price, description } = req.body;
 
-  const imageName = await uploadImage(req.file);
+  let imageName: string | null = null;
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  const imageFile = files?.image?.[0];
+
+  if (imageFile) {
+    imageName = await uploadImage(imageFile);
+  }
 
   try {
-    const data = await addCompanyProduct(company_id, model_number, name, price, description, imageName);
+    const data = await addCompanyProduct(company_id, model_number, name, price, description, imageName ?? "");
     res.status(200).json(data);
   } catch (err) {
     return next(err);

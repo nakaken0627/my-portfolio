@@ -22,36 +22,6 @@ export const AddCustomProductSchema = z
     startDate: z.string().nullable(),
     endDate: z.string().nullable(),
   })
-  //   .refine(
-  //     (data) => {
-  //       if (data.startDate && data.endDate) {
-  //         return (
-  //           new Date(data.startDate).getTime() < new Date(data.endDate).getTime()
-  //         );
-  //       } else {
-  //         return true;
-  //       }
-  //     },
-  //     {
-  //       message: "適用開始日は適用終了日より以前の日付を指定して下さい",
-  //       path: ["startDate"],
-  //     },
-  //   )
-  //   .refine(
-  //     (data) => {
-  //       if (data.startDate && data.endDate) {
-  //         return (
-  //           new Date(data.startDate).getTime() < new Date(data.endDate).getTime()
-  //         );
-  //       } else {
-  //         return true;
-  //       }
-  //     },
-  //     {
-  //       message: "適用終了日は適用開始日より以降の日付を指定して下さい",
-  //       path: ["endDate"],
-  //     },
-  //   );
 
   .superRefine((data, ctx) => {
     if (data.startDate && data.endDate) {

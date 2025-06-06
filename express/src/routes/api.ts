@@ -33,12 +33,12 @@ const router = express.Router();
 //問屋用のAPI
 router.get("/company/profile", getMyCompany);
 router.get("/company/users", getUserList);
-router.get("/company/products", findProductsForCompany);
+router.get("/company/products", findProductsForCompany); //使ってなさそう
 router.get("/company/products/custom", fetchDisplayProductsByCompany);
 router.get("/company/orders", orderListForCompany);
 router.get("/company/orders/confirmed", confirmedOrderList);
 
-router.post("/company/products", upload.single("image"), addProductForCompany);
+router.post("/company/products", upload.fields([{ name: "image", maxCount: 1 }]), addProductForCompany);
 router.post("/company/custom-products", registerCustomProduct);
 
 router.patch("/company/orders/confirmed", changStatusOfConfirm);
