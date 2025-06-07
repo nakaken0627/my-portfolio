@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { AddCustomProduct } from "./AddCustomProduct/AddCustomProduct";
+import { AddCustomProduct } from "../AddCustomProduct/AddCustomProduct";
 
 export const ModalForm = () => {
   return (

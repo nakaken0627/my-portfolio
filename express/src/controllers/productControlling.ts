@@ -371,7 +371,6 @@ export const fetchDisplayProductsByCompany = async (req: Request, res: Response,
     const groupedProducts = enrichedProducts.reduce<GroupedProduct>((acc, row) => {
       const product = row.productWithUrl;
       const customization = row.customization;
-      console.log(customization);
 
       if (!acc[product.id]) {
         acc[product.id] = {
