@@ -16,11 +16,10 @@ export const AddCustomProductSchema = z
         invalid_type_error: "数値で入力して下さい",
       })
       .int()
-      .positive()
-      .nullable(),
+      .positive(),
     description: z.string(),
-    startDate: z.string().nullable(),
-    endDate: z.string().nullable(),
+    startDate: z.string(),
+    endDate: z.string(),
   })
 
   .superRefine((data, ctx) => {

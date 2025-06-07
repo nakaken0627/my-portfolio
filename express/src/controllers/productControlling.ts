@@ -77,16 +77,18 @@ export const deleteProductsForCompany = async (req: Request, res: Response, next
   if (!req.body || !req.user) return;
 
   const companyId = req.user.id;
-  const { productsIds } = req.body;
+  const { productIds } = req.body;
 
   try {
     await Promise.all(
-      productsIds.map(async (id: number) => {
+      productIds.map(async (id: number) => {
         const result = await deleteCompanyProduct(companyId, id);
         res.status(200).json({
           message: "削除が成功しました",
         });
-        await deleteImage(result);
+        if (result) {
+          await deleteImage(result);
+        }
       }),
     );
   } catch (err) {

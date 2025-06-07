@@ -1,8 +1,6 @@
 "use client";
 
-import { useContext, useState } from "react";
-import { API_BASE_URL } from "@/components/lib/api";
-import { CompanyContext } from "@/context/company-context";
+import { useState } from "react";
 import { ProductWithCustomization } from "@/types/company";
 import {
   Button,
@@ -17,18 +15,23 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { useDeleteProducts } from "hooks/company/useDeleteProducts";
+import { useFetchProducts } from "hooks/company/useFetchProducts";
 
 import { ProductsDetailModal } from "./ProductDetailModal";
 
+type CustomError = Error & {
+  info?: { message: string };
+};
+
 export const ProductList = () => {
-  const companyContext = useContext(CompanyContext);
+  const { products, isErrorProducts, isLoadingProducts } = useFetchProducts();
+  const { trigger, isMutating } = useDeleteProducts();
+
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [selectedProduct, setSelectedProduct] =
     useState<ProductWithCustomization>();
-
-  if (!companyContext) return <Typography>Loading...</Typography>;
-  const { companyCustomProducts, fetchCompanyCustomProducts } = companyContext;
 
   const handleCheckBoxStatus = (productId: number) => {
     setSelectedIds((prev) =>
@@ -40,17 +43,12 @@ export const ProductList = () => {
 
   const handleDeleteProducts = async () => {
     try {
-      await fetch(`${API_BASE_URL}/api/company/products`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productsIds: selectedIds }),
-      });
-
+      await trigger(selectedIds);
       setSelectedIds([]);
-      await fetchCompanyCustomProducts();
     } catch (err) {
-      console.error(err);
+      const error = err as CustomError;
+      const msg = error.info?.message ?? "";
+      alert(msg || "削除に失敗しました");
     }
   };
 
@@ -61,6 +59,13 @@ export const ProductList = () => {
   const handleModalClose = () => {
     setModalOpen(false);
   };
+
+  if (!products) {
+    return <Typography>データを取得中です...</Typography>;
+  }
+  if (isErrorProducts)
+    return <Typography>データを取得中に失敗しました</Typography>;
+  if (isLoadingProducts) return <Typography>データを取得中です...</Typography>;
 
   return (
     <Container maxWidth="lg" sx={{ py: 2 }}>
@@ -120,7 +125,7 @@ export const ProductList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {companyCustomProducts.map((p) => (
+            {products.map((p) => (
               <TableRow
                 key={String(p.id)}
                 hover
@@ -165,6 +170,7 @@ export const ProductList = () => {
         color="error"
         onClick={handleDeleteProducts}
         sx={{ mt: 2 }}
+        disabled={isMutating}
       >
         選択商品を削除
       </Button>

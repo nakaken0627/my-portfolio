@@ -23,10 +23,10 @@ type FormData = {
   userId: number | null;
   modelNumber: string;
   productName: string;
-  price: number | null;
+  price: number;
   description: string;
-  startDate: string | null;
-  endDate: string | null;
+  startDate: string;
+  endDate: string;
 };
 
 type CustomError = Error & {
@@ -41,10 +41,10 @@ export const AddCustomProduct = () => {
       userId: null,
       modelNumber: "",
       productName: "",
-      price: null,
+      price: 0,
       description: "",
-      startDate: undefined,
-      endDate: undefined,
+      startDate: "",
+      endDate: "",
     },
     resolver: zodResolver(AddCustomProductSchema),
     criteriaMode: "all",
@@ -223,10 +223,11 @@ export const AddCustomProduct = () => {
                 render={({ field, fieldState: { error } }) => (
                   <TextField
                     {...field}
-                    value={field.value ?? ""}
+                    value={field.value === 0 ? "" : field.value}
                     onChange={(e) => {
                       const newVal = e.target.value;
-                      field.onChange(newVal === "" ? null : Number(newVal));
+                      const registerVal = newVal === "" ? 0 : Number(newVal);
+                      field.onChange(registerVal);
                     }}
                     type="number"
                     label="個別単価"
