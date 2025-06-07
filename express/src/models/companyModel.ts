@@ -200,10 +200,12 @@ export const fetchMergedCompanyProducts = async (company_id: number) => {
     const result = await client.query(
       ` SELECT
           row_to_json(p.*) AS product,
-          row_to_json(pc.*) AS customization
+          (to_jsonb(pc) || jsonb_build_object('user_name',u.name)) AS customization
         FROM products p
         LEFT JOIN product_customizations pc
           ON p.id = pc.product_id
+        LEFT JOIN users u
+		      ON u.id = pc.user_id
         WHERE p.company_id =$1
         ORDER BY p.id `,
       [company_id],
@@ -252,7 +254,7 @@ export const deleteCustomCompanyProduct = async (customProductId: number[]): Pro
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
-      `DELETE FROM custom_products
+      `DELETE FROM product_customizations
         WHERE id = $1
         RETURNING *`,
       [customProductId],
@@ -267,7 +269,7 @@ export const deleteCustomCompanyProducts = async (customProductIds: number[]): P
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
-      `DELETE FROM custom_products
+      `DELETE FROM product_customizations
         WHERE id =ANY($1::int[])
         RETURNING *`,
       [customProductIds],

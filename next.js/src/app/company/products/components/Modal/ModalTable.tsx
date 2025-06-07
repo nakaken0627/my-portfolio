@@ -1,6 +1,3 @@
-import { useContext } from "react";
-import { API_BASE_URL } from "@/components/lib/api";
-import { CompanyContext } from "@/context/company-context";
 import { ProductCustomizations } from "@/types/company";
 import {
   Box,
@@ -14,28 +11,26 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { useDeleteCustomProducts } from "hooks/company/useDeleteCustomProducts";
 
 type Props = {
   customs: ProductCustomizations[];
 };
 
-export const ModalTable = ({ customs }: Props) => {
-  const companyContext = useContext(CompanyContext);
+type CustomError = Error & {
+  info?: { message: string };
+};
 
-  if (!companyContext) return <Typography>Loading...</Typography>;
-  const { fetchCompanyCustomProducts } = companyContext;
+export const ModalTable = ({ customs }: Props) => {
+  const { trigger, isMutating } = useDeleteCustomProducts();
 
   const handleDeleteCustomProduct = async (customId: number) => {
     try {
-      await fetch(`${API_BASE_URL}/api/company/custom-product`, {
-        method: "DELETE",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ customProductId: customId }),
-      });
-      await fetchCompanyCustomProducts();
+      await trigger(customId);
     } catch (err) {
-      console.error(err);
+      const error = err as CustomError;
+      const msg = error.info?.message ?? "";
+      alert(msg || "削除に失敗しました");
     }
   };
 
@@ -67,7 +62,13 @@ export const ModalTable = ({ customs }: Props) => {
               </TableCell>
               <TableCell
                 align="center"
-                sx={{ fontWeight: "bold", minWidth: 200 }}
+                sx={{ fontWeight: "bold", minWidth: 100 }}
+              >
+                ユーザー
+              </TableCell>
+              <TableCell
+                align="center"
+                sx={{ fontWeight: "bold", minWidth: 150 }}
               >
                 商品名
               </TableCell>
@@ -113,11 +114,13 @@ export const ModalTable = ({ customs }: Props) => {
                     color="error"
                     size="small"
                     onClick={() => void handleDeleteCustomProduct(c.id)}
+                    disabled={isMutating}
                   >
                     削除
                   </Button>
                 </TableCell>
                 <TableCell align="center">{c.id}</TableCell>
+                <TableCell align="center">{c.user_name ?? "共通品"}</TableCell>
                 <TableCell align="center">{c.name}</TableCell>
                 <TableCell align="center">{c.model_number}</TableCell>
                 <TableCell align="center">

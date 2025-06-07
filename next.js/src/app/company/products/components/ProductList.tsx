@@ -18,7 +18,7 @@ import {
 import { useDeleteProducts } from "hooks/company/useDeleteProducts";
 import { useFetchProducts } from "hooks/company/useFetchProducts";
 
-import { ProductsDetailModal } from "./ProductDetailModal";
+import { ProductsDetailModal } from "./Modal/ProductDetailModal";
 
 type CustomError = Error & {
   info?: { message: string };

@@ -10,7 +10,7 @@ export type ProductWithCustomization = {
 
 export type ProductCustomizations = {
   id: number;
-  user_name: string;
+  user_name?: string;
   model_number: string;
   name: string;
   price: number;
