@@ -3,9 +3,9 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { SigninSchema } from "@/app/auth/company-signin/components/SigninForm/SigninSchema";
+import { useSignin } from "@/hooks/company/useSignin";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField } from "@mui/material";
-import { useSignin } from "hooks/company/useSignin";
 
 type FormData = {
   username: string;

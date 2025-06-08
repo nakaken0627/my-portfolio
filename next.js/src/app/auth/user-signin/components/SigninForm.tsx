@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { API_BASE_URL } from "@/components/lib/api";
+import { API_BASE_URL } from "@/lib/api";
 import {
   Alert,
   Box,

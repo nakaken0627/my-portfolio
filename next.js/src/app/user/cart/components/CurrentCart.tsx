@@ -1,8 +1,9 @@
 "use client";
 
 import { useContext } from "react";
-import { API_BASE_URL } from "@/components/lib/api";
 import { CartContext } from "@/context/cart-context";
+import { useFetchUserProducts } from "@/hooks/user/useFetchUserProducts";
+import { API_BASE_URL } from "@/lib/api";
 import {
   Box,
   Button,
@@ -11,7 +12,6 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { useFetchUserProducts } from "hooks/user/useFetchUserProducts";
 
 import { CartCard } from "./CartCard";
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useFetchPageProducts } from "@/hooks/user/useFetchPageProducts";
 import { Container, Grid, Typography } from "@mui/material";
-import { useFetchPageProducts } from "hooks/user/useFetchPageProducts";
 
 import { UserPagiNation } from "./UserPagiNation";
 import { UserProductItem } from "./UserProductItem";

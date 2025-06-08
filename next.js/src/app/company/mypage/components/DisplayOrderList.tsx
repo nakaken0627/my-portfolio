@@ -1,16 +1,14 @@
 "use client";
 
-import { useContext, useState } from "react";
-import { CompanyContext } from "@/context/company-context";
+import { useState } from "react";
+import { useConfirmedOrders } from "@/hooks/company/useConfirmedOrders";
+import { useFetchOrderList } from "@/hooks/company/useFetchOrderList";
 import { Container, Typography } from "@mui/material";
-import { useConfirmedOrders } from "hooks/company/useConfirmedOrders";
-import { useFetchOrderList } from "hooks/company/useFetchOrderList";
 
 import { OrderActionButtons } from "./OrderActionButtons";
 import { OrderCard } from "./OrderCard";
 
 export const DisplayOrderList = () => {
-  const companyContext = useContext(CompanyContext);
   const [confirmedIds, setConfirmedIds] = useState<number[]>([]);
 
   const { data, isError, isLoading } = useFetchOrderList();
@@ -42,8 +40,6 @@ export const DisplayOrderList = () => {
       setConfirmedIds(idArray);
     }
   };
-
-  if (!companyContext) return <Typography>Loading...</Typography>;
 
   return (
     <Container maxWidth="lg" sx={{ py: 1 }}>

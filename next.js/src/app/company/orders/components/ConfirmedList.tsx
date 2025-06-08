@@ -1,5 +1,7 @@
+"use client";
+
+import { useFetchConfirmedList } from "@/hooks/company/useFetchConfirmedList";
 import { Box, Container, Typography } from "@mui/material";
-import { useFetchConfirmedList } from "hooks/company/useFetchConfirmedList";
 
 import { OrderCard } from "./OrderCard";
 

@@ -1,9 +1,9 @@
 "use client";
 
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { usePostDefaultProducts } from "@/hooks/company/usePostDefaultProducts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
-import { usePostDefaultProducts } from "hooks/company/usePostDefaultProducts";
 
 import { AddDefaultProductSchema } from "./AddDefaultProductSchema";
 

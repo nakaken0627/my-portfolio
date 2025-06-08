@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useDeleteProducts } from "@/hooks/company/useDeleteProducts";
+import { useFetchCompanyProducts } from "@/hooks/company/useFetchCompanyProducts";
 import { ProductWithCustomization } from "@/types/company";
 import {
   Button,
@@ -15,8 +17,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useDeleteProducts } from "hooks/company/useDeleteProducts";
-import { useFetchCompanyProducts } from "hooks/company/useFetchCompanyProducts";
 
 import { ProductsDetailModal } from "./Modal/ProductDetailModal";
 

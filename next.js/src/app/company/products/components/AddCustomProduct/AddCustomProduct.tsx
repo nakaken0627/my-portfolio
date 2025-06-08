@@ -2,6 +2,9 @@
 
 import { useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { useFetchCompanyProducts } from "@/hooks/company/useFetchCompanyProducts";
+import { useFetchUsers } from "@/hooks/company/useFetchUsers";
+import { usePostCustomProducts } from "@/hooks/company/usePostCustomProducts";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Autocomplete,
@@ -12,9 +15,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useFetchCompanyProducts } from "hooks/company/useFetchCompanyProducts";
-import { useFetchUsers } from "hooks/company/useFetchUsers";
-import { usePostCustomProducts } from "hooks/company/usePostCustomProducts";
 
 import { AddCustomProductSchema } from "./AddCustomProductSchema";
 

@@ -2,9 +2,9 @@
 
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { useSignup } from "@/hooks/company/useSignup";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField } from "@mui/material";
-import { useSignup } from "hooks/company/useSignup";
 
 import { SignupSchema } from "./SignupSchema";
 

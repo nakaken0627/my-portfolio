@@ -1,3 +1,4 @@
+import { useDeleteCustomProducts } from "@/hooks/company/useDeleteCustomProducts";
 import { ProductCustomizations } from "@/types/company";
 import {
   Box,
@@ -11,7 +12,6 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useDeleteCustomProducts } from "hooks/company/useDeleteCustomProducts";
 
 type Props = {
   customs: ProductCustomizations[];
