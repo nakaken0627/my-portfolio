@@ -10,3 +10,12 @@ export type DisplayProductDto = {
   imageUrl?: string | null;
   customization: ProductCustomization[];
 };
+
+export type AddProductDTO = {
+  companyId: number;
+  modelNumber: string;
+  productName: string;
+  price: number;
+  description: string;
+  imageName: string;
+};

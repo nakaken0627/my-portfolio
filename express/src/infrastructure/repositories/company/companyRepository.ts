@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 import { PoolClient } from "pg";
 
-import { Company } from "../../domain/models/companyModel.js";
-import pool from "../../shared/config/database.js";
+import { Company } from "../../../domain/models/companyModel.js";
+import pool from "../../../shared/config/database.js";
 
 export const findByCompanyName = async (companyName: string): Promise<Company | null> => {
   const client: PoolClient = await pool.connect();
@@ -23,6 +23,16 @@ export const createCompany = async (companyName: string, companyPassword: string
       [companyName, hashedPassword],
     );
     return result.rows[0];
+  } finally {
+    client.release();
+  }
+};
+
+export const getUserIds = async () => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(`SELECT id,name FROM users`);
+    return result.rows;
   } finally {
     client.release();
   }

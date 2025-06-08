@@ -68,27 +68,27 @@ export type Product = {
 //   }
 // };
 
-export const addCompanyProduct = async (
-  company_id: string,
-  model_number: string,
-  name: string,
-  price: number,
-  description: string,
-  imageName: string,
-) => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `INSERT INTO products (company_id, model_number, name, price, description,image_name)
-           VALUES ($1,$2,$3,$4,$5,$6)
-           RETURNING *`,
-      [company_id, model_number, name, price, description, imageName],
-    );
-    return result.rows[0];
-  } finally {
-    client.release();
-  }
-};
+// export const addCompanyProduct = async (
+//   company_id: string,
+//   model_number: string,
+//   name: string,
+//   price: number,
+//   description: string,
+//   imageName: string,
+// ) => {
+//   const client: PoolClient = await pool.connect();
+//   try {
+//     const result = await client.query(
+//       `INSERT INTO products (company_id, model_number, name, price, description,image_name)
+//            VALUES ($1,$2,$3,$4,$5,$6)
+//            RETURNING *`,
+//       [company_id, model_number, name, price, description, imageName],
+//     );
+//     return result.rows[0];
+//   } finally {
+//     client.release();
+//   }
+// };
 
 export const deleteCompanyProduct = async (companyId: number, productsId: number): Promise<string> => {
   const client: PoolClient = await pool.connect();
@@ -278,15 +278,15 @@ export const deleteCustomCompanyProducts = async (customProductIds: number[]): P
   }
 };
 
-export const getUserIds = async () => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(`SELECT id,name FROM users`);
-    return result.rows;
-  } finally {
-    client.release();
-  }
-};
+// export const getUserIds = async () => {
+//   const client: PoolClient = await pool.connect();
+//   try {
+//     const result = await client.query(`SELECT id,name FROM users`);
+//     return result.rows;
+//   } finally {
+//     client.release();
+//   }
+// };
 
 export const getImages = async () => {
   const client: PoolClient = await pool.connect();

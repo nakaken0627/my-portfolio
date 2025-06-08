@@ -1,5 +1,5 @@
 import { ProductCustomization } from "../../../domain/models/productModel.js";
-import { fetchMergedCompanyProducts } from "../../../infrastructure/repositories/productRepository.js";
+import { fetchMergedCompanyProducts } from "../../../infrastructure/repositories/company/productRepository.js";
 import { getSignedImageUrl } from "../../../infrastructure/s3/s3Service.js";
 import { DisplayProductDto } from "../../../presentation/dto/product.dto.js";
 

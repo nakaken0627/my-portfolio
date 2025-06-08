@@ -10,7 +10,7 @@ import {
   getCartAllProducts,
 } from "../.models/cartModel.js";
 import {
-  addCompanyProduct,
+  // addCompanyProduct,
   addCustomProduct,
   confirmingOrder,
   deleteCompanyProduct,
@@ -20,7 +20,7 @@ import {
   // findCompanyProducts,//使ってなさそう
   getConfirmedOrderList,
   getMyOrderList,
-  getUserIds,
+  // getUserIds,
 } from "../.models/companyModel.js";
 import { createOrder, createOrderProduct } from "../.models/orderModel.js";
 import {
@@ -29,7 +29,9 @@ import {
   findProductsWithCustomization,
   orderedProductList,
 } from "../.models/userModel.js";
-import { deleteImage, getSignedImageUrl, uploadImage } from "../infrastructure/s3/s3Service.js";
+import { deleteImage, getSignedImageUrl } from "../infrastructure/s3/s3Service.js";
+
+// import { deleteImage, getSignedImageUrl, uploadImage } from "../infrastructure/s3/s3Service.js";
 
 // //使ってなさそう
 // export const findProductsForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -52,27 +54,27 @@ import { deleteImage, getSignedImageUrl, uploadImage } from "../infrastructure/s
 //   }
 // };
 
-export const addProductForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  if (!req.body || !req.user) return;
+// export const addProductForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+//   if (!req.body || !req.user) return;
 
-  const company_id = String(req.user.id);
-  const { model_number, name, price, description } = req.body;
+//   const company_id = String(req.user.id);
+//   const { model_number, name, price, description } = req.body;
 
-  let imageName: string | null = null;
-  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-  const imageFile = files?.image?.[0];
+//   let imageName: string | null = null;
+//   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+//   const imageFile = files?.image?.[0];
 
-  if (imageFile) {
-    imageName = await uploadImage(imageFile);
-  }
+//   if (imageFile) {
+//     imageName = await uploadImage(imageFile);
+//   }
 
-  try {
-    const data = await addCompanyProduct(company_id, model_number, name, price, description, imageName ?? "");
-    res.status(200).json(data);
-  } catch (err) {
-    return next(err);
-  }
-};
+//   try {
+//     const data = await addCompanyProduct(company_id, model_number, name, price, description, imageName ?? "");
+//     res.status(200).json(data);
+//   } catch (err) {
+//     return next(err);
+//   }
+// };
 
 export const deleteProductsForCompany = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.body || !req.user) return;
@@ -457,14 +459,14 @@ export const deleteCustomProduct = async (req: Request, res: Response, next: Nex
   }
 };
 
-export const getUserList = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const result = await getUserIds();
-    res.status(200).json(result);
-  } catch (err) {
-    return next(err);
-  }
-};
+// export const getUserList = async (req: Request, res: Response, next: NextFunction) => {
+//   try {
+//     const result = await getUserIds();
+//     res.status(200).json(result);
+//   } catch (err) {
+//     return next(err);
+//   }
+// };
 
 type UserProductWithCustomization = {
   id: number;
