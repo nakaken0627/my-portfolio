@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
+import { addProductService } from "../../../application/services/company/addProductServices.js";
 import { fetchDisplayProducts } from "../../../application/services/company/displayProductService.js";
 import { getUserIds } from "../../../infrastructure/repositories/company/companyRepository.js";
 import { uploadImage } from "../../../infrastructure/s3/s3Service.js";
@@ -30,7 +31,7 @@ export const getUserList = async (req: Request, res: Response, next: NextFunctio
 export const addProductForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   if (!req.body || !req.user) return;
 
-  const companyId = String(req.user.id);
+  const companyId = req.user.id;
   const { modelNumber, productName, price, description } = req.body;
 
   let imageName: string | null = null;
@@ -42,6 +43,7 @@ export const addProductForCompany = async (req: Request, res: Response, next: Ne
   }
 
   const productData: AddProductDTO = {
+    companyId,
     modelNumber,
     productName,
     price: Number(price),
@@ -50,7 +52,7 @@ export const addProductForCompany = async (req: Request, res: Response, next: Ne
   };
 
   try {
-    const data = await addCompanyProduct(companyId, modelNumber, productName, price, description, imageName ?? "");
+    const data = await addProductService(productData);
     res.status(200).json(data);
   } catch (err) {
     next(err);
