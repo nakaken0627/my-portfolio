@@ -1,7 +1,7 @@
+import { UserNav } from "@/components/navigation/user/UserNav";
+// import { UserNav } from "../../components/navigation/user/UserNav";
+import { CartContextProvider } from "@/context/cart-context";
 import { Toolbar } from "@mui/material";
-
-import { UserNav } from "../../../components/navigation/UserNav";
-import { CartContextProvider } from "../../../context/cart-context";
 
 export const UserLayout = ({ children }: { children: React.ReactNode }) => {
   return (

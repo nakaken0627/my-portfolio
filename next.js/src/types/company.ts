@@ -1,16 +1,16 @@
-export type DefaultProductWithCustomization = {
+export type ProductWithCustomization = {
   id: number;
   name: string;
   model_number: string;
   price: number;
   description: string;
   imageUrl: string;
-  customization: ProductCustomizations[];
+  custom: ProductCustomizations[];
 };
 
 export type ProductCustomizations = {
   id: number;
-  user_name: string;
+  user_name?: string;
   model_number: string;
   name: string;
   price: number;
@@ -27,7 +27,7 @@ export type OrderProduct = {
   model_number: string;
   price: number;
   quantity: number;
-  customization: {
+  custom: {
     id: number;
     model_number: string;
     name: string;

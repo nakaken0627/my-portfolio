@@ -40,7 +40,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     }
     if (!getUser) {
       return res.status(401).json({
-        message: "ログインに失敗しました",
+        message: "認証に失敗しました",
         error: info.message || "認証が無効です",
       });
     }
@@ -49,7 +49,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         return next(err);
       }
       return res.status(200).json({
-        message: "ログインに成功しました",
+        message: "認証に成功しました",
         user: {
           id: getUser.id,
           name: getUser.name,

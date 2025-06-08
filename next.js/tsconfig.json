@@ -20,9 +20,10 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/context/*": ["context/*"],
-      "@/components/*": ["components/*"]
+      "@/*": ["src/*"],
+      "@/context/*": ["src/context/*"],
+      "@/components/*": ["src/components/*"],
+      "@/lib/*": ["src/lib/*"]
     }
   },
   "include": [
@@ -30,7 +31,9 @@
     "**/*.tsx",
     "next-env.d.ts",
     "src",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "src/components/navigation/user/UserNav",
+    "src/context"
   ],
   "exclude": ["node_modules", ".next", "eslint.config.mjs"]
 }

@@ -39,7 +39,7 @@ router.get("/company/products/custom", fetchDisplayProductsByCompany);
 router.get("/company/orders", orderListForCompany);
 router.get("/company/orders/confirmed", confirmedOrderList);
 
-router.post("/company/products", upload.single("image"), addProductForCompany);
+router.post("/company/products", upload.fields([{ name: "image", maxCount: 1 }]), addProductForCompany);
 router.post("/company/custom-products", registerCustomProduct);
 
 router.patch("/company/orders/confirmed", changStatusOfConfirm);
@@ -56,7 +56,7 @@ router.get("/user/products/custom", fetchDisplayProductsForUser);
 router.get("/user/products/count", getTotalProductsCount);
 
 //カート機能
-router.get("/cart/cart", getOrCreateCart);
+router.get("/cart", getOrCreateCart); //use
 router.get("/cart/products", getUserCartALLProducts);
 router.put("/cart/product", createOrUpdateUserCartProduct);
 router.post("/cart/checkout", checkoutUserCart);

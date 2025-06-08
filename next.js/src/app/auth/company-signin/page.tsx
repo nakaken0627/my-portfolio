@@ -1,4 +1,4 @@
-import { TopNav } from "components/navigation/TopNav";
+import { TopNav } from "@/components/navigation/top/TopNav";
 
 import { SigninPage } from "./components/SigninPage";
 

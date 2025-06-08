@@ -1,7 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import type { Metadata } from "next";
 
-import { ThemeRegistry } from "../../components/ThemeRegistry";
+import { ThemeRegistry } from "../components/ThemeRegistry";
 
 import "./globals.css";
 

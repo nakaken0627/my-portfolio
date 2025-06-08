@@ -165,6 +165,7 @@ export const confirmingOrder = async (confirmedIds: number[]) => {
   }
 };
 
+//使ってないかも
 export const getConfirmedOrderList = async (company_id: number) => {
   const client: PoolClient = await pool.connect();
   try {
@@ -251,7 +252,7 @@ export const deleteCustomCompanyProduct = async (customProductId: number[]): Pro
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
-      `DELETE FROM custom_products
+      `DELETE FROM product_customizations
         WHERE id = $1
         RETURNING *`,
       [customProductId],
@@ -266,7 +267,7 @@ export const deleteCustomCompanyProducts = async (customProductIds: number[]): P
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
-      `DELETE FROM custom_products
+      `DELETE FROM product_customizations
         WHERE id =ANY($1::int[])
         RETURNING *`,
       [customProductIds],
