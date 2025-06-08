@@ -39,7 +39,7 @@ type Transformed = {
 
 export const OrderHistory = () => {
   const cartContext = useContext(CartContext);
-  const { myUser } = cartContext ?? {};
+  // const { myUser } = cartContext ?? {};
 
   const [orders, setOrders] = useState<Transformed[]>([]);
 
@@ -55,7 +55,7 @@ export const OrderHistory = () => {
   };
 
   useEffect(() => {
-    if (!myUser) return;
+    // if (!myUser) return;
 
     //myUserとの依存関係を保持し、エラーを避けるためにuseEffect内で定義
     const fetchOrder = async () => {
@@ -73,7 +73,8 @@ export const OrderHistory = () => {
     };
 
     void fetchOrder();
-  }, [myUser]);
+    // }, [myUser]);
+  }, []);
 
   if (!cartContext) {
     return <Typography>Loading...</Typography>;

@@ -4,17 +4,12 @@ import {
   createContext,
   Dispatch,
   SetStateAction,
-  useCallback,
   useEffect,
   useState,
 } from "react";
 import { API_BASE_URL } from "@/components/lib/api";
-import { DefaultProductWithCustomization } from "@/types/company";
-
-type User = {
-  id: number;
-  name: string;
-};
+import { useFetchCart } from "hooks/user/useFetchCart";
+import { useFetchCartProducts } from "hooks/user/useFetchCartProducts";
 
 type CartProduct = {
   productId: number;
@@ -23,12 +18,9 @@ type CartProduct = {
 };
 
 type CartContent = {
-  myUser: User | null;
-  cartId: { id: number } | null;
-  productWithCustomList: DefaultProductWithCustomization[];
+  cartId: number;
   cartProducts: CartProduct[];
   setCartProducts: Dispatch<SetStateAction<CartProduct[]>>;
-  getCartLatestData: () => Promise<void>;
   addProduct: (
     productId: number,
     customizationID: number | null,
@@ -46,11 +38,6 @@ type CartContent = {
     customizationID: number | null,
     newQuantity: number,
   ) => Promise<void>;
-  calcProductTotalAmount: (
-    productId: number,
-    customizationID: number | null,
-  ) => number;
-  calcCartTotalAmount: () => number;
 };
 
 export const CartContext = createContext<CartContent | null>(null);
@@ -60,78 +47,27 @@ export const CartContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [myUser, setMyUser] = useState<User | null>(null);
-  const [cartId, setCartId] = useState<{ id: number } | null>(null);
-  const [productWithCustomList, setProductWithCustomList] = useState<
-    DefaultProductWithCustomization[]
-  >([]);
   const [cartProducts, setCartProducts] = useState<CartProduct[]>([]);
 
-  const fetchMyUser = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
-        method: "GET",
-        credentials: "include",
-      });
-      if (!response.ok) {
-        throw new Error("[cart-context]fetchMyUserでエラー発生");
-      }
-      const data: User = await response.json();
-      setMyUser(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const { cart } = useFetchCart();
+  const cartId = cart?.id ?? null;
+  const { cartItems } = useFetchCartProducts(cartId);
 
-  const fetchMyCart = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/cart/cart`, {
-        method: "GET",
-        credentials: "include",
-      });
-      if (!response.ok) {
-        throw new Error("[cart-context]fetchMyCartでエラー発生");
-      }
-      const data: { id: number } = await response.json();
-      setCartId(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  //   const { products } = useFetchUserProducts();
 
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/user/products`, {
-        method: "GET",
-        credentials: "include",
-      });
-      if (!response.ok) {
-        throw new Error("[cart-context]fetchProductsでエラー発生");
-      }
-      const data: DefaultProductWithCustomization[] = await response.json();
-      setProductWithCustomList(data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // useEffect(() => {
+  //   if (cartItems) {
+  //     setCartProducts(cartItems);
+  //   }
+  // }, [cartItems]);
 
-  //useEffectで呼び出す際にcartIdとの依存関係がないためwarningとなるのを防ぐため、useCallbackで回避
-  const getCartLatestData = useCallback(async () => {
-    if (!cartId) return;
-    try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/cart/products?cartId=${String(cartId.id)}`,
-        {
-          method: "GET",
-        },
-      );
-
-      const data: CartProduct[] = await response.json();
-      setCartProducts(data);
-    } catch (err) {
-      console.error("cartデータの取得に失敗しました", err);
+  useEffect(() => {
+    if (cartItems) {
+      setCartProducts(cartItems);
     }
-  }, [cartId]);
+  }, [cartItems]);
+
+  if (!cartId) return;
 
   const sendCartLatestData = async (
     productId: number,
@@ -146,7 +82,7 @@ export const CartContextProvider = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          cartId: cartId.id,
+          cartId: cartId,
           productId,
           customizationId,
           quantity,
@@ -169,7 +105,7 @@ export const CartContextProvider = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          cartId: cartId.id,
+          cartId: cartId,
           productId,
           customizationId,
         }),
@@ -306,75 +242,15 @@ export const CartContextProvider = ({
     );
   };
 
-  const calcProductTotalAmount = (
-    productId: number,
-    customizationId: number | null,
-  ) => {
-    const product = productWithCustomList.find((item) => item.id === productId);
-    if (!product) return 0;
-
-    const cartItem = cartProducts.find(
-      (item) =>
-        item.productId === productId &&
-        (item.customizationId ?? null) === customizationId,
-    );
-    const quantity = cartItem?.quantity ?? 0; //quantityがundefinedになる可能性を排除する
-
-    if (customizationId === null) {
-      return product.price * quantity;
-    }
-
-    const customization = product.customization.find(
-      (custom) => custom.id === customizationId,
-    );
-    if (!customization) return 0;
-    return customization.price * quantity;
-  };
-
-  const calcCartTotalAmount = () => {
-    return cartProducts.reduce((total, item) => {
-      const product = productWithCustomList.find(
-        (p) => p.id === item.productId,
-      );
-      if (!product) return total;
-
-      const custom =
-        item.customizationId !== null
-          ? product.customization.find((c) => c.id === item.customizationId)
-          : null;
-
-      const targetPrice = custom ? custom.price : product.price;
-
-      return total + targetPrice * item.quantity;
-    }, 0);
-  };
-
   const contextValue = {
-    myUser,
     cartId,
-    productWithCustomList,
     cartProducts,
     setCartProducts,
-    getCartLatestData,
     addProduct,
     reduceProduct,
     handleQuantityChange,
     deleteProduct,
-    calcProductTotalAmount,
-    calcCartTotalAmount,
   };
-
-  useEffect(() => {
-    void fetchMyUser();
-    void fetchProducts();
-    void fetchMyCart();
-  }, []);
-
-  useEffect(() => {
-    if (cartId) {
-      void getCartLatestData();
-    }
-  }, [cartId, getCartLatestData]);
 
   return (
     <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>

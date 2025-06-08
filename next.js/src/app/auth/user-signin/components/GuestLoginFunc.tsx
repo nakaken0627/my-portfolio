@@ -20,7 +20,7 @@ export const GuestLoginFunc = () => {
         }),
       });
       if (response.ok) {
-        router.push("/user/mypage");
+        router.push("/user/dashboard");
       }
     } catch (err) {
       console.error(err);

@@ -1,14 +1,11 @@
-"use client";
+// "use client";
 
-import { useContext } from "react";
-import { CartContext } from "@/context/cart-context";
 import { Typography } from "@mui/material";
 
-export const GetUserInfo = () => {
-  const cartContext = useContext(CartContext);
-  if (!cartContext) return;
+import { fetchUser } from "./fetchUser";
 
-  const { myUser } = cartContext;
+export const GetUserInfo = async () => {
+  const myUser = await fetchUser();
   if (!myUser) return null;
 
   return (

@@ -101,10 +101,10 @@ export const getOrCreateCart = async (req: Request, res: Response, next: NextFun
   const userId = req.user.id;
   try {
     const data = await getCart(userId);
+
     if (!data) {
       const newCart = await createCart(userId);
       res.status(200).json(newCart);
-      return;
     }
     res.status(200).json(data);
   } catch (err) {
@@ -474,7 +474,7 @@ type UserProductWithCustomization = {
   description: string;
   image_name?: string;
   imageUrl?: string | null;
-  customization: UserProductCustomization[];
+  custom: UserProductCustomization[];
 };
 
 type UserProductCustomization = {
@@ -530,11 +530,11 @@ export const fetchDisplayProductsForUser = async (req: Request, res: Response, n
           description: product.description,
           image_name: product.image_name,
           imageUrl: product.imageUrl,
-          customization: [],
+          custom: [],
         };
       }
       if (customization) {
-        acc[product.id].customization.push({
+        acc[product.id].custom.push({
           id: customization.id,
           model_number: customization.model_number,
           name: customization.name,
@@ -558,7 +558,6 @@ export const fetchAllProductsForUser = async (req: Request, res: Response, next:
   const userId = req.user.id;
   try {
     const products = await findAllProductsWithCustomization(userId);
-
     const groupedProducts = products.reduce<GroupedUserProduct>((acc, row) => {
       const product: UserProductWithCustomization = row.product;
       const customization: UserProductCustomization = row.customization;
@@ -573,12 +572,12 @@ export const fetchAllProductsForUser = async (req: Request, res: Response, next:
           model_number: product.model_number,
           price: product.price,
           description: product.description,
-          customization: [],
+          custom: [],
         };
       }
 
       if (customization) {
-        acc[product.id].customization.push({
+        acc[product.id].custom.push({
           id: customization.id,
           model_number: customization.model_number,
           name: customization.name,

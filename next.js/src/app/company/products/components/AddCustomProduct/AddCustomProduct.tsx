@@ -12,7 +12,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useFetchProducts } from "hooks/company/useFetchProducts";
+import { useFetchCompanyProducts } from "hooks/company/useFetchCompanyProducts";
 import { useFetchUsers } from "hooks/company/useFetchUsers";
 import { usePostCustomProducts } from "hooks/company/usePostCustomProducts";
 
@@ -49,7 +49,8 @@ export const AddCustomProduct = () => {
     resolver: zodResolver(AddCustomProductSchema),
     criteriaMode: "all",
   });
-  const { products, isErrorProducts, isLoadingProducts } = useFetchProducts();
+  const { products, isErrorProducts, isLoadingProducts } =
+    useFetchCompanyProducts();
   const { users, isErrorUsers, isLoadingUsers } = useFetchUsers();
   const { trigger, isMutating } = usePostCustomProducts();
 

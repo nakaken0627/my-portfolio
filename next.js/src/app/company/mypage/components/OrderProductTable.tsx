@@ -37,7 +37,7 @@ export const OrderProductTable = ({
         </TableHead>
         <TableBody>
           {products.map((p) => (
-            <TableRow key={`${String(p.id)}-${String(p.customization?.id)}`}>
+            <TableRow key={`${String(p.id)}-${String(p.custom?.id)}`}>
               <TableCell>
                 <Checkbox
                   checked={confirmedIds.includes(p.orderProductId)}
@@ -46,19 +46,16 @@ export const OrderProductTable = ({
                   }}
                 />
               </TableCell>
+              <TableCell>{p.custom?.model_number ?? p.model_number}</TableCell>
+              <TableCell>{p.custom?.name ?? p.name}</TableCell>
               <TableCell>
-                {p.customization?.model_number ?? p.model_number}
-              </TableCell>
-              <TableCell>{p.customization?.name ?? p.name}</TableCell>
-              <TableCell>
-                ¥
-                {Math.round(p.customization?.price ?? p.price).toLocaleString()}
+                ¥{Math.round(p.custom?.price ?? p.price).toLocaleString()}
               </TableCell>
               <TableCell>{p.quantity}</TableCell>
               <TableCell>
                 ¥
                 {Math.round(
-                  (p.customization?.price ?? p.price) * p.quantity,
+                  (p.custom?.price ?? p.price) * p.quantity,
                 ).toLocaleString()}
               </TableCell>
               <TableCell>{p.userName}</TableCell>

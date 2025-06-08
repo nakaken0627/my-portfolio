@@ -30,7 +30,8 @@
     "**/*.tsx",
     "next-env.d.ts",
     "src",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "components/navigation/user/UserNav"
   ],
   "exclude": ["node_modules", ".next", "eslint.config.mjs"]
 }

@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useDeleteProducts } from "hooks/company/useDeleteProducts";
-import { useFetchProducts } from "hooks/company/useFetchProducts";
+import { useFetchCompanyProducts } from "hooks/company/useFetchCompanyProducts";
 
 import { ProductsDetailModal } from "./Modal/ProductDetailModal";
 
@@ -25,7 +25,8 @@ type CustomError = Error & {
 };
 
 export const ProductList = () => {
-  const { products, isErrorProducts, isLoadingProducts } = useFetchProducts();
+  const { products, isErrorProducts, isLoadingProducts } =
+    useFetchCompanyProducts();
   const { trigger, isMutating } = useDeleteProducts();
 
   const [selectedIds, setSelectedIds] = useState<number[]>([]);

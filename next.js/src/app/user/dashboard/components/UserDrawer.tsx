@@ -1,4 +1,4 @@
-import { UserProductCustomization } from "@/types/user";
+import { UserProductCustom } from "@/types/user";
 import { Box, Drawer, Typography } from "@mui/material";
 
 import { UserProductCustomizationList } from "./UserProductCustomizationList";
@@ -7,7 +7,7 @@ type DrawerProps = {
   openDrawer: boolean;
   handleDrawerClose: () => void;
   productId: number;
-  customization: UserProductCustomization[];
+  customization: UserProductCustom[];
 };
 
 type Props = {

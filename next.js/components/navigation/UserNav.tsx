@@ -23,9 +23,9 @@ import { GetUserInfo } from "components/user/GetUserInfo";
 import { SignoutFunc } from "components/user/SignoutFunc";
 
 const navLinks = [
-  { href: "/user/mypage", label: "Mypage" },
-  { href: "/user/mycart", label: "Mycart" },
-  { href: "/user/orderhistory", label: "Myorderhistory" },
+  { href: "/user/dashboard", label: "マイページ" },
+  { href: "/user/cart", label: "カート" },
+  { href: "/user/orders", label: "注文履歴" },
 ];
 
 export const UserNav = () => {
@@ -60,14 +60,14 @@ export const UserNav = () => {
                 <MenuIcon />
               </IconButton>
               <Typography variant="h6" sx={{ mr: 2, cursor: "pointer" }}>
-                <Link href="/user/mypage">User Panel</Link>
+                <Link href="/user/dashboard">User Panel</Link>
               </Typography>
               <GetUserInfo />
             </Box>
             <IconButton
               color="inherit"
               edge="start"
-              href="/user/mycart"
+              href="/user/cart"
               sx={{ mr: 2 }}
             >
               <ShoppingCartIcon />
@@ -85,7 +85,7 @@ export const UserNav = () => {
               }}
             >
               <Typography variant="h6" sx={{ mr: 2, cursor: "pointer" }}>
-                <Link href="/user/mypage">User Panel</Link>
+                <Link href="/user/dashboard">User Panel</Link>
               </Typography>
               <GetUserInfo />
             </Box>

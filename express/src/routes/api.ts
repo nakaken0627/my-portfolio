@@ -55,7 +55,7 @@ router.get("/user/products/custom", fetchDisplayProductsForUser);
 router.get("/user/products/count", getTotalProductsCount);
 
 //カート機能
-router.get("/cart/cart", getOrCreateCart);
+router.get("/cart", getOrCreateCart); //use
 router.get("/cart/products", getUserCartALLProducts);
 router.put("/cart/product", createOrUpdateUserCartProduct);
 router.post("/cart/checkout", checkoutUserCart);

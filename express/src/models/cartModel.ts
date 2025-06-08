@@ -24,7 +24,7 @@ export const createCart = async (user_id: number) => {
     const result = await client.query(
       `INSERT INTO carts (user_id) 
         VALUES ($1)
-        RETURNING id,user_id,is_checkedout,created_at,updated_at`,
+        RETURNING id`,
       [user_id],
     );
     return result.rows[0];

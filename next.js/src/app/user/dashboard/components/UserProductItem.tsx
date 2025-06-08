@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import Image from "next/image";
 import { CartContext } from "@/context/cart-context";
-import { UserProductWithCustomization } from "@/types/user";
+import { UserProductWithCustom } from "@/types/user";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
 import { Box, Button, Card, Grid, Typography } from "@mui/material";
@@ -10,7 +10,7 @@ import { UserDrawer } from "./UserDrawer";
 
 type Props = {
   id: number;
-  product: UserProductWithCustomization;
+  product: UserProductWithCustom;
 };
 
 export const UserProductItem = ({ id, product }: Props) => {
@@ -35,7 +35,7 @@ export const UserProductItem = ({ id, product }: Props) => {
     openDrawer: openDrawer,
     handleDrawerClose: handleDrawerClose,
     productId: product.id,
-    customization: product.customization,
+    customization: product.custom,
   };
 
   return (
@@ -148,7 +148,7 @@ export const UserProductItem = ({ id, product }: Props) => {
             borderColor: "#4caf50",
           }}
         >
-          個別商品一覧 （{String(product.customization.length)}）
+          個別商品一覧 （{String(product.custom.length)}）
         </Button>
       </Card>
 

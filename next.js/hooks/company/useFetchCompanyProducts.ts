@@ -11,7 +11,7 @@ const fetcher = async (url: string) => {
   return result;
 };
 
-export const useFetchProducts = () => {
+export const useFetchCompanyProducts = () => {
   const { data, error, isLoading } = useSWR(
     `${API_BASE_URL}/api/company/products/custom`,
     fetcher,

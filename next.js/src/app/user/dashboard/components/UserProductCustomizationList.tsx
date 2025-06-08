@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { CartContext } from "@/context/cart-context";
-import { UserProductCustomization } from "@/types/user";
+import { UserProductCustom } from "@/types/user";
 import {
   Box,
   Button,
@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 
 type Props = {
-  customization: UserProductCustomization[];
+  customization: UserProductCustom[];
   productId: number;
 };
 
