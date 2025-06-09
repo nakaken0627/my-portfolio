@@ -90,109 +90,109 @@ export type Product = {
 //   }
 // };
 
-export const deleteCompanyProduct = async (companyId: number, productsId: number): Promise<string> => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `DELETE FROM products
-        WHERE company_id = $1 
-        AND id = $2
-        RETURNING image_name`,
-      [companyId, productsId],
-    );
-    const imageName: string = result.rows[0].image_name;
-    return imageName;
-  } finally {
-    client.release();
-  }
-};
+// export const deleteCompanyProduct = async (companyId: number, productsId: number): Promise<string> => {
+//   const client: PoolClient = await pool.connect();
+//   try {
+//     const result = await client.query(
+//       `DELETE FROM products
+//         WHERE company_id = $1
+//         AND id = $2
+//         RETURNING image_name`,
+//       [companyId, productsId],
+//     );
+//     const imageName: string = result.rows[0].image_name;
+//     return imageName;
+//   } finally {
+//     client.release();
+//   }
+// };
 
-export const getMyOrderList = async (isConfirmed: boolean, companyId: number) => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `
-      SELECT 
-        o.id AS order_id,
-        (to_jsonb(p) || jsonb_build_object
-          ('userName',u.name,'quantity',op.quantity,'orderProductId',op.id))
-          AS product,
-        to_jsonb(pc) AS customization
-      FROM
-        orders o
-      INNER JOIN users u 
-        ON u.id = o.user_id
-      INNER JOIN order_products op
-        ON op.order_id = o.id
-      INNER JOIN products p
-        ON p.id = op.product_id
-      LEFT JOIN product_customizations pc
-        ON pc.id = op.customization_id
-      WHERE op.is_confirmed = $1
-      AND p.company_id = $2
-      ORDER BY o.id
-      `,
-      [isConfirmed, companyId],
-    );
-    return result.rows;
-  } finally {
-    client.release();
-  }
-};
+// export const getMyOrderList = async (isConfirmed: boolean, companyId: number) => {
+//   const client: PoolClient = await pool.connect();
+//   try {
+//     const result = await client.query(
+//       `
+//       SELECT
+//         o.id AS order_id,
+//         (to_jsonb(p) || jsonb_build_object
+//           ('userName',u.name,'quantity',op.quantity,'orderProductId',op.id))
+//           AS product,
+//         to_jsonb(pc) AS custom
+//       FROM
+//         orders o
+//       INNER JOIN users u
+//         ON u.id = o.user_id
+//       INNER JOIN order_products op
+//         ON op.order_id = o.id
+//       INNER JOIN products p
+//         ON p.id = op.product_id
+//       LEFT JOIN product_customizations pc
+//         ON pc.id = op.customization_id
+//       WHERE op.is_confirmed = $1
+//       AND p.company_id = $2
+//       ORDER BY o.id
+//       `,
+//       [isConfirmed, companyId],
+//     );
+//     return result.rows;
+//   } finally {
+//     client.release();
+//   }
+// };
 
-export const confirmingOrder = async (confirmedIds: number[]) => {
-  const client: PoolClient = await pool.connect();
-  try {
-    await client.query("BEGIN");
+// export const confirmingOrder = async (confirmedIds: number[]) => {
+//   const client: PoolClient = await pool.connect();
+//   try {
+//     await client.query("BEGIN");
 
-    for (const id of confirmedIds) {
-      await client.query(
-        `
-      UPDATE ORDER_PRODUCTS
-      SET IS_CONFIRMED = TRUE
-      WHERE ID = $1
-      RETURNING ID,IS_CONFIRMED  
-        `,
-        [id],
-      );
-    }
-    await client.query("COMMIT");
-  } catch (err) {
-    await client.query("ROLLBACK");
-    throw err;
-  } finally {
-    client.release();
-  }
-};
+//     for (const id of confirmedIds) {
+//       await client.query(
+//         `
+//       UPDATE ORDER_PRODUCTS
+//       SET IS_CONFIRMED = TRUE
+//       WHERE ID = $1
+//       RETURNING ID,IS_CONFIRMED
+//         `,
+//         [id],
+//       );
+//     }
+//     await client.query("COMMIT");
+//   } catch (err) {
+//     await client.query("ROLLBACK");
+//     throw err;
+//   } finally {
+//     client.release();
+//   }
+// };
 
 //使ってないかも
-export const getConfirmedOrderList = async (company_id: number) => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `
-      SELECT 
-      o.id AS order_id,
-      (to_jsonb(p) || jsonb_build_object
-        ('userName',u.name,'quantity',op.quantity))
-        AS product,
-      to_jsonb(pc) AS customization
-      FROM orders o
-      INNER JOIN users u on u.id = o.user_id
-      INNER JOIN order_products op ON op.order_id = o.id
-      INNER JOIN products p ON p.id = op.product_id
-      LEFT JOIN product_customizations pc ON pc.id = op.customization_id
-      WHERE op.is_confirmed = true
-      AND p.company_id = $1
-      ORDER BY o.id
-      `,
-      [company_id],
-    );
-    return result.rows;
-  } finally {
-    client.release();
-  }
-};
+// export const getConfirmedOrderList = async (company_id: number) => {
+//   const client: PoolClient = await pool.connect();
+//   try {
+//     const result = await client.query(
+//       `
+//       SELECT
+//       o.id AS order_id,
+//       (to_jsonb(p) || jsonb_build_object
+//         ('userName',u.name,'quantity',op.quantity))
+//         AS product,
+//       to_jsonb(pc) AS customization
+//       FROM orders o
+//       INNER JOIN users u on u.id = o.user_id
+//       INNER JOIN order_products op ON op.order_id = o.id
+//       INNER JOIN products p ON p.id = op.product_id
+//       LEFT JOIN product_customizations pc ON pc.id = op.customization_id
+//       WHERE op.is_confirmed = true
+//       AND p.company_id = $1
+//       ORDER BY o.id
+//       `,
+//       [company_id],
+//     );
+//     return result.rows;
+//   } finally {
+//     client.release();
+//   }
+// };
 
 // export const fetchMergedCompanyProducts = async (company_id: number) => {
 //   const client: PoolClient = await pool.connect();
@@ -214,69 +214,69 @@ export const getConfirmedOrderList = async (company_id: number) => {
 //   }
 // };
 
-export const addCustomProduct = async (
-  product_id: number,
-  user_id: number,
-  custom_model_number: string,
-  custom_product_name: string,
-  custom_price: number,
-  description: string,
-  start_date: string,
-  end_date: string,
-) => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `
-      INSERT INTO product_customizations
-       (product_id,
-        user_id,
-        model_number,
-        name,
-        price,
-        description,
-        start_date,
-        end_date)
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
-      RETURNING id,product_id
-      `,
-      [product_id, user_id, custom_model_number, custom_product_name, custom_price, description, start_date, end_date],
-    );
-    return result.rows[0];
-  } finally {
-    client.release();
-  }
-};
+// export const addCustomProduct = async (
+//   product_id: number,
+//   user_id: number,
+//   custom_model_number: string,
+//   custom_product_name: string,
+//   custom_price: number,
+//   description: string,
+//   start_date: string,
+//   end_date: string,
+// ) => {
+//   const client: PoolClient = await pool.connect();
+//   try {
+//     const result = await client.query(
+//       `
+//       INSERT INTO product_customizations
+//        (product_id,
+//         user_id,
+//         model_number,
+//         name,
+//         price,
+//         description,
+//         start_date,
+//         end_date)
+//       VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+//       RETURNING id,product_id
+//       `,
+//       [product_id, user_id, custom_model_number, custom_product_name, custom_price, description, start_date, end_date],
+//     );
+//     return result.rows[0];
+//   } finally {
+//     client.release();
+//   }
+// };
 
-export const deleteCustomCompanyProduct = async (customProductId: number[]): Promise<number[]> => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `DELETE FROM product_customizations
-        WHERE id = $1
-        RETURNING *`,
-      [customProductId],
-    );
-    return result.rows[0];
-  } finally {
-    client.release();
-  }
-};
+// export const deleteCustomCompanyProduct = async (customProductId: number[]): Promise<number[]> => {
+//   const client: PoolClient = await pool.connect();
+//   try {
+//     const result = await client.query(
+//       `DELETE FROM product_customizations
+//         WHERE id = $1
+//         RETURNING *`,
+//       [customProductId],
+//     );
+//     return result.rows[0];
+//   } finally {
+//     client.release();
+//   }
+// };
 
-export const deleteCustomCompanyProducts = async (customProductIds: number[]): Promise<number[]> => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `DELETE FROM product_customizations
-        WHERE id =ANY($1::int[])
-        RETURNING *`,
-      [customProductIds],
-    );
-    return result.rows;
-  } finally {
-    client.release();
-  }
-};
+// export const deleteCustomCompanyProducts = async (customProductIds: number[]): Promise<number[]> => {
+//   const client: PoolClient = await pool.connect();
+//   try {
+//     const result = await client.query(
+//       `DELETE FROM product_customizations
+//         WHERE id =ANY($1::int[])
+//         RETURNING *`,
+//       [customProductIds],
+//     );
+//     return result.rows;
+//   } finally {
+//     client.release();
+//   }
+// };
 
 // export const getUserIds = async () => {
 //   const client: PoolClient = await pool.connect();

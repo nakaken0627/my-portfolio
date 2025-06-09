@@ -1,6 +1,6 @@
 import { PoolClient } from "pg";
 
-import { AddProductDTO } from "../../../presentation/dto/product.dto";
+import { CreateCustomProductDTO, CreateProductDTO } from "../../../presentation/dto/company/product.dto";
 import pool from "../../../shared/config/database.js";
 
 export const fetchMergedCompanyProducts = async (companyId: number) => {
@@ -23,7 +23,7 @@ export const fetchMergedCompanyProducts = async (companyId: number) => {
   }
 };
 
-export const addCompanyProduct = async (productData: AddProductDTO) => {
+export const createCompanyProduct = async (productData: CreateProductDTO) => {
   const client: PoolClient = await pool.connect();
   const { companyId, modelNumber, productName, price, description, imageName } = productData;
 
@@ -33,6 +33,79 @@ export const addCompanyProduct = async (productData: AddProductDTO) => {
            VALUES ($1,$2,$3,$4,$5,$6)
            RETURNING *`,
       [companyId, modelNumber, productName, price, description, imageName],
+    );
+    return result.rows[0];
+  } finally {
+    client.release();
+  }
+};
+
+export const createCustomProduct = async (productsData: CreateCustomProductDTO) => {
+  const client: PoolClient = await pool.connect();
+  const { productId, userId, modelNumber, productName, price, description, startDate, endDate } = productsData;
+  try {
+    const result = await client.query(
+      `
+      INSERT INTO product_customizations
+       (product_id,
+        user_id,
+        model_number,
+        name,
+        price,
+        description,
+        start_date,
+        end_date)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+      RETURNING id,product_id
+      `,
+      [productId, userId, modelNumber, productName, price, description, startDate, endDate],
+    );
+    return result.rows[0];
+  } finally {
+    client.release();
+  }
+};
+
+export const deleteProduct = async (companyId: number, productsId: number): Promise<string> => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      `DELETE FROM products
+        WHERE company_id = $1 
+        AND id = $2
+        RETURNING image_name`,
+      [companyId, productsId],
+    );
+    const imageName: string = result.rows[0].image_name;
+    return imageName;
+  } finally {
+    client.release();
+  }
+};
+
+export const deleteCustomProducts = async (customProductIds: number[]): Promise<number[]> => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      `DELETE FROM product_customizations
+        WHERE id =ANY($1::int[])
+        RETURNING *`,
+      [customProductIds],
+    );
+    return result.rows;
+  } finally {
+    client.release();
+  }
+};
+
+export const deleteCustomProduct = async (customProductId: number): Promise<number[]> => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      `DELETE FROM product_customizations
+        WHERE id = $1
+        RETURNING *`,
+      [customProductId],
     );
     return result.rows[0];
   } finally {

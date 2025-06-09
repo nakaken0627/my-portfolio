@@ -15,7 +15,7 @@ const fetcher = async (url: string, { arg }: { arg: number }) => {
 
 export const useDeleteCustomProducts = () => {
   const { trigger, isMutating } = useSWRMutation(
-    `${API_BASE_URL}/api/company/custom-product`,
+    `${API_BASE_URL}/api/company/product/custom`,
     fetcher,
     {
       onSuccess: async () => {

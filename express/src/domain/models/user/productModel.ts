@@ -1,15 +1,15 @@
-export type Product = {
+export type UserProduct = {
   id: number;
   name: string;
+  company_name: string;
   model_number: string;
   price: number;
   description: string;
   image_name?: string;
 };
 
-export type ProductCustomization = {
+export type UserCustomProduct = {
   id: number;
-  user_name: string;
   model_number: string;
   name: string;
   price: number;
@@ -18,7 +18,7 @@ export type ProductCustomization = {
   end_date: string;
 };
 
-export type ProductWithCustomization = Product & {
-  imageUrl?: string | null;
-  customization: ProductCustomization[];
+export type UserProductRow = {
+  product: UserProduct;
+  customization: UserCustomProduct | null;
 };

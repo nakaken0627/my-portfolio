@@ -1,21 +1,23 @@
 import { NextFunction, Request, Response } from "express";
 
-import { addProductService } from "../../../application/services/company/addProductServices.js";
-import { fetchDisplayProducts } from "../../../application/services/company/displayProductService.js";
+import { createCustomProductService } from "../../../application/services/company/products/createCustomProductsServices.js";
+import { createProductService } from "../../../application/services/company/products/createProductServices.js";
+import { deleteCustomProductService } from "../../../application/services/company/products/deleteCustomProductService.js";
+import { deleteCustomProductsServices } from "../../../application/services/company/products/deleteCustomProductsServices.js";
+import { deleteProductsServices } from "../../../application/services/company/products/deleteProductsServices.js";
+import { fetchDisplayProductsService } from "../../../application/services/company/products/fetchDisplayProductsService.js";
 import { getUserIds } from "../../../infrastructure/repositories/company/companyRepository.js";
 import { uploadImage } from "../../../infrastructure/s3/s3Service.js";
-import { AddProductDTO } from "../../../presentation/dto/product.dto";
+import { CreateCustomProductDTO, CreateProductDTO } from "../../dto/company/product.dto.js";
 
-// import { getUserIds } from ".models/companyModel.js";
-
-export const fetchDisplayProductsByCompany = async (req: Request, res: Response, next: NextFunction) => {
+export const fetchDisplayProducts = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
 
   try {
-    const data = await fetchDisplayProducts(req.user.id);
+    const data = await fetchDisplayProductsService(req.user.id);
     res.status(200).json(data);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 
@@ -28,7 +30,7 @@ export const getUserList = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-export const addProductForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const createProduct = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   if (!req.body || !req.user) return;
 
   const companyId = req.user.id;
@@ -42,7 +44,7 @@ export const addProductForCompany = async (req: Request, res: Response, next: Ne
     imageName = await uploadImage(imageFile);
   }
 
-  const productData: AddProductDTO = {
+  const productData: CreateProductDTO = {
     companyId,
     modelNumber,
     productName,
@@ -52,9 +54,81 @@ export const addProductForCompany = async (req: Request, res: Response, next: Ne
   };
 
   try {
-    const data = await addProductService(productData);
+    const data = await createProductService(productData);
     res.status(200).json(data);
   } catch (err) {
-    next(err);
+    return next(err);
+  }
+};
+
+export const createCustomProduct = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body) return;
+  const { productId, userId, modelNumber, productName, price, description, startDate, endDate } = req.body;
+
+  const productData: CreateCustomProductDTO = {
+    productId,
+    userId,
+    modelNumber,
+    productName,
+    price,
+    description,
+    startDate,
+    endDate,
+  };
+
+  try {
+    const data = await createCustomProductService(productData);
+    res.status(200).json(data);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const deleteProducts = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body || !req.user) return;
+
+  const companyId = req.user.id;
+  const productIds: number[] = req.body;
+
+  try {
+    const result = await deleteProductsServices(companyId, productIds);
+    res.status(200).json({
+      message: "削除が成功しました",
+      result,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const deleteCustomProducts = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body) return;
+
+  const { customProductIds } = req.body;
+
+  try {
+    const result = await deleteCustomProductsServices(customProductIds);
+    res.status(200).json({
+      message: "削除が成功しました",
+      result,
+    });
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const deleteCustomProduct = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.body) return;
+
+  const { customProductId } = req.body;
+
+  try {
+    const result = await deleteCustomProductService(customProductId);
+    res.status(200).json({
+      message: "削除が成功しました",
+      result,
+    });
+  } catch (err) {
+    return next(err);
   }
 };

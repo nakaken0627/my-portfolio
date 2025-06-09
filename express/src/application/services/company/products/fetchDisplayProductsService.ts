@@ -1,16 +1,16 @@
-import { ProductCustomization } from "../../../domain/models/productModel.js";
-import { fetchMergedCompanyProducts } from "../../../infrastructure/repositories/company/productRepository.js";
-import { getSignedImageUrl } from "../../../infrastructure/s3/s3Service.js";
-import { DisplayProductDto } from "../../../presentation/dto/product.dto.js";
+import { ProductCustom } from "../../../../domain/models/company/productModel.js";
+import { fetchMergedCompanyProducts } from "../../../../infrastructure/repositories/company/productRepository.js";
+import { getSignedImageUrl } from "../../../../infrastructure/s3/s3Service.js";
+import { DisplayProductDto } from "../../../../presentation/dto/company/product.dto.js";
 
 type RowData = {
   product: Omit<DisplayProductDto, "customization" | "imageUrl">;
-  customization: ProductCustomization;
+  customization: ProductCustom;
 };
 
 type GroupedProduct = Record<number, DisplayProductDto>;
 
-export const fetchDisplayProducts = async (companyId: number): Promise<DisplayProductDto[]> => {
+export const fetchDisplayProductsService = async (companyId: number): Promise<DisplayProductDto[]> => {
   const products: RowData[] = await fetchMergedCompanyProducts(companyId);
 
   const enrichedProducts = await Promise.all(
@@ -23,11 +23,11 @@ export const fetchDisplayProducts = async (companyId: number): Promise<DisplayPr
     if (!acc[productWithUrl.id]) {
       acc[productWithUrl.id] = {
         ...productWithUrl,
-        customization: [],
+        custom: [],
       };
     }
     if (customization) {
-      acc[productWithUrl.id].customization.push(customization);
+      acc[productWithUrl.id].custom.push(customization);
     }
     return acc;
   }, {});

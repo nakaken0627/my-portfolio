@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { PoolClient } from "pg";
 
-import { Company } from "../../../domain/models/companyModel.js";
+import { Company } from "../../../domain/models/company/companyModel.js";
 import pool from "../../../shared/config/database.js";
 
 export const findByCompanyName = async (companyName: string): Promise<Company | null> => {
