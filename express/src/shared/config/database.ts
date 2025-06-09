@@ -1,5 +1,3 @@
-// PostgreSQLデータベースへの接続設定
-
 import * as dotenv from "dotenv"; // dotenvをインポートして環境変数を読み込む
 import * as pg from "pg"; // PostgreSQLのクライアントライブラリをインポート
 

@@ -1,6 +1,6 @@
 import { PoolClient } from "pg";
 
-import { CreateCustomProductDTO, CreateProductDTO } from "../../../presentation/dto/company/product.dto";
+import { CreateCustomProductDTO, CreateProductDTO } from "../../../presentation/dto/company/product.dto.js";
 import pool from "../../../shared/config/database.js";
 
 export const fetchMergedCompanyProducts = async (companyId: number) => {

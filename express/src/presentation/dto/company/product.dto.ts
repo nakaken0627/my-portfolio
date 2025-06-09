@@ -1,4 +1,4 @@
-import { ProductCustom } from "../../../domain/models/company/productModel";
+import { ProductCustom } from "../../../domain/models/company/productModel.js";
 
 export type DisplayProductDto = {
   id: number;

@@ -1,5 +1,5 @@
-import { deleteProduct } from "../../../../infrastructure/repositories/company/productRepository";
-import { deleteImage } from "../../../../infrastructure/s3/s3Service";
+import { deleteProduct } from "../../../../infrastructure/repositories/company/productRepository.js";
+import { deleteImage } from "../../../../infrastructure/s3/s3Service.js";
 
 export const deleteProductsServices = async (companyId: number, productIds: number[]) => {
   return await Promise.all(

@@ -1,6 +1,6 @@
-import { OrderRow } from "../../../../domain/models/company/orderModel";
-import { getOrders } from "../../../../infrastructure/repositories/company/orderRepositories";
-import { TransformedOrders } from "../../../../presentation/dto/company/order.dto";
+import { OrderRow } from "../../../../domain/models/company/orderModel.js";
+import { getOrders } from "../../../../infrastructure/repositories/company/orderRepositories.js";
+import { TransformedOrders } from "../../../../presentation/dto/company/order.dto.js";
 
 export const fetchOrdersService = async (isConfirmedBool: boolean, companyId: number): Promise<TransformedOrders[]> => {
   const rows: OrderRow[] = await getOrders(isConfirmedBool, companyId);

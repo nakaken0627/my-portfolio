@@ -1,10 +1,10 @@
-import { UserProductRow } from "../../../../domain/models/user/productModel";
+import { UserProductRow } from "../../../../domain/models/user/productModel.js";
 import {
   countAllProducts,
   getPaginatedProductsWithCustom,
-} from "../../../../infrastructure/repositories/user/productRepository";
-import { getSignedImageUrl } from "../../../../infrastructure/s3/s3Service";
-import { GroupedProductDTO, UserProductWithCustomDTO } from "../../../../presentation/dto/user/product.dto";
+} from "../../../../infrastructure/repositories/user/productRepository.js";
+import { getSignedImageUrl } from "../../../../infrastructure/s3/s3Service.js";
+import { GroupedProductDTO, UserProductWithCustomDTO } from "../../../../presentation/dto/user/product.dto.js";
 
 export const fetchPaginatedProductsService = async (
   userId: number,

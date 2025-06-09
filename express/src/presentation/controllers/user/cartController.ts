@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 
-import { createOrUpdateUserCartProductService } from "../../../application/services/user/carts/cerateOrUpdateUserCartProductService";
-import { checkoutUserCartService } from "../../../application/services/user/carts/checkoutUserCartService";
-import { deleteUserCartAllProductsService } from "../../../application/services/user/carts/deleteUserCartAllProductsService";
-import { deleteUserCartProductService } from "../../../application/services/user/carts/deleteUserCartProductService";
-import { fetchOrCreateUserCartService } from "../../../application/services/user/carts/fetchOrCreateUserCartService";
-import { fetchUserOrderProductsService } from "../../../application/services/user/orders/fetchUserOrderProductsService";
+import { createOrUpdateUserCartProductService } from "../../../application/services/user/carts/cerateOrUpdateUserCartProductService.js";
+import { checkoutUserCartService } from "../../../application/services/user/carts/checkoutUserCartService.js";
+import { deleteUserCartAllProductsService } from "../../../application/services/user/carts/deleteUserCartAllProductsService.js";
+import { deleteUserCartProductService } from "../../../application/services/user/carts/deleteUserCartProductService.js";
+import { fetchOrCreateUserCartService } from "../../../application/services/user/carts/fetchOrCreateUserCartService.js";
+import { fetchUserOrderProductsService } from "../../../application/services/user/orders/fetchUserOrderProductsService.js";
 
 export const getOrCreateCart = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;

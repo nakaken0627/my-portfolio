@@ -1,6 +1,6 @@
-import { UserCartProduct } from "../../../../domain/models/user/cartModel";
-import { getUserCartProducts } from "../../../../infrastructure/repositories/user/cartRepository";
-import { UserCartProductDTO } from "../../../../presentation/dto/user/cart.dto";
+import { UserCartProduct } from "../../../../domain/models/user/cartModel.js";
+import { getUserCartProducts } from "../../../../infrastructure/repositories/user/cartRepository.js";
+import { UserCartProductDTO } from "../../../../presentation/dto/user/cart.dto.js";
 
 export const fetchUserOrderProductsService = async (cartId: number): Promise<UserCartProductDTO[]> => {
   const rows: UserCartProduct[] = await getUserCartProducts(cartId);

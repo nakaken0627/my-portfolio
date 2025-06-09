@@ -17,7 +17,7 @@ const router = express.Router();
 
 //company用
 router.post("/company/signup", companySignup);
-router.post("/company/login", companyLogin);
+router.post("/company/signin", companyLogin);
 router.get("/company/logout", companyLogout);
 router.get("/company/profile", getMyCompany);
 

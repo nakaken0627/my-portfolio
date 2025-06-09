@@ -1,4 +1,4 @@
-/// <reference path="../shared/@types/express/globals.d.ts" />
+/// <reference path="../../shared/@types/express/globals.d.ts" />
 
 //認証方法の定義、セッションへの保存
 import * as bcrypt from "bcrypt";

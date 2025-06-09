@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-import { fetchPaginatedProductsService } from "../../../application/services/user/products/fetchPaginatedProductsService";
-import { fetchProductListWithCustomService } from "../../../application/services/user/products/fetchProductListWithCustomService";
+import { fetchPaginatedProductsService } from "../../../application/services/user/products/fetchPaginatedProductsService.js";
+import { fetchProductListWithCustomService } from "../../../application/services/user/products/fetchProductListWithCustomService.js";
 
 export const fetchAllProductsWithCustom = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;

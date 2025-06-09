@@ -2,8 +2,9 @@ import { API_BASE_URL } from "@/lib/api";
 import useSWRMutation from "swr/mutation";
 
 type FormData = {
-  username: string;
+  name: string;
   password: string;
+  confirmedPassword: string;
 };
 
 type CustomError = Error & {
@@ -17,20 +18,22 @@ const fetcher = async (url: string, { arg }: { arg: FormData }) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(arg),
+    body: JSON.stringify({
+      username: arg.name,
+      password: arg.password,
+    }),
   });
   if (!res.ok) {
-    const error: CustomError = new Error("ログインエラーが発生");
+    const error: CustomError = new Error();
     error.info = await res.json();
     throw error;
   }
-
   return res;
 };
 
-export const useSignin = () => {
+export const useUserSignup = () => {
   const { trigger, isMutating } = useSWRMutation(
-    `${API_BASE_URL}/auth/company/signin`,
+    `${API_BASE_URL}/auth/user/signup`,
     fetcher,
   );
 

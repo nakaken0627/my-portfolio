@@ -1,4 +1,4 @@
-import { createOrUpdateCartProduct } from "../../../../infrastructure/repositories/user/cartRepository";
+import { createOrUpdateCartProduct } from "../../../../infrastructure/repositories/user/cartRepository.js";
 
 export const createOrUpdateUserCartProductService = async (
   cartId: number,

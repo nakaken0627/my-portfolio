@@ -2,8 +2,8 @@ import {
   checkoutCart,
   createOrder,
   createOrderProduct,
-} from "../../../../infrastructure/repositories/user/cartRepository";
-import { CartProductWithPriceDTO } from "../../../../presentation/dto/user/cart.dto";
+} from "../../../../infrastructure/repositories/user/cartRepository.js";
+import { CartProductWithPriceDTO } from "../../../../presentation/dto/user/cart.dto.js";
 
 export const checkoutUserCartService = async (
   userId: number,

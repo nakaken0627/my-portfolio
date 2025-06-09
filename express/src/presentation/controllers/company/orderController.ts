@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
-import { fetchOrdersService } from "../../../application/services/company/orders/fetchOrdersService";
-import { updateConfirmService } from "../../../application/services/company/orders/updateConfirmService";
+import { fetchOrdersService } from "../../../application/services/company/orders/fetchOrdersService.js";
+import { updateConfirmService } from "../../../application/services/company/orders/updateConfirmService.js";
 
 export const fetchOrders = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.user) return;
