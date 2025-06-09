@@ -1,9 +1,9 @@
 //DBへの操作など裏側の処理を記載
 
 // import bcrypt from "bcrypt";
-import { PoolClient } from "pg";
+// import { PoolClient } from "pg";
 
-import pool from "../shared/config/database.js";
+// import pool from "../shared/config/database.js";
 
 // export type Company = {
 //   id: number;
@@ -288,12 +288,12 @@ export type Product = {
 //   }
 // };
 
-export const getImages = async () => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(`SELECT * FROM images`);
-    return result.rows;
-  } finally {
-    client.release();
-  }
-};
+// export const getImages = async () => {
+//   const client: PoolClient = await pool.connect();
+//   try {
+//     const result = await client.query(`SELECT * FROM images`);
+//     return result.rows;
+//   } finally {
+//     client.release();
+//   }
+// };

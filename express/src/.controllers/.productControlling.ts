@@ -1,14 +1,14 @@
-import { NextFunction, Request, Response } from "express";
+// import { NextFunction, Request, Response } from "express";
 
-import {
-  checkoutCart,
-  // createCart,
-  createOrUpdateCartProduct,
-  deleteCartAllProducts,
-  deleteCartProduct,
-  // getCart,
-  getCartAllProducts,
-} from "../.models/cartModel.js";
+// import "../.models/cartModel.js"; // checkoutCart,
+
+// createCart,
+// createOrUpdateCartProduct,
+// deleteCartAllProducts,
+// deleteCartProduct,
+// getCart,
+// getCartAllProducts,
+
 // import {
 //   // addCompanyProduct,
 //   // addCustomProduct,
@@ -22,7 +22,7 @@ import {
 //   // getMyOrderList,
 //   // getUserIds,
 // } from "../.models/companyModel.js";
-import { createOrder, createOrderProduct } from "../.models/orderModel.js";
+// import { createOrder, createOrderProduct } from "../.models/.orderModel.js";
 
 // import {
 //   // countAllProducts,
@@ -117,72 +117,72 @@ import { createOrder, createOrderProduct } from "../.models/orderModel.js";
 //   }
 // };
 
-export const getUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
-  const cartId = Number(req.query.cartId);
-  try {
-    const rows = await getCartAllProducts(cartId);
-    if (!rows) {
-      res.status(404).json({ message: "データが見つかりません" });
-      return;
-    }
-    const data = rows.map((row) => {
-      return {
-        productId: row.product_id,
-        customizationId: row.customization_id,
-        quantity: row.quantity,
-      };
-    });
-    res.status(200).json(data);
-  } catch (err) {
-    return next(err);
-  }
-};
+// export const getUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
+//   const cartId = Number(req.query.cartId);
+//   try {
+//     const rows = await getCartAllProducts(cartId);
+//     if (!rows) {
+//       res.status(404).json({ message: "データが見つかりません" });
+//       return;
+//     }
+//     const data = rows.map((row) => {
+//       return {
+//         productId: row.product_id,
+//         customizationId: row.customization_id,
+//         quantity: row.quantity,
+//       };
+//     });
+//     res.status(200).json(data);
+//   } catch (err) {
+//     return next(err);
+//   }
+// };
 
-export const createOrUpdateUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
-  const { cartId, productId, customizationId, quantity } = req.body;
-  try {
-    const data = await createOrUpdateCartProduct(cartId, quantity, productId, customizationId);
-    res.status(200).json(data);
-  } catch (err) {
-    return next(err);
-  }
-};
+// export const createOrUpdateUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
+//   const { cartId, productId, customizationId, quantity } = req.body;
+//   try {
+//     const data = await createOrUpdateCartProduct(cartId, quantity, productId, customizationId);
+//     res.status(200).json(data);
+//   } catch (err) {
+//     return next(err);
+//   }
+// };
 
-export const deleteUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
-  const { cartId, productId, customizationId } = req.body;
-  try {
-    const data = await deleteCartProduct(cartId, productId, customizationId);
-    res.status(200).json(data);
-  } catch (err) {
-    return next(err);
-  }
-};
+// export const deleteUserCartProduct = async (req: Request, res: Response, next: NextFunction) => {
+//   const { cartId, productId, customizationId } = req.body;
+//   try {
+//     const data = await deleteCartProduct(cartId, productId, customizationId);
+//     res.status(200).json(data);
+//   } catch (err) {
+//     return next(err);
+//   }
+// };
 
-export const deleteUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
-  const { cartId } = req.body;
-  try {
-    const data = await deleteCartAllProducts(cartId);
-    res.status(200).json(data);
-  } catch (err) {
-    return next(err);
-  }
-};
+// export const deleteUserCartALLProducts = async (req: Request, res: Response, next: NextFunction) => {
+//   const { cartId } = req.body;
+//   try {
+//     const data = await deleteCartAllProducts(cartId);
+//     res.status(200).json(data);
+//   } catch (err) {
+//     return next(err);
+//   }
+// };
 
-export const checkoutUserCart = async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.user) return;
-  const userId = req.user.id;
-  const { cartId, cartProducts } = req.body;
+// export const checkoutUserCart = async (req: Request, res: Response, next: NextFunction) => {
+//   if (!req.user) return;
+//   const userId = req.user.id;
+//   const { cartId, cartProducts } = req.body;
 
-  try {
-    const order = await createOrder(userId);
-    const orderId = order.id;
-    await checkoutCart(orderId, cartId);
-    await createOrderProduct(orderId, cartProducts);
-    res.status(200).json(order);
-  } catch (err) {
-    return next(err);
-  }
-};
+//   try {
+//     const order = await createOrder(userId);
+//     const orderId = order.id;
+//     await checkoutCart(orderId, cartId);
+//     await createOrderProduct(orderId, cartProducts);
+//     res.status(200).json(order);
+//   } catch (err) {
+//     return next(err);
+//   }
+// };
 
 // type OrderProductForUser = {
 //   id: number;

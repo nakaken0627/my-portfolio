@@ -2,29 +2,29 @@ import express from "express";
 
 // import { getMyCompany } from "../../.controllers/auth/authCompanyControlling.js";
 // import { getMyUser } from "../../.controllers/auth/authUserControlling.js";
-import {
-  // addProductForCompany,
-  // changStatusOfConfirm,
-  checkoutUserCart,
-  // confirmedOrderList,
-  createOrUpdateUserCartProduct,
-  // deleteCustomProduct,
-  // deleteCustomProductsForCompany,
-  // deleteProductsForCompany,
-  deleteUserCartALLProducts,
-  deleteUserCartProduct,
-  // fetchAllProductsForUser,
-  // fetchDisplayProductsByCompany,
-  // fetchDisplayProductsForUser,
-  // findProductsForCompany,
-  // getOrCreateCart,
-  // getTotalProductsCount,
-  getUserCartALLProducts,
-  // getUserList,
-  // orderHistory,
-  // orderListForCompany,
-  // registerCustomProduct,
-} from "../../.controllers/productControlling.js";
+import "../../.controllers/.productControlling.js"; // addProductForCompany,
+
+// changStatusOfConfirm,
+// checkoutUserCart,
+// confirmedOrderList,
+// createOrUpdateUserCartProduct,
+// deleteCustomProduct,
+// deleteCustomProductsForCompany,
+// deleteProductsForCompany,
+// deleteUserCartALLProducts,
+// deleteUserCartProduct,
+// fetchAllProductsForUser,
+// fetchDisplayProductsByCompany,
+// fetchDisplayProductsForUser,
+// findProductsForCompany,
+// getOrCreateCart,
+// getTotalProductsCount,
+// getUserCartALLProducts,
+// getUserList,
+// orderHistory,
+// orderListForCompany,
+// registerCustomProduct,
+
 import { upload } from "../../shared/config/upload.js";
 import { fetchOrders, updateConfirmOrders } from "../controllers/company/orderController.js";
 import {
@@ -39,6 +39,13 @@ import {
   // registerCustomProduct,
   // registerProductForCompany,
 } from "../controllers/company/productController.js";
+import {
+  checkoutUserCart,
+  createOrUpdateUserCartProduct,
+  deleteUserCartALLProducts,
+  deleteUserCartProduct,
+  fetchUserCartProducts,
+} from "../controllers/user/cartController.js";
 import { fetchUserOrders } from "../controllers/user/orderController.js";
 import { fetchAllProductsWithCustom, fetchPaginatedProducts } from "../controllers/user/productController.js";
 
@@ -71,10 +78,10 @@ router.get("/user/orders/history", fetchUserOrders); //済
 
 //カート機能
 router.get("/cart", fetchUserOrders); //済
-router.get("/cart/products", getUserCartALLProducts);
-router.put("/cart/product", createOrUpdateUserCartProduct);
-router.post("/cart/checkout", checkoutUserCart);
-router.delete("/cart/products", deleteUserCartProduct);
-router.delete("/cart/products/all", deleteUserCartALLProducts);
+router.get("/cart/products", fetchUserCartProducts); //済
+router.put("/cart/product", createOrUpdateUserCartProduct); //済
+router.post("/cart/checkout", checkoutUserCart); //済
+router.delete("/cart/products", deleteUserCartProduct); //済
+router.delete("/cart/products/all", deleteUserCartALLProducts); //済
 
 export default router;

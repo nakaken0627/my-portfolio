@@ -1,6 +1,6 @@
-import { OrderedUserRow } from "../../../domain/models/user/orderModel";
-import { getUserOrders } from "../../../infrastructure/repositories/user/orderRepository";
-import { TransformedUserOrderDTO } from "../../../presentation/dto/user/order.dto";
+import { OrderedUserRow } from "../../../../domain/models/user/orderModel";
+import { getUserOrders } from "../../../../infrastructure/repositories/user/orderRepository";
+import { TransformedUserOrderDTO } from "../../../../presentation/dto/user/order.dto";
 
 export const fetchUserOrdersService = async (userId: number) => {
   const rows: OrderedUserRow[] = await getUserOrders(userId);

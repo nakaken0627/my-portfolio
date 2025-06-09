@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-import { createUser, findByUsername } from "../../../.models/userModel.js";
+import { createUser, findByUsername } from "../../../infrastructure/repositories/user/userRepository.js";
 import passport from "../../../shared/config/passport.js";
 
 export const signup = async (req: Request, res: Response, next: NextFunction) => {
