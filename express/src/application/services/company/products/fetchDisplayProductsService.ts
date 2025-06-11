@@ -19,6 +19,7 @@ export const fetchDisplayProductsService = async (companyId: number): Promise<Di
       return { productWithUrl: { ...product, imageUrl }, customization };
     }),
   );
+
   const groupedProducts = enrichedProducts.reduce<GroupedProduct>((acc, { productWithUrl, customization }) => {
     if (!acc[productWithUrl.id]) {
       acc[productWithUrl.id] = {

@@ -18,14 +18,10 @@ export const fetchPaginatedProductsService = async (
 
   const enrichedProducts = await Promise.all(
     rows.map(async (row) => {
-      const { product, customization } = row;
-
-      //   const product: UserProduct = row.product;
-      //   const customization: UserCustomProduct | null = row.customization;
+      const { product, custom } = row;
 
       const imageUrl = product.image_name ? await getSignedImageUrl(product.image_name) : null;
 
-      //   const productWithUrl = { ...product, imageUrl };
       return {
         product: {
           id: product.id,
@@ -37,15 +33,15 @@ export const fetchPaginatedProductsService = async (
           imageName: product.image_name,
           imageUrl,
         },
-        customization: customization
+        custom: custom
           ? {
-              id: customization.id,
-              modelNumber: customization.model_number,
-              name: customization.name,
-              price: customization.price,
-              description: customization.description,
-              startDate: customization.start_date,
-              endDate: customization.end_date,
+              id: custom.id,
+              modelNumber: custom.model_number,
+              name: custom.name,
+              price: custom.price,
+              description: custom.description,
+              startDate: custom.start_date,
+              endDate: custom.end_date,
             }
           : null,
       };
@@ -53,40 +49,19 @@ export const fetchPaginatedProductsService = async (
   );
 
   const groupedProducts = enrichedProducts.reduce<GroupedProductDTO>((acc, row) => {
-    // const product: UserProductWithCustomization = row.product;
-    // const customization: UserProductCustomization = row.customization;
-
-    const { product, customization } = row;
+    const { product, custom } = row;
 
     if (!acc[product.id]) {
       acc[product.id] = {
         ...product,
         custom: [],
-        // id: product.id,
-        // name: product.name,
-        // company_name: product.company_name,
-        // model_number: product.model_number,
-        // price: product.price,
-        // description: product.description,
-        // image_name: product.image_name,
-        // imageUrl: product.imageUrl,
-        // custom: [],
       };
     }
-    if (customization) {
-      acc[product.id].custom.push(
-        customization,
-        //     {
-        //     id: customization.id,
-        //     model_number: customization.model_number,
-        //     name: customization.name,
-        //     price: customization.price,
-        //     description: customization.description,
-        //     start_date: customization.start_date,
-        //     end_date: customization.end_date,
-        //   }
-      );
+
+    if (custom) {
+      acc[product.id].custom.push(custom);
     }
+
     return acc;
   }, {});
   return { data: Object.values(groupedProducts), total };

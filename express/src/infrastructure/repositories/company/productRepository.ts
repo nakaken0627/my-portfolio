@@ -8,13 +8,13 @@ export const fetchMergedCompanyProducts = async (companyId: number) => {
   try {
     const result = await client.query(
       ` SELECT
-            row_to_json(p.*) AS product,
-            row_to_json(pc.*) AS customization
-          FROM products p
-          LEFT JOIN product_customizations pc
-            ON p.id = pc.product_id
-          WHERE p.company_id =$1
-          ORDER BY p.id `,
+          row_to_json(p.*) AS product,
+          row_to_json(pc.*) AS customization
+        FROM products p
+        LEFT JOIN product_customizations pc
+          ON p.id = pc.product_id
+        WHERE p.company_id =$1
+        ORDER BY p.id `,
       [companyId],
     );
     return result.rows;
@@ -29,9 +29,9 @@ export const createCompanyProduct = async (productData: CreateProductDTO) => {
 
   try {
     const result = await client.query(
-      `INSERT INTO products (company_id, model_number, name, price, description,image_name)
-           VALUES ($1,$2,$3,$4,$5,$6)
-           RETURNING *`,
+      ` INSERT INTO products (company_id, model_number, name, price, description,image_name)
+        VALUES ($1,$2,$3,$4,$5,$6)
+        RETURNING *`,
       [companyId, modelNumber, name, price, description, imageName],
     );
     return result.rows[0];
@@ -70,7 +70,7 @@ export const deleteProduct = async (companyId: number, productsId: number): Prom
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
-      `DELETE FROM products
+      ` DELETE FROM products
         WHERE company_id = $1 
         AND id = $2
         RETURNING image_name`,
@@ -87,7 +87,7 @@ export const deleteCustomProducts = async (customProductIds: number[]): Promise<
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
-      `DELETE FROM product_customizations
+      ` DELETE FROM product_customizations
         WHERE id =ANY($1::int[])
         RETURNING *`,
       [customProductIds],
@@ -99,7 +99,6 @@ export const deleteCustomProducts = async (customProductIds: number[]): Promise<
 };
 
 export const deleteCustomProduct = async (customProductId: number): Promise<number[]> => {
-  console.log("customProductId", customProductId);
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
@@ -108,7 +107,6 @@ export const deleteCustomProduct = async (customProductId: number): Promise<numb
         RETURNING *`,
       [customProductId],
     );
-    console.log("result", result.rows[0]);
     return result.rows[0];
   } finally {
     client.release();

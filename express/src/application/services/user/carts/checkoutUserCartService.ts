@@ -11,6 +11,7 @@ export const checkoutUserCartService = async (
   cartProducts: CartProductWithPriceDTO[],
 ) => {
   const orderId = await createOrder(userId);
+
   await checkoutCart(orderId, cartId);
   await createOrderProduct(orderId, cartProducts);
 

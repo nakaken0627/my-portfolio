@@ -7,7 +7,12 @@ import pool from "../../../shared/config/database.js";
 export const findByCompanyName = async (companyName: string): Promise<Company | null> => {
   const client: PoolClient = await pool.connect();
   try {
-    const result = await client.query("SELECT * FROM companies WHERE name = $1", [companyName]);
+    const result = await client.query(
+      ` SELECT * 
+        FROM companies 
+        WHERE name = $1 `,
+      [companyName],
+    );
     return result.rows[0];
   } finally {
     client.release();
@@ -19,7 +24,9 @@ export const createCompany = async (companyName: string, companyPassword: string
   try {
     const hashedPassword = await bcrypt.hash(companyPassword, 12);
     const result = await client.query(
-      "INSERT INTO companies(name,password) VALUES ($1,$2) RETURNING id,name,created_at,updated_at",
+      ` INSERT INTO companies(name,password)
+        VALUES ($1,$2)
+        RETURNING id,name,created_at,updated_at`,
       [companyName, hashedPassword],
     );
     return result.rows[0];
@@ -31,7 +38,10 @@ export const createCompany = async (companyName: string, companyPassword: string
 export const getUserIds = async () => {
   const client: PoolClient = await pool.connect();
   try {
-    const result = await client.query(`SELECT id,name FROM users`);
+    const result = await client.query(
+      ` SELECT id,name 
+        FROM users`,
+    );
     return result.rows;
   } finally {
     client.release();

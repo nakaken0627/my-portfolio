@@ -58,7 +58,7 @@ app.get("/", (req: Request, res: Response) => {
 //認証用
 app.use("/auth", authRouter);
 
-//情報取得用
+//情報取得/更新用のルーティング
 app.use("/api", apiRouter);
 
 //エラーハンドラー
