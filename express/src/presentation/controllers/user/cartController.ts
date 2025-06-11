@@ -21,8 +21,10 @@ export const getOrCreateCart = async (req: Request, res: Response, next: NextFun
 
 export const fetchUserCartProducts = async (req: Request, res: Response, next: NextFunction) => {
   const cartId = Number(req.query.cartId);
+
   try {
     const data = await fetchUserOrderProductsService(cartId);
+    console.log("data", data);
     res.status(200).json(data);
   } catch (err) {
     return next(err);

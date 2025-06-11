@@ -1,19 +1,20 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+// import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { AppBar, Box, useMediaQuery, useTheme } from "@mui/material";
 
 import { NavDesktop } from "./NavDesktop";
 import { NavMobile } from "./NavMobile";
 
 type Props = {
-  userInfoElement: ReactNode;
+  userInfo: { name: string } | null;
 };
 
-export const UserNavClient = ({ userInfoElement }: Props) => {
+export const UserNavClient = ({ userInfo }: Props) => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -21,11 +22,15 @@ export const UserNavClient = ({ userInfoElement }: Props) => {
 
   return (
     <Box>
-      <AppBar sx={{ backgroundColor: "#5cd81d" }}>
+      <AppBar>
         {isMobile ? (
-          <NavMobile toggleDrawer={toggleDrawer} userInfoElement drawerOpen />
+          <NavMobile
+            drawerOpen={drawerOpen}
+            toggleDrawer={toggleDrawer}
+            userInfo={userInfo}
+          />
         ) : (
-          <NavDesktop userInfoElement={userInfoElement} />
+          <NavDesktop userInfo={userInfo} />
         )}
       </AppBar>
     </Box>

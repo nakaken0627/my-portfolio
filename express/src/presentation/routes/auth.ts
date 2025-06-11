@@ -23,7 +23,7 @@ router.get("/company/profile", getMyCompany);
 
 //user用
 router.post("/user/signup", userSignup);
-router.post("/user/login", userLogin);
+router.post("/user/signin", userLogin);
 router.get("/user/logout", userLogout);
 router.get("/user/profile", getMyUser);
 

@@ -31,7 +31,7 @@ const fetcher = async (url: string, { arg }: { arg: FormData }) => {
   return res;
 };
 
-export const useSignup = () => {
+export const useCompanySignup = () => {
   const { trigger, isMutating } = useSWRMutation(
     `${API_BASE_URL}/auth/company/signup`,
     fetcher,

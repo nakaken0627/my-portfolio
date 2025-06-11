@@ -10,7 +10,7 @@ export const fetchCompanyServer = async () => {
   const cookie = await getCookies();
 
   try {
-    const response = await fetch(`${API_BASE_URL}/api/company/profile`, {
+    const response = await fetch(`${API_BASE_URL}/auth/company/profile`, {
       method: "GET",
       headers: { cookie },
       cache: "no-store",
@@ -22,6 +22,6 @@ export const fetchCompanyServer = async () => {
     const data: Company = await response.json();
     return data;
   } catch (err) {
-    alert(err);
+    console.error(err);
   }
 };

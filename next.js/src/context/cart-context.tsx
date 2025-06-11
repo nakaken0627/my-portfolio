@@ -18,12 +18,12 @@ type CartProduct = {
 };
 
 type CartContent = {
-  cartId: number;
+  cartId: number | null;
   cartProducts: CartProduct[];
   setCartProducts: Dispatch<SetStateAction<CartProduct[]>>;
   addProduct: (
     productId: number,
-    customizationID: number | null,
+    customizationId: number | null,
   ) => Promise<void>;
   reduceProduct: (
     productId: number,
@@ -49,17 +49,9 @@ export const CartContextProvider = ({
 }) => {
   const [cartProducts, setCartProducts] = useState<CartProduct[]>([]);
 
-  const { cart } = useFetchCart();
+  const { cart, isLoadingCart } = useFetchCart();
   const cartId = cart?.id ?? null;
-  const { cartItems } = useFetchCartProducts(cartId);
-
-  //   const { products } = useFetchUserProducts();
-
-  // useEffect(() => {
-  //   if (cartItems) {
-  //     setCartProducts(cartItems);
-  //   }
-  // }, [cartItems]);
+  const { cartItems, isLoadingCartProducts } = useFetchCartProducts(cartId);
 
   useEffect(() => {
     if (cartItems) {
@@ -67,7 +59,9 @@ export const CartContextProvider = ({
     }
   }, [cartItems]);
 
-  if (!cartId) return;
+  if (isLoadingCart || isLoadingCartProducts) {
+    return <div>Loading cart...</div>;
+  }
 
   const sendCartLatestData = async (
     productId: number,

@@ -13,8 +13,8 @@ export const UserProductList = () => {
   const [page, setPage] = useState(1);
 
   const { result, isLoading, isError } = useFetchPageProducts(page, limit);
-  if (!result) return <div>読み込み中...</div>;
 
+  if (!result) return <div>読み込み中...</div>;
   if (isLoading) return <div>読み込み中...</div>;
   if (isError) return <div>エラーが発生しました。</div>;
 

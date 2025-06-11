@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+// import { ReactNode } from "react";
 import Link from "next/link";
 import { Box, Button, Toolbar, Typography } from "@mui/material";
 
@@ -6,10 +6,10 @@ import { navLinks } from "./NavLinks";
 import { SignoutFunc } from "./SignoutFunc";
 
 type Props = {
-  userInfoElement: ReactNode;
+  userInfo: { name: string } | null;
 };
 
-export const NavDesktop = ({ userInfoElement }: Props) => {
+export const NavDesktop = ({ userInfo }: Props) => {
   return (
     <Toolbar>
       <Box
@@ -23,7 +23,10 @@ export const NavDesktop = ({ userInfoElement }: Props) => {
         <Typography variant="h6">
           <Link href="/user/mypage">User Panel</Link>
         </Typography>
-        {userInfoElement}
+        {/* {userInfo} */}
+        <Typography variant="body1" sx={{ mx: 2, borderBottom: "1px solid" }}>
+          ようこそ、{userInfo?.name === "test" ? "ゲスト" : userInfo?.name}様
+        </Typography>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>
         {navLinks.map((link) => (

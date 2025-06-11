@@ -10,7 +10,7 @@ export const fetchUserServer = async () => {
   const cookie = await getCookies();
 
   try {
-    const response = await fetch(`${API_BASE_URL}/api/user/profile`, {
+    const response = await fetch(`${API_BASE_URL}/auth/user/profile`, {
       method: "GET",
       headers: { cookie },
       cache: "no-store",
@@ -20,8 +20,9 @@ export const fetchUserServer = async () => {
       throw new Error("レスポンスエラー発生");
     }
     const data: User = await response.json();
+
     return data;
   } catch (err) {
-    alert(err);
+    console.error(err);
   }
 };

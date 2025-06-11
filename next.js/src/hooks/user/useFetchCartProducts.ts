@@ -8,6 +8,7 @@ type CartProduct = {
 };
 
 const fetcher = async (url: string) => {
+  // console.log("url", url);
   const res = await fetch(url, {
     credentials: "include",
   });
@@ -18,12 +19,17 @@ const fetcher = async (url: string) => {
 
 export const useFetchCartProducts = (cartId: number | null) => {
   const isFetch = typeof cartId === "number";
+  // console.log("isFetch", isFetch, "cartId", cartId);
+
   const { data, error, isLoading } = useSWR(
     isFetch
       ? `${API_BASE_URL}/api/cart/products?cartId=${String(cartId)}`
       : null,
     fetcher,
   );
+
+  // console.log(`${API_BASE_URL}/api/cart/products?cartId=${String(cartId)}`);
+  // console.log("data", data);
 
   return {
     cartItems: data,

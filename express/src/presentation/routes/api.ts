@@ -45,6 +45,7 @@ import {
   deleteUserCartALLProducts,
   deleteUserCartProduct,
   fetchUserCartProducts,
+  getOrCreateCart,
 } from "../controllers/user/cartController.js";
 import { fetchUserOrders } from "../controllers/user/orderController.js";
 import { fetchAllProductsWithCustom, fetchPaginatedProducts } from "../controllers/user/productController.js";
@@ -77,7 +78,7 @@ router.get("/user/orders/history", fetchUserOrders); //済
 // router.get("/user/products/count", getTotalProductsCount); //使っていない
 
 //カート機能
-router.get("/cart", fetchUserOrders); //済
+router.get("/cart", getOrCreateCart); //済
 router.get("/cart/products", fetchUserCartProducts); //済
 router.put("/cart/product", createOrUpdateUserCartProduct); //済
 router.post("/cart/checkout", checkoutUserCart); //済
