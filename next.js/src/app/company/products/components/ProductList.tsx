@@ -73,6 +73,7 @@ export const ProductList = () => {
       <Typography variant="h5" gutterBottom>
         商品一覧
       </Typography>
+
       <TableContainer
         component={Paper}
         elevation={3}
@@ -87,36 +88,42 @@ export const ProductList = () => {
               >
                 選択
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{ fontWeight: "bold", minWidth: 80 }}
               >
                 商品ID
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{ fontWeight: "bold", minWidth: 120 }}
               >
                 商品名
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{ fontWeight: "bold", minWidth: 100 }}
               >
                 型番
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{ fontWeight: "bold", minWidth: 100 }}
               >
                 価格
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{ fontWeight: "bold", minWidth: 200 }}
               >
                 説明
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{ fontWeight: "bold", minWidth: 100 }}
@@ -147,6 +154,7 @@ export const ProductList = () => {
                   ¥{Number(p.price).toLocaleString()}
                 </TableCell>
                 <TableCell align="left">{p.description}</TableCell>
+
                 <TableCell align="center">
                   <Button
                     variant="outlined"

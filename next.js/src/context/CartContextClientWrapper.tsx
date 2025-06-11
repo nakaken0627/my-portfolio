@@ -7,6 +7,5 @@ export const CartContextClientWrapper = ({
 }: {
   children: React.ReactNode;
 }) => {
-  // return <p>a</p>;
   return <CartContextProvider>{children}</CartContextProvider>;
 };

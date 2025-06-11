@@ -25,14 +25,14 @@ export const fetchMergedCompanyProducts = async (companyId: number) => {
 
 export const createCompanyProduct = async (productData: CreateProductDTO) => {
   const client: PoolClient = await pool.connect();
-  const { companyId, modelNumber, productName, price, description, imageName } = productData;
+  const { companyId, modelNumber, name, price, description, imageName } = productData;
 
   try {
     const result = await client.query(
       `INSERT INTO products (company_id, model_number, name, price, description,image_name)
            VALUES ($1,$2,$3,$4,$5,$6)
            RETURNING *`,
-      [companyId, modelNumber, productName, price, description, imageName],
+      [companyId, modelNumber, name, price, description, imageName],
     );
     return result.rows[0];
   } finally {
@@ -99,6 +99,7 @@ export const deleteCustomProducts = async (customProductIds: number[]): Promise<
 };
 
 export const deleteCustomProduct = async (customProductId: number): Promise<number[]> => {
+  console.log("customProductId", customProductId);
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
@@ -107,6 +108,7 @@ export const deleteCustomProduct = async (customProductId: number): Promise<numb
         RETURNING *`,
       [customProductId],
     );
+    console.log("result", result.rows[0]);
     return result.rows[0];
   } finally {
     client.release();

@@ -103,10 +103,10 @@ export const UserProductItem = ({ id, product }: Props) => {
                 {product.name}
               </Typography>
               <Typography variant="body2" sx={{ my: 1 }}>
-                型番: {product.model_number}
+                型番: {product.modelNumber}
               </Typography>
               <Typography variant="body2" sx={{ my: 1 }}>
-                企業: {product.company_name}
+                企業: {product.companyName}
               </Typography>
               <Typography variant="body2" sx={{ my: 1 }}>
                 説明:

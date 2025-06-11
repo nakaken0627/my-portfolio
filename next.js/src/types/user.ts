@@ -1,21 +1,21 @@
 export type UserProductWithCustom = {
   id: number;
   name: string;
-  company_name: string;
-  model_number: string;
+  companyName: string;
+  modelNumber: string;
   price: number;
   description: string;
-  image_name?: string;
+  imageName?: string;
   imageUrl?: string | null;
   custom: UserProductCustom[];
 };
 
 export type UserProductCustom = {
   id: number;
-  model_number: string;
+  modelNumber: string;
   name: string;
   price: number;
   description: string;
-  start_date: string;
-  end_date: string;
+  startDate: string;
+  endDate: string;
 };

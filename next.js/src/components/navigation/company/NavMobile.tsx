@@ -34,7 +34,9 @@ export const CompanyNavMobile = ({
           <IconButton color="inherit" onClick={toggleDrawer}>
             <MenuIcon />
           </IconButton>
+
           <Typography variant="h6">Company Panel</Typography>
+
           {companyInfo}
         </Box>
         <SignoutFunc />

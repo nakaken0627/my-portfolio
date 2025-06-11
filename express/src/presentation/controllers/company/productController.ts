@@ -34,7 +34,7 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
   if (!req.body || !req.user) return;
 
   const companyId = req.user.id;
-  const { modelNumber, productName, price, description } = req.body;
+  const { modelNumber, name, price, description } = req.body;
 
   let imageName: string | null = null;
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
@@ -47,7 +47,7 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
   const productData: CreateProductDTO = {
     companyId,
     modelNumber,
-    productName,
+    name,
     price: Number(price),
     description,
     imageName: imageName ?? "",
@@ -88,7 +88,7 @@ export const deleteProducts = async (req: Request, res: Response, next: NextFunc
   if (!req.body || !req.user) return;
 
   const companyId = req.user.id;
-  const productIds: number[] = req.body;
+  const productIds: number[] = req.body.productIds;
 
   try {
     const result = await deleteProductsServices(companyId, productIds);
@@ -120,10 +120,8 @@ export const deleteCustomProducts = async (req: Request, res: Response, next: Ne
 export const deleteCustomProduct = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.body) return;
 
-  const { customProductId } = req.body;
-
   try {
-    const result = await deleteCustomProductService(customProductId);
+    const result = await deleteCustomProductService(req.body.customProductId);
     res.status(200).json({
       message: "削除が成功しました",
       result,

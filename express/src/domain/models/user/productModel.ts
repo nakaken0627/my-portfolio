@@ -20,5 +20,5 @@ export type UserCustomProduct = {
 
 export type UserProductRow = {
   product: UserProduct;
-  customization: UserCustomProduct | null;
+  custom: UserCustomProduct | null;
 };

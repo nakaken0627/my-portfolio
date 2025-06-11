@@ -7,7 +7,7 @@ export const fetchProductListWithCustomService = async (userId: number): Promise
 
   const groupedProducts = rows.reduce<GroupedProductDTO>((acc, row) => {
     const product: UserProduct = row.product;
-    const customization: UserCustomProduct | null = row.customization;
+    const custom: UserCustomProduct | null = row.custom;
 
     if (!product) return acc;
 
@@ -23,15 +23,15 @@ export const fetchProductListWithCustomService = async (userId: number): Promise
       };
     }
 
-    if (customization) {
+    if (custom) {
       acc[product.id].custom.push({
-        id: customization.id,
-        modelNumber: customization.model_number,
-        name: customization.name,
-        price: customization.price,
-        description: customization.description,
-        startDate: customization.start_date,
-        endDate: customization.end_date,
+        id: custom.id,
+        modelNumber: custom.model_number,
+        name: custom.name,
+        price: custom.price,
+        description: custom.description,
+        startDate: custom.start_date,
+        endDate: custom.end_date,
       });
     }
     return acc;

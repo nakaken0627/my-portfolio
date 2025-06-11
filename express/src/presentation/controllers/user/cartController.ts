@@ -24,7 +24,6 @@ export const fetchUserCartProducts = async (req: Request, res: Response, next: N
 
   try {
     const data = await fetchUserOrderProductsService(cartId);
-    console.log("data", data);
     res.status(200).json(data);
   } catch (err) {
     return next(err);

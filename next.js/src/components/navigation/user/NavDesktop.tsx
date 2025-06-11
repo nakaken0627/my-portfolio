@@ -21,13 +21,14 @@ export const NavDesktop = ({ userInfo }: Props) => {
         }}
       >
         <Typography variant="h6">
-          <Link href="/user/mypage">User Panel</Link>
+          <Link href="/user/dashboard">User Panel</Link>
         </Typography>
-        {/* {userInfo} */}
+
         <Typography variant="body1" sx={{ mx: 2, borderBottom: "1px solid" }}>
           ようこそ、{userInfo?.name === "test" ? "ゲスト" : userInfo?.name}様
         </Typography>
       </Box>
+
       <Box sx={{ display: "flex", alignItems: "center" }}>
         {navLinks.map((link) => (
           <Button

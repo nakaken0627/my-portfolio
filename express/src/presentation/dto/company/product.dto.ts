@@ -14,7 +14,7 @@ export type DisplayProductDto = {
 export type CreateProductDTO = {
   companyId: number;
   modelNumber: string;
-  productName: string;
+  name: string;
   price: number;
   description: string;
   imageName: string;

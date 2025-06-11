@@ -1,5 +1,3 @@
-// import { Typography } from "@mui/material";
-
 import { fetchUserServer } from "./fetchUserServer";
 
 export const FetchUserInfoServer = async () => {
@@ -9,9 +7,4 @@ export const FetchUserInfoServer = async () => {
   return {
     name: user.name === "test" ? "ゲスト" : user.name,
   };
-  // (
-  //   <Typography variant="body1" sx={{ mx: 2, borderBottom: "1px solid" }}>
-  //     ようこそ、{user.name === "test" ? "ゲスト" : user.name}様
-  //   </Typography>
-  // );
 };

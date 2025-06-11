@@ -59,36 +59,42 @@ export const UserProductCustomizationList = ({
               >
                 操作
               </TableCell>
+
               <TableCell
                 sx={{ bgcolor: "#e0f2f1", fontWeight: "bold", minWidth: 100 }}
                 align="center"
               >
                 商品名
               </TableCell>
+
               <TableCell
                 sx={{ bgcolor: "#e0f2f1", fontWeight: "bold", minWidth: 100 }}
                 align="center"
               >
                 型番
               </TableCell>
+
               <TableCell
                 sx={{ bgcolor: "#e0f2f1", fontWeight: "bold", minWidth: 150 }}
                 align="center"
               >
                 説明
               </TableCell>
+
               <TableCell
                 sx={{ bgcolor: "#e0f2f1", fontWeight: "bold", minWidth: 100 }}
                 align="center"
               >
                 価格
               </TableCell>
+
               <TableCell
                 sx={{ bgcolor: "#e0f2f1", fontWeight: "bold", minWidth: 100 }}
                 align="center"
               >
                 適用開始日
               </TableCell>
+
               <TableCell
                 sx={{ bgcolor: "#e0f2f1", fontWeight: "bold", minWidth: 100 }}
                 align="center"
@@ -111,13 +117,13 @@ export const UserProductCustomizationList = ({
                   </Button>
                 </TableCell>
                 <TableCell align="center">{item.name}</TableCell>
-                <TableCell align="center">{item.model_number}</TableCell>
+                <TableCell align="center">{item.modelNumber}</TableCell>
                 <TableCell align="center">{item.description}</TableCell>
                 <TableCell align="center">
                   ¥{Math.round(item.price).toLocaleString()}
                 </TableCell>
-                <TableCell align="center">{item.start_date}</TableCell>
-                <TableCell align="center">{item.end_date}</TableCell>
+                <TableCell align="center">{item.startDate}</TableCell>
+                <TableCell align="center">{item.endDate}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -41,6 +41,7 @@ export const RegisterSection = () => {
             商品登録（新規 / 個別）
           </Typography>
         </AccordionSummary>
+
         <AccordionDetails sx={{ p: 2, pt: 1 }}>
           <Box sx={{ maxWidth: 600, mx: "auto", width: "100%" }}>
             <Stack
@@ -57,6 +58,7 @@ export const RegisterSection = () => {
               >
                 新規商品登録
               </Button>
+
               <Button
                 variant={isDefaultForm ? "outlined" : "contained"}
                 fullWidth

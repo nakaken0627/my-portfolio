@@ -11,10 +11,13 @@ export default function MyCompanyPage() {
         <Typography variant="h4" gutterBottom>
           商品管理
         </Typography>
+
         <Box sx={{ my: 3 }}>
           <RegisterSection />
         </Box>
+
         <Divider sx={{ my: 3 }} />
+
         <ProductList />
       </Box>
     </CompanyLayout>

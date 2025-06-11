@@ -16,21 +16,6 @@ export const GuestLoginFunc = () => {
   const handleGuestLogin = async () => {
     try {
       await trigger({ username: "test", password: "password" });
-      // try {
-      //   const response = await fetch(`${API_BASE_URL}/auth/company/login`, {
-      //     method: "POST",
-      //     credentials: "include",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({
-      //       username: "test",
-      //       password: "test",
-      //     }),
-      //   });
-      //   if (response.ok) {
-      //     router.push("/company/mypage");
-
       router.push("/company/mypage");
     } catch (err) {
       const error = err as CustomError;

@@ -48,7 +48,6 @@ export const CartContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [cartProducts, setCartProducts] = useState<CartProduct[]>([]);
-
   const { cart, isLoadingCart } = useFetchCart();
   const cartId = cart?.id ?? null;
   const { cartItems, isLoadingCartProducts } = useFetchCartProducts(cartId);
