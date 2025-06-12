@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { createCompany, findByCompanyName } from "../../../infrastructure/repositories/company/companyRepository.js";
+import { logger } from "../../../shared/config/logger.js";
 import passport from "../../../shared/config/passport.js";
 
 export const signup = async (req: Request, res: Response, next: NextFunction) => {
@@ -33,7 +34,8 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     });
   } catch (err) {
     res.status(500).json({ message: "サーバエラー" });
-    console.error(err);
+    logger.error(err, { component: "authCompanyController", action: "signup" });
+    next(err);
   }
 };
 

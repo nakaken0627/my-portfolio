@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 
 import { createUser, findByUsername } from "../../../infrastructure/repositories/user/userRepository.js";
+import { logger } from "../../../shared/config/logger.js";
 import passport from "../../../shared/config/passport.js";
 
 export const signup = async (req: Request, res: Response, next: NextFunction) => {
@@ -29,7 +30,8 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     });
   } catch (err) {
     res.status(500).json({ message: "[authUserControlling]サーバエラー" });
-    console.error(err);
+    logger.error(err, { component: "authUserController", action: "signup" });
+    next(err);
   }
 };
 

@@ -1,6 +1,8 @@
 import * as dotenv from "dotenv"; // dotenvをインポートして環境変数を読み込む
 import * as pg from "pg"; // PostgreSQLのクライアントライブラリをインポート
 
+import { logger } from "./logger";
+
 dotenv.config();
 
 const pool = new pg.Pool({
@@ -14,10 +16,10 @@ const pool = new pg.Pool({
 
 //接続状況確認用
 pool.on("connect", () => {
-  console.info("PostgreSQLに接続しました。");
+  logger.info("PostgreSQLに接続しました。", { component: "database" });
 });
 pool.on("error", (err) => {
-  console.error("PostgreSQL接続エラー:", err);
+  logger.error(err, { component: "database", action: "connectionError" });
 });
 
 export default pool;
