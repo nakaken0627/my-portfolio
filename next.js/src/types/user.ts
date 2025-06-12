@@ -19,3 +19,24 @@ export type UserProductCustom = {
   startDate: string;
   endDate: string;
 };
+
+export type OrderProduct = {
+  id: number;
+  name: string;
+  companyName: string;
+  modelNumber: string;
+  price: number;
+  quantity: number;
+};
+
+export type OrderCustom = {
+  id: number;
+  modelNumber: string;
+  name: string;
+  price: number;
+};
+
+export type Transformed = {
+  orderId: number;
+  products: (OrderProduct & { custom: OrderCustom | null })[];
+};

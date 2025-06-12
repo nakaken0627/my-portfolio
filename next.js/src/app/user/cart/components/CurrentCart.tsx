@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { CartContext } from "@/context/CartContext";
 import { useFetchUserProducts } from "@/hooks/user/useFetchUserProducts";
 import { API_BASE_URL } from "@/lib/api";
+import { logger } from "@/lib/logger";
 import {
   Box,
   Button,
@@ -65,7 +66,7 @@ export const CurrentCart = () => {
       });
       setCartProducts([]);
     } catch (err) {
-      console.error(err);
+      logger.error(err, { component: "CurrentCart", action: "handleCheckout" });
     }
   };
 

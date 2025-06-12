@@ -1,3 +1,4 @@
+import { OrderCustom, OrderProduct, Transformed } from "@/types/user";
 import {
   Box,
   Container,
@@ -11,27 +12,6 @@ import {
   Typography,
 } from "@mui/material";
 
-type OrderProduct = {
-  id: number;
-  name: string;
-  companyName: string;
-  modelNumber: string;
-  price: number;
-  quantity: number;
-};
-
-type OrderCustom = {
-  id: number;
-  modelNumber: string;
-  name: string;
-  price: number;
-};
-
-type Transformed = {
-  orderId: number;
-  products: (OrderProduct & { custom: OrderCustom | null })[];
-};
-
 type Props = {
   orders: Transformed[];
 };
@@ -40,7 +20,6 @@ export const OrderDisplay = ({ orders }: Props) => {
   const orderTotalAmount = (
     data: (OrderProduct & { custom: OrderCustom | null })[],
   ) => {
-    // console.log("Calculating total amount for order:", data);
     return data.reduce((total, p) => {
       const custom = p.custom;
       return custom

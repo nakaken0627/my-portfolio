@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "@/lib/api";
 import { getCookies } from "@/lib/getCookies";
+import { logger } from "@/lib/logger";
 
 type User = {
   id: number;
@@ -23,6 +24,9 @@ export const fetchUserServer = async () => {
 
     return data;
   } catch (err) {
-    console.error(err);
+    logger.error(err, {
+      component: "fetchUserServer",
+      action: "fetchUserServer",
+    });
   }
 };

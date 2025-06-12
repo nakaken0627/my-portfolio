@@ -1,5 +1,6 @@
 import { API_BASE_URL } from "@/lib/api";
 import { getCookies } from "@/lib/getCookies";
+import { logger } from "@/lib/logger";
 
 type Company = {
   id: number;
@@ -22,6 +23,9 @@ export const fetchCompanyServer = async () => {
     const data: Company = await response.json();
     return data;
   } catch (err) {
-    console.error(err);
+    logger.error(err, {
+      component: "fetchCompanyServer",
+      action: "fetchCompanyServer",
+    });
   }
 };

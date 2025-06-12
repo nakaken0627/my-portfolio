@@ -10,6 +10,7 @@ import {
 import { useFetchCart } from "@/hooks/user/useFetchCart";
 import { useFetchCartProducts } from "@/hooks/user/useFetchCartProducts";
 import { API_BASE_URL } from "@/lib/api";
+import { logger } from "@/lib/logger";
 
 type CartProduct = {
   productId: number;
@@ -82,7 +83,10 @@ export const CartContextProvider = ({
         }),
       });
     } catch (err) {
-      console.error("更新失敗", err);
+      logger.error(err, {
+        component: "CartContextProvider",
+        action: "sendCartLatestData",
+      });
     }
   };
 
@@ -104,7 +108,10 @@ export const CartContextProvider = ({
         }),
       });
     } catch (err) {
-      console.error("削除更新失敗", err);
+      logger.error(err, {
+        component: "CartContextProvider",
+        action: "sendCartDeleteProduct",
+      });
     }
   };
 
