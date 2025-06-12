@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import Image from "next/image";
-import { CartContext } from "@/context/cart-context";
+import { CartContext } from "@/context/CartContext";
 import { UserProductWithCustom } from "@/types/user";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";

@@ -62,6 +62,16 @@ export const ProductList = () => {
     void mutateProducts();
   };
 
+  const handleAddSuccess = useCallback(async () => {
+    const updatedProductsData = await mutateProducts();
+    if (updatedProductsData && selectedProduct) {
+      const newSelectedProduct = updatedProductsData.find(
+        (p) => p.id === selectedProduct.id,
+      );
+      setSelectedProduct(newSelectedProduct);
+    }
+  }, [mutateProducts, selectedProduct]);
+
   const handleCustomDeleteSuccess = useCallback(async () => {
     // 削除処理時に商品一覧を再フェッチし、SWRのキャッシュを最新の状態に更新
     const updatedProductsData = await mutateProducts();
@@ -203,6 +213,7 @@ export const ProductList = () => {
         open={modalOpen}
         onClose={handleModalClose}
         productWithCustoms={selectedProduct}
+        onAddSuccess={handleAddSuccess}
         onCustomDeleteSuccess={handleCustomDeleteSuccess}
       />
     </Container>

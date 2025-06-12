@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useContext } from "react";
-import { CartContext } from "@/context/cart-context";
+import { CartContext } from "@/context/CartContext";
 import { UserProductWithCustom } from "@/types/user";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 

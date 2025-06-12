@@ -1,6 +1,6 @@
 "use client";
 
-import { CartContextProvider } from "./cart-context";
+import { CartContextProvider } from "./CartContext";
 
 export const CartContextClientWrapper = ({
   children,

@@ -16,6 +16,7 @@ type ModalProps = {
   open: boolean;
   onClose: () => void;
   productWithCustoms?: ProductWithCustomization;
+  onAddSuccess?: () => void;
   onCustomDeleteSuccess?: () => void;
 };
 
@@ -23,6 +24,7 @@ export const ProductsDetailModal = ({
   open,
   onClose,
   productWithCustoms,
+  onAddSuccess,
   onCustomDeleteSuccess,
 }: ModalProps) => {
   if (!productWithCustoms) return;
@@ -42,7 +44,7 @@ export const ProductsDetailModal = ({
       <DialogContent dividers sx={{ backgroundColor: "#fafafa" }}>
         <ModalDefaultInfo product={productWithCustoms} />
         <Divider sx={{ my: 2 }} />
-        <ModalForm />
+        <ModalForm onAddSuccess={onAddSuccess} />
         <Divider sx={{ my: 2 }} />
         <ModalTable
           customs={productWithCustoms.custom}

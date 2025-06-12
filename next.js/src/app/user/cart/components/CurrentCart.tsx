@@ -1,7 +1,7 @@
 "use client";
 
 import { useContext } from "react";
-import { CartContext } from "@/context/cart-context";
+import { CartContext } from "@/context/CartContext";
 import { useFetchUserProducts } from "@/hooks/user/useFetchUserProducts";
 import { API_BASE_URL } from "@/lib/api";
 import {

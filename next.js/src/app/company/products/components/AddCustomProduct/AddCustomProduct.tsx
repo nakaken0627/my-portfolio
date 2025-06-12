@@ -33,7 +33,11 @@ type CustomError = Error & {
   info?: { message: string };
 };
 
-export const AddCustomProduct = () => {
+type Props = {
+  onAddSuccess?: () => void;
+};
+
+export const AddCustomProduct = ({ onAddSuccess }: Props) => {
   const { handleSubmit, control, watch, setValue, reset } = useForm<FormData>({
     mode: "onChange",
     defaultValues: {
@@ -62,6 +66,9 @@ export const AddCustomProduct = () => {
     try {
       await trigger(inputData);
       reset();
+      if (onAddSuccess) {
+        onAddSuccess();
+      }
     } catch (err) {
       const error = err as CustomError;
       const msg = error.info?.message ?? "";
