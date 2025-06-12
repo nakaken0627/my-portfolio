@@ -40,7 +40,8 @@ export const getUserCartProducts = async (cartId: number) => {
     const result = await client.query(
       ` SELECT *
         FROM cart_products
-        WHERE cart_id = $1`,
+        WHERE cart_id = $1
+        ORDER BY created_at`,
       [cartId],
     );
     return result.rows;

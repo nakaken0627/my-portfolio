@@ -14,7 +14,7 @@ export const fetchMergedCompanyProducts = async (companyId: number) => {
         LEFT JOIN product_customizations pc
           ON p.id = pc.product_id
         WHERE p.company_id =$1
-        ORDER BY p.id `,
+        ORDER BY p.id , pc.id DESC`,
       [companyId],
     );
     return result.rows;

@@ -1,20 +1,20 @@
 type OrderUserProduct = {
   id: number;
   name: string;
-  company_name: string;
-  model_number: string;
+  companyName: string;
+  modelNumber: string;
   price: number;
   quantity: number;
 };
 
 type OrderUserCustomProduct = {
   id: number;
-  model_number: string;
+  modelNumber: string;
   name: string;
   price: number;
 };
 
 export type TransformedUserOrderDTO = {
   orderId: number;
-  products: Array<OrderUserProduct & { customization: OrderUserCustomProduct | null }>;
+  products: Array<OrderUserProduct & { custom: OrderUserCustomProduct | null }>;
 };

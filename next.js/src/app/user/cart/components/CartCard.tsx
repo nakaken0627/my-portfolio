@@ -200,13 +200,20 @@ export const CartCard = ({ products, cartProducts }: Props) => {
               justifyContent="center"
               alignItems="center"
               sx={{
-                minWidth: 10,
+                minWidth: "100px",
                 whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
+                overflowX: "auto",
               }}
             >
-              <Typography>{custom?.name ?? product.name}</Typography>
+              <Typography
+                sx={{
+                  overflow: "hidden",
+                  whiteSpace: "nowrap",
+                  overflowX: "auto",
+                }}
+              >
+                {custom?.name ?? product.name}
+              </Typography>
             </Grid>
 
             <Grid

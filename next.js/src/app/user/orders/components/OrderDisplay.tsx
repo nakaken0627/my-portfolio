@@ -14,22 +14,22 @@ import {
 type OrderProduct = {
   id: number;
   name: string;
-  company_name: string;
-  model_number: string;
+  companyName: string;
+  modelNumber: string;
   price: number;
   quantity: number;
 };
 
 type OrderCustom = {
   id: number;
-  model_number: string;
+  modelNumber: string;
   name: string;
   price: number;
 };
 
 type Transformed = {
   orderId: number;
-  products: (OrderProduct & { customization: OrderCustom | null })[];
+  products: (OrderProduct & { custom: OrderCustom | null })[];
 };
 
 type Props = {
@@ -38,10 +38,11 @@ type Props = {
 
 export const OrderDisplay = ({ orders }: Props) => {
   const orderTotalAmount = (
-    data: (OrderProduct & { customization: OrderCustom | null })[],
+    data: (OrderProduct & { custom: OrderCustom | null })[],
   ) => {
+    // console.log("Calculating total amount for order:", data);
     return data.reduce((total, p) => {
-      const custom = p.customization;
+      const custom = p.custom;
       return custom
         ? total + custom.price * p.quantity
         : total + p.price * p.quantity;
@@ -78,28 +79,22 @@ export const OrderDisplay = ({ orders }: Props) => {
             </TableHead>
             <TableBody>
               {o.products.map((p) => (
-                <TableRow
-                  key={`${String(p.id)}-${String(p.customization?.id)}`}
-                  hover
-                >
+                <TableRow key={`${String(p.id)}-${String(p.custom?.id)}`} hover>
                   <TableCell>
-                    {p.customization?.model_number ?? p.model_number}
+                    {p.custom?.modelNumber ?? p.modelNumber}
                   </TableCell>
-                  <TableCell>{p.customization?.name ?? p.name}</TableCell>
+                  <TableCell>{p.custom?.name ?? p.name}</TableCell>
                   <TableCell>
-                    ¥
-                    {Math.round(
-                      p.customization?.price ?? p.price,
-                    ).toLocaleString()}
+                    ¥{Math.round(p.custom?.price ?? p.price).toLocaleString()}
                   </TableCell>
                   <TableCell>{p.quantity}</TableCell>
                   <TableCell>
                     ¥
                     {Math.round(
-                      (p.customization?.price ?? p.price) * p.quantity,
+                      (p.custom?.price ?? p.price) * p.quantity,
                     ).toLocaleString()}
                   </TableCell>
-                  <TableCell>{p.company_name}</TableCell>
+                  <TableCell>{p.companyName}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

@@ -11,7 +11,7 @@ export const getUserOrders = async (userId: number): Promise<OrderedUserRow[]> =
       SELECT 
         order_id ,
         (to_jsonb(p) || jsonb_build_object('company_name',co.name,'quantity',cp.quantity)) AS product,
-        to_jsonb(pc) AS customization
+        to_jsonb(pc) AS custom
       FROM carts c
       INNER JOIN users u ON c.user_id = u.id
       INNER JOIN cart_products cp ON cp.cart_id = c.id 

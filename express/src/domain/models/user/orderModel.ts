@@ -17,5 +17,5 @@ type OrderUserCustomProduct = {
 export type OrderedUserRow = {
   order_id: number;
   product: OrderUserProduct;
-  customization: OrderUserCustomProduct;
+  custom: OrderUserCustomProduct;
 };

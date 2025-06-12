@@ -7,15 +7,29 @@ export const fetchUserOrdersService = async (userId: number) => {
   const grouped: Record<number, TransformedUserOrderDTO["products"]> = {};
 
   for (const row of rows) {
-    const { order_id, product, customization } = row;
+    const { order_id, product, custom } = row;
 
     if (!grouped[order_id]) {
       grouped[order_id] = [];
     }
 
+    const customData = custom
+      ? {
+          id: custom.id,
+          modelNumber: custom.model_number,
+          name: custom.name,
+          price: custom.price,
+        }
+      : null;
+
     grouped[order_id].push({
-      ...product,
-      customization: customization ?? null,
+      id: product.id,
+      name: product.name,
+      companyName: product.company_name,
+      modelNumber: product.model_number,
+      price: product.price,
+      quantity: product.quantity,
+      custom: customData,
     });
   }
 

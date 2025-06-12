@@ -16,17 +16,25 @@ type ModalProps = {
   open: boolean;
   onClose: () => void;
   productWithCustoms?: ProductWithCustomization;
+  onCustomDeleteSuccess?: () => void;
 };
 
 export const ProductsDetailModal = ({
   open,
   onClose,
   productWithCustoms,
+  onCustomDeleteSuccess,
 }: ModalProps) => {
   if (!productWithCustoms) return;
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      closeAfterTransition={false}
+      fullWidth
+      maxWidth="md"
+    >
       <DialogTitle sx={{ fontWeight: "bold", backgroundColor: "#e3f2fd" }}>
         商品詳細
       </DialogTitle>
@@ -36,7 +44,10 @@ export const ProductsDetailModal = ({
         <Divider sx={{ my: 2 }} />
         <ModalForm />
         <Divider sx={{ my: 2 }} />
-        <ModalTable customs={productWithCustoms.custom} />
+        <ModalTable
+          customs={productWithCustoms.custom}
+          onCustomDeleteSuccess={onCustomDeleteSuccess}
+        />
       </DialogContent>
 
       <DialogActions sx={{ p: 3 }}>
