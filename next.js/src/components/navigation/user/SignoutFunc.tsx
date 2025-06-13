@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/lib/api";
+import { logger } from "@/lib/logger";
 import { Button } from "@mui/material";
 
 export const SignoutFunc = () => {
@@ -17,7 +18,11 @@ export const SignoutFunc = () => {
 
       router.push("/auth/user-signin");
     } catch (err) {
-      console.error(err);
+      logger.error(err, {
+        component: "SignoutFunc",
+        action: "handleClickSignout",
+      });
+      throw err;
     }
   };
 

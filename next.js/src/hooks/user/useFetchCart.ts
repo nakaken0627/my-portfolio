@@ -11,9 +11,14 @@ const fetcher = async (url: string) => {
 };
 
 export const useFetchCart = () => {
-  const { data } = useSWR(`${API_BASE_URL}/api/cart`, fetcher);
+  const { data, error, isLoading } = useSWR(
+    `${API_BASE_URL}/api/cart`,
+    fetcher,
+  );
 
   return {
     cart: data,
+    isErrorCart: error,
+    isLoadingCart: isLoading,
   };
 };
