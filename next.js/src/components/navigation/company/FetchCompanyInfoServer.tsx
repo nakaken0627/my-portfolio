@@ -4,7 +4,6 @@ import { fetchCompanyServer } from "./fetchCompanyServer";
 
 export const FetchCompanyInfoServer = async () => {
   const company = await fetchCompanyServer();
-  if (!company) return null;
 
   return (
     <Typography variant="body1" sx={{ mx: 2, borderBottom: "1px solid" }}>

@@ -56,12 +56,11 @@ class ErrorBoundary extends Component<Props, State> {
 
   // エラーが発生した場合に state を更新し、次のレンダーでフォールバックUIを表示する
   static getDerivedStateFromError(error: Error): State {
-    // componentDidCatch で詳細を設定するため、errorInfo はここではnull
     return {
       hasError: true,
       error: error,
       errorInfo: null,
-      showDetails: false, // エラー発生時は詳細を閉じ直す
+      showDetails: false,
     };
   }
 

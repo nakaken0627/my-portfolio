@@ -18,7 +18,13 @@ export default tseslint.config(
     files: ["**/*.{js,jsx,ts,tsx}"],
 
     // グローバルで無視するファイル
-    ignores: ["**/.next/**/*", "*.config.*", "**/.prettierrc.mjs"],
+    ignores: [
+      "**/.next/**/*",
+      "*.config.*",
+      "**/.prettierrc.mjs",
+      "jest.config.js",
+      "eslint.config.mjs",
+    ],
   },
   eslint.configs.recommended,
   tseslint.configs.strictTypeChecked,
