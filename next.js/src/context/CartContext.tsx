@@ -112,6 +112,7 @@ export const CartContextProvider = ({
         component: "CartContextProvider",
         action: "sendCartDeleteProduct",
       });
+      throw err;
     }
   };
 

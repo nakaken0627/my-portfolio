@@ -22,6 +22,7 @@ export const SignoutFunc = () => {
         component: "SignoutFunc",
         action: "handleClickSignout",
       });
+      throw err;
     }
   };
 

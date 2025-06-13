@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv"; // dotenvをインポートして環境変数を読み込む
 import * as pg from "pg"; // PostgreSQLのクライアントライブラリをインポート
 
-import { logger } from "./logger";
+import { logger } from "./logger.js";
 
 dotenv.config();
 

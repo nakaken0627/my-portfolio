@@ -18,7 +18,19 @@ export const fetchCompanyServer = async () => {
       credentials: "include",
     });
     if (!response.ok) {
-      throw new Error("レスポンスエラー発生");
+      const errorText = await response.text();
+      // サーバーサイドでのエラーログをthrowしてクライアントサイドで確認できるようにする
+      logger.error(
+        new Error(
+          `APIレスポンスエラー: ${String(response.status)} - ${errorText}`,
+        ),
+        {
+          component: "fetchCompanyServer",
+          action: "fetchCompanyServer",
+          statusCode: response.status,
+        },
+      );
+      throw new Error("会社情報の取得に失敗しました。");
     }
     const data: Company = await response.json();
     return data;
@@ -27,5 +39,6 @@ export const fetchCompanyServer = async () => {
       component: "fetchCompanyServer",
       action: "fetchCompanyServer",
     });
+    throw err;
   }
 };

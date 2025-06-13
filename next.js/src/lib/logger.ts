@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-type LogContext = Record<string, string | number>;
+type LogContext = Record<string, unknown>;
 
 const currentEnv = process.env.NEXT_PUBLIC_NODE_ENV ?? process.env.NODE_ENV;
 

@@ -2,9 +2,9 @@
 
 import { useContext } from "react";
 import { CartContext } from "@/context/CartContext";
+import { useErrorHandling } from "@/hooks/useErrorHandling";
 import { useFetchUserProducts } from "@/hooks/user/useFetchUserProducts";
 import { API_BASE_URL } from "@/lib/api";
-import { logger } from "@/lib/logger";
 import {
   Box,
   Button,
@@ -27,6 +27,7 @@ type CartProductWithPrice = CartProduct & { price: number | null };
 export const CurrentCart = () => {
   const { products } = useFetchUserProducts();
   const cartContext = useContext(CartContext);
+  const handleError = useErrorHandling();
 
   if (!cartContext) {
     return <Typography>Loading...</Typography>;
@@ -66,7 +67,7 @@ export const CurrentCart = () => {
       });
       setCartProducts([]);
     } catch (err) {
-      logger.error(err, { component: "CurrentCart", action: "handleCheckout" });
+      handleError(err, { component: "CurrentCart", action: "handleCheckout" });
     }
   };
 
