@@ -52,15 +52,21 @@ export const findProductsForCompany = async (req: Request, res: Response, next: 
 };
 
 export const addProductForCompany = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  if (!req.body || !req.user || !req.file) return;
+  if (!req.body || !req.user) return;
 
   const company_id = String(req.user.id);
   const { model_number, name, price, description } = req.body;
 
-  const imageName = await uploadImage(req.file);
+  let imageName: string | null = null;
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  const imageFile = files?.image?.[0];
+
+  if (imageFile) {
+    imageName = await uploadImage(imageFile);
+  }
 
   try {
-    const data = await addCompanyProduct(company_id, model_number, name, price, description, imageName);
+    const data = await addCompanyProduct(company_id, model_number, name, price, description, imageName ?? "");
     res.status(200).json(data);
   } catch (err) {
     return next(err);
@@ -71,16 +77,18 @@ export const deleteProductsForCompany = async (req: Request, res: Response, next
   if (!req.body || !req.user) return;
 
   const companyId = req.user.id;
-  const { productsIds } = req.body;
+  const { productIds } = req.body;
 
   try {
     await Promise.all(
-      productsIds.map(async (id: number) => {
+      productIds.map(async (id: number) => {
         const result = await deleteCompanyProduct(companyId, id);
         res.status(200).json({
           message: "削除が成功しました",
         });
-        await deleteImage(result);
+        if (result) {
+          await deleteImage(result);
+        }
       }),
     );
   } catch (err) {
@@ -93,10 +101,10 @@ export const getOrCreateCart = async (req: Request, res: Response, next: NextFun
   const userId = req.user.id;
   try {
     const data = await getCart(userId);
+
     if (!data) {
       const newCart = await createCart(userId);
       res.status(200).json(newCart);
-      return;
     }
     res.status(200).json(data);
   } catch (err) {
@@ -321,12 +329,12 @@ type DefaultProductWithCustomization = {
   description: string;
   image_name?: string;
   imageUrl?: string | null;
-  customization: ProductCustomizations[];
+  custom: ProductCustomizations[];
 };
 
 type ProductCustomizations = {
   id: number;
-  user_name: string;
+  user_name?: string;
   model_number: string;
   name: string;
   price: number;
@@ -373,11 +381,11 @@ export const fetchDisplayProductsByCompany = async (req: Request, res: Response,
           description: product.description,
           image_name: product.image_name,
           imageUrl: product.imageUrl,
-          customization: [],
+          custom: [],
         };
       }
       if (customization) {
-        acc[product.id].customization.push({
+        acc[product.id].custom.push({
           id: customization.id,
           user_name: customization.user_name,
           model_number: customization.model_number,
@@ -466,7 +474,7 @@ type UserProductWithCustomization = {
   description: string;
   image_name?: string;
   imageUrl?: string | null;
-  customization: UserProductCustomization[];
+  custom: UserProductCustomization[];
 };
 
 type UserProductCustomization = {
@@ -522,11 +530,11 @@ export const fetchDisplayProductsForUser = async (req: Request, res: Response, n
           description: product.description,
           image_name: product.image_name,
           imageUrl: product.imageUrl,
-          customization: [],
+          custom: [],
         };
       }
       if (customization) {
-        acc[product.id].customization.push({
+        acc[product.id].custom.push({
           id: customization.id,
           model_number: customization.model_number,
           name: customization.name,
@@ -550,7 +558,6 @@ export const fetchAllProductsForUser = async (req: Request, res: Response, next:
   const userId = req.user.id;
   try {
     const products = await findAllProductsWithCustomization(userId);
-
     const groupedProducts = products.reduce<GroupedUserProduct>((acc, row) => {
       const product: UserProductWithCustomization = row.product;
       const customization: UserProductCustomization = row.customization;
@@ -565,12 +572,12 @@ export const fetchAllProductsForUser = async (req: Request, res: Response, next:
           model_number: product.model_number,
           price: product.price,
           description: product.description,
-          customization: [],
+          custom: [],
         };
       }
 
       if (customization) {
-        acc[product.id].customization.push({
+        acc[product.id].custom.push({
           id: customization.id,
           model_number: customization.model_number,
           name: customization.name,

@@ -3,7 +3,7 @@
 import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { API_BASE_URL } from "@/components/lib/api";
+import { API_BASE_URL } from "@/lib/api";
 import {
   Alert,
   Box,
@@ -44,7 +44,7 @@ export const SigninForm = () => {
       const data: { message: string } = await response.json();
 
       if (response.ok) {
-        router.push("/user/mypage");
+        router.push("/user/dashboard");
       } else {
         setError(data.message || "ログインに失敗しました");
       }

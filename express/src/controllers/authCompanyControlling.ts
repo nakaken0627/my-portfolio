@@ -17,16 +17,18 @@ export const signup = async (req: Request, res: Response, next: NextFunction) =>
     const newCompany = await createCompany(companyName, companyPassword);
 
     // サインアップ後に自動的にログインする
-    req.login(newCompany, (err) => {
+    req.logIn({ ...newCompany, type: "company" }, (err) => {
       if (err) {
         return next(err);
       }
-      res.status(201).json({
-        message: "登録成功",
-        company: {
-          id: newCompany.id,
-          companyName: newCompany.name,
-        },
+      req.session.save(() => {
+        res.status(201).json({
+          message: "登録成功",
+          company: {
+            id: newCompany.id,
+            companyName: newCompany.name,
+          },
+        });
       });
     });
   } catch (err) {
@@ -51,7 +53,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
         return next(error);
       }
       return res.status(200).json({
-        massage: "ログインに成功しました",
+        massage: "認証に成功しました",
         company: {
           id: getCompany.id,
           name: getCompany.name,
