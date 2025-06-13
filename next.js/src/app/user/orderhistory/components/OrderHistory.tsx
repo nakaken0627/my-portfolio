@@ -16,29 +16,41 @@ import {
   Typography,
 } from "@mui/material";
 
-type Order = {
-  order_id: number;
-  cart_id: number;
-  product_id: number;
+type OrderProduct = {
+  id: number;
+  name: string;
+  company_name: string;
   model_number: string;
-  product_name: string;
   price: number;
   quantity: number;
-  company_name: string;
 };
 
-type GroupedOrder = Record<number, Order[]>;
+type OrderCustom = {
+  id: number;
+  model_number: string;
+  name: string;
+  price: number;
+};
+
+type Transformed = {
+  orderId: number;
+  products: (OrderProduct & { customization: OrderCustom | null })[];
+};
 
 export const OrderHistory = () => {
   const cartContext = useContext(CartContext);
   const { myUser } = cartContext ?? {};
 
-  const [orders, setOrders] = useState<GroupedOrder>({});
+  const [orders, setOrders] = useState<Transformed[]>([]);
 
-  const orderTotalAmount = (order_id: number, data: Order[]) => {
-    const orderData = data.filter((item) => item.order_id === order_id);
-    return orderData.reduce((total, product) => {
-      return total + product.price * product.quantity;
+  const orderTotalAmount = (
+    data: (OrderProduct & { customization: OrderCustom | null })[],
+  ) => {
+    return data.reduce((total, p) => {
+      const custom = p.customization;
+      return custom
+        ? total + custom.price * p.quantity
+        : total + p.price * p.quantity;
     }, 0);
   };
 
@@ -52,15 +64,9 @@ export const OrderHistory = () => {
           method: "GET",
           credentials: "include",
         });
-        const data: Order[] = await res.json();
+        const data: Transformed[] = await res.json();
 
-        const groupedOrder = data.reduce<GroupedOrder>((acc, item) => {
-          acc[item.order_id] ??= [];
-          acc[item.order_id].push(item);
-          return acc;
-        }, {});
-
-        setOrders(groupedOrder);
+        setOrders(data);
       } catch (err) {
         console.error(err);
       }
@@ -79,55 +85,58 @@ export const OrderHistory = () => {
         注文履歴
       </Typography>
 
-      {/* バックエンド側で並び順を変えても、reduceを使用した際にorder_idの昇順になってしまうため
-      こちらで.sort()を使って並び替えをすることにしております。 */}
-      {Object.entries(orders)
-        .sort((a, b) => Number(b[0]) - Number(a[0]))
-        .map(([orderId, items]) => (
-          <Paper key={orderId} elevation={3} sx={{ p: 3, mb: 4 }}>
-            <Box mb={2}>
-              <Typography variant="h6">注文ID: {orderId}</Typography>
-              <Typography variant="h6" color="primary">
-                合計金額: ¥
-                {orderTotalAmount(Number(orderId), items).toLocaleString()}
-              </Typography>
-            </Box>
+      {orders.map((o) => (
+        <Paper key={o.orderId} elevation={3} sx={{ p: 3, mb: 4 }}>
+          <Box mb={2}>
+            <Typography variant="h6">注文ID: {o.orderId}</Typography>
+            <Typography variant="h6" color="primary">
+              合計金額: ¥{orderTotalAmount(o.products).toLocaleString()}
+            </Typography>
+          </Box>
 
-            <Divider sx={{ mb: 2 }} />
+          <Divider sx={{ mb: 2 }} />
 
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>商品番号</TableCell>
-                  <TableCell>商品名</TableCell>
-                  <TableCell>価格</TableCell>
-                  <TableCell>数量</TableCell>
-                  <TableCell>金額</TableCell>
-                  <TableCell>発注先</TableCell>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>商品番号</TableCell>
+                <TableCell>商品名</TableCell>
+                <TableCell>価格</TableCell>
+                <TableCell>数量</TableCell>
+                <TableCell>金額</TableCell>
+                <TableCell>発注先</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {o.products.map((p) => (
+                <TableRow
+                  key={`${String(p.id)}-${String(p.customization?.id)}`}
+                  hover
+                >
+                  <TableCell>
+                    {p.customization?.model_number ?? p.model_number}
+                  </TableCell>
+                  <TableCell>{p.customization?.name ?? p.name}</TableCell>
+                  <TableCell>
+                    ¥
+                    {Math.round(
+                      p.customization?.price ?? p.price,
+                    ).toLocaleString()}
+                  </TableCell>
+                  <TableCell>{p.quantity}</TableCell>
+                  <TableCell>
+                    ¥
+                    {Math.round(
+                      (p.customization?.price ?? p.price) * p.quantity,
+                    ).toLocaleString()}
+                  </TableCell>
+                  <TableCell>{p.company_name}</TableCell>
                 </TableRow>
-              </TableHead>
-              <TableBody>
-                {items.map((item) => (
-                  <TableRow
-                    key={`${String(item.cart_id)}-${item.model_number}`}
-                    hover
-                  >
-                    <TableCell>{item.model_number}</TableCell>
-                    <TableCell>{item.product_name}</TableCell>
-                    <TableCell>
-                      ¥{Math.round(item.price).toLocaleString()}
-                    </TableCell>
-                    <TableCell>{item.quantity}</TableCell>
-                    <TableCell>
-                      ¥{Math.round(item.price * item.quantity).toLocaleString()}
-                    </TableCell>
-                    <TableCell>{item.company_name}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
-        ))}
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      ))}
     </Container>
   );
 };

@@ -26,7 +26,7 @@ export const CurrentCart = () => {
     cartId,
     cartProducts,
     setCartProducts,
-    productList,
+    productWithCustomList,
     calcProductTotalAmount,
     calcCartTotalAmount,
     addProduct,
@@ -37,13 +37,28 @@ export const CurrentCart = () => {
 
   if (!myUser || !cartId) return null;
 
-  const cartProductsWithPrice = () => {
-    return cartProducts.map((product) => {
-      const findItem = productList.find(
-        (item) => item.id === product.product_id,
+  type CartProduct = {
+    productId: number;
+    customizationId: number | null;
+    quantity: number;
+  };
+
+  type CartProductWithPrice = CartProduct & { price: number | null };
+
+  const cartProductsWithPrice = (): CartProductWithPrice[] => {
+    return cartProducts.map((cp) => {
+      const product = productWithCustomList.find(
+        (item) => item.id === cp.productId,
       );
-      const price = findItem?.price;
-      return { ...product, price };
+      if (!product) return { ...cp, price: null };
+
+      const custom = cp.customizationId
+        ? product.customization.find((c) => c.id === cp.customizationId)
+        : null;
+
+      const price = custom ? custom.price : product.price;
+
+      return { ...cp, price };
     });
   };
 
@@ -55,7 +70,7 @@ export const CurrentCart = () => {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          cart_id: cartId.id,
+          cartId: cartId.id,
           cartProducts: cartProductWithPriceData,
         }),
       });
@@ -66,44 +81,242 @@ export const CurrentCart = () => {
   };
 
   return (
-    <Container maxWidth="md" sx={{ py: 1 }}>
+    <Container maxWidth="lg" sx={{ py: 2 }}>
       <Typography variant="h4" gutterBottom>
         カート
       </Typography>
-      <Paper elevation={3} sx={{ p: 3 }}>
+      <Paper elevation={3} sx={{ p: 3, backgroundColor: "#f1f8e9" }}>
         {cartProducts.length === 0 ? (
           <Typography>カートが空です</Typography>
         ) : (
-          cartProducts.map((cartProduct) => {
-            const product = productList.find(
-              (item) => item.id === cartProduct.product_id,
-            );
-            if (!product) return null;
+          <Box sx={{ overflowY: "auto", overflowX: "auto" }}>
+            <Grid
+              container
+              spacing={2}
+              alignItems="center"
+              sx={{
+                fontWeight: "bold",
+                mb: 1,
+                px: 2,
+                py: 1,
+                minWidth: 1000,
+                overflowY: "auto",
+                overflowX: "auto",
+              }}
+            >
+              <Grid
+                size={{ xs: 2 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                型番
+              </Grid>
+              <Grid
+                size={{ xs: 2 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                商品名
+              </Grid>
+              <Grid
+                size={{ xs: 1 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                種別
+              </Grid>
+              <Grid
+                size={{ xs: 2 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                価格
+              </Grid>
+              <Grid
+                size={{ xs: 2 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                数量
+              </Grid>
+              <Grid
+                size={{ xs: 2 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                小計
+              </Grid>
+              <Grid
+                size={{ xs: 1 }}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minWidth: 10,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                操作
+              </Grid>
+            </Grid>
 
-            return (
-              <Box key={cartProduct.product_id} sx={{ mb: 3 }}>
+            {cartProducts.map((cartProduct) => {
+              const product = productWithCustomList.find(
+                (item) => item.id === cartProduct.productId,
+              );
+              if (!product) return null;
+
+              const custom = cartProduct.customizationId
+                ? product.customization.find(
+                    (c) => c.id === cartProduct.customizationId,
+                  )
+                : null;
+
+              return (
                 <Grid
                   container
-                  alignItems="center"
+                  key={`${String(cartProduct.productId)}-${String(cartProduct.customizationId ?? "null")}`}
                   spacing={2}
-                  sx={{ backgroundColor: "#E3F2FD", p: 2, borderRadius: 2 }}
+                  alignItems="center"
+                  sx={{
+                    backgroundColor: "#e8f5e9",
+                    borderRadius: 2,
+                    mb: 1,
+                    px: 2,
+                    py: 1,
+                    minWidth: 1000,
+                    overflowY: "auto",
+                    overflowX: "auto",
+                  }}
                 >
-                  <Grid size={{ xs: 12, sm: 2 }}>
-                    <Typography sx={{ ml: 2 }}>
-                      {product.model_number}
-                    </Typography>
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 3 }}>
-                    <Typography>{product.product_name}</Typography>
-                  </Grid>
-                  <Grid size={{ xs: 12, sm: 1 }}>
+                  <Grid
+                    size={{ xs: 2 }}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
                     <Typography>
-                      ¥{Math.round(product.price).toLocaleString()}
+                      {custom?.model_number ?? product.model_number}
                     </Typography>
                   </Grid>
-                  <Grid size={{ xs: 12, sm: 3 }}>
-                    <Box display="flex" alignItems="center">
-                      <Button onClick={() => reduceProduct(product.id)}>
+                  <Grid
+                    size={{ xs: 2 }}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    <Typography>{custom?.name ?? product.name}</Typography>
+                  </Grid>
+                  <Grid
+                    size={{ xs: 1 }}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    <Typography>{custom ? `個別品` : "共通品"}</Typography>
+                  </Grid>
+                  <Grid
+                    size={{ xs: 2 }}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    <Typography>
+                      ¥
+                      {Math.round(
+                        custom?.price ?? product.price,
+                      ).toLocaleString()}
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    size={{ xs: 2 }}
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
+                      <Button
+                        size="small"
+                        sx={{ minWidth: 32, px: 1 }}
+                        onClick={() =>
+                          reduceProduct(product.id, custom?.id ?? null)
+                        }
+                      >
                         -
                       </Button>
                       <TextField
@@ -111,13 +324,15 @@ export const CurrentCart = () => {
                         onChange={(e) =>
                           handleQuantityChange(
                             product.id,
+                            custom?.id ?? null,
                             Number(e.target.value),
                           )
                         }
                         type="number"
                         size="small"
                         sx={{
-                          width: 80,
+                          mx: 0.5,
+                          width: 50,
                           "& input": {
                             textAlign: "center",
                             padding: 0,
@@ -144,29 +359,66 @@ export const CurrentCart = () => {
                           },
                         }}
                       />
-                      <Button onClick={() => addProduct(product.id)}>+</Button>
+                      <Button
+                        size="small"
+                        sx={{ minWidth: 32, px: 1 }}
+                        onClick={() =>
+                          addProduct(product.id, custom?.id ?? null)
+                        }
+                      >
+                        +
+                      </Button>
                     </Box>
                   </Grid>
-                  <Grid size={{ xs: 12, sm: 2 }}>
+                  <Grid
+                    size={{ xs: 2 }}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
                     <Typography>
-                      ¥{calcProductTotalAmount(product.id).toLocaleString()}
+                      ¥
+                      {calcProductTotalAmount(
+                        product.id,
+                        custom?.id ?? null,
+                      ).toLocaleString()}
                     </Typography>
                   </Grid>
-                  <Grid size={{ xs: 12, sm: 1 }}>
+                  <Grid
+                    size={{ xs: 1 }}
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    sx={{
+                      minWidth: 10,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
                     <Button
                       color="error"
-                      sx={{ mr: 2 }}
-                      onClick={() => deleteProduct(product.id)}
+                      size="small"
+                      onClick={() =>
+                        deleteProduct(product.id, custom?.id ?? null)
+                      }
                     >
                       削除
                     </Button>
                   </Grid>
                 </Grid>
-              </Box>
-            );
-          })
+              );
+            })}
+          </Box>
         )}
-        <Divider sx={{ my: 4 }} />
+
+        <Divider sx={{ my: 3 }} />
         <Box display="flex" justifyContent="flex-end">
           <Typography variant="h6">
             合計: ¥{calcCartTotalAmount().toLocaleString()}
@@ -175,9 +427,15 @@ export const CurrentCart = () => {
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Button
             variant="contained"
-            color="primary"
+            sx={{
+              backgroundColor: "#81c784",
+              px: 4,
+              py: 1.5,
+              "&:hover": {
+                backgroundColor: "#66bb6a",
+              },
+            }}
             onClick={handleCheckout}
-            sx={{ px: 4, py: 1.5 }}
           >
             チェックアウト
           </Button>

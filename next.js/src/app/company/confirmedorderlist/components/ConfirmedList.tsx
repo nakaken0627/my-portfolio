@@ -19,39 +19,46 @@ import {
   Typography,
 } from "@mui/material";
 
-type ConfirmedList = {
+type OrderProductForCompany = {
   id: number;
-  company_id: number;
-  order_id: number;
-  user_name: string;
-  model_number: number;
-  product_id: number;
-  product_name: string;
-  quantity: number;
+  orderProductId: number;
+  name: string;
+  userName: string;
+  model_number: string;
   price: number;
+  quantity: number;
+  custom: {
+    id: number;
+    model_number: string;
+    name: string;
+    price: number;
+  } | null;
 };
 
-type GroupedList = Record<number, ConfirmedList[]>;
+type TransformedForCompany = {
+  orderId: number;
+  products: OrderProductForCompany[];
+};
 
 export const ConfirmedList = () => {
   const companyContext = useContext(CompanyContext);
-  const [groupingList, setGroupingList] = useState<GroupedList>({});
+  const [orderList, setOrderList] = useState<TransformedForCompany[]>([]);
 
   const { myCompany } = companyContext ?? {};
 
+  console.log(orderList);
+
   const fetchConfirmedOrderList = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/company/orders/confirmed`, {
-        method: "GET",
-        credentials: "include",
-      });
-      const data: ConfirmedList[] = await res.json();
-      const groupedList = data.reduce<GroupedList>((acc, item) => {
-        acc[item.order_id] ??= [];
-        acc[item.order_id].push(item);
-        return acc;
-      }, {});
-      setGroupingList(groupedList);
+      const res = await fetch(
+        `${API_BASE_URL}/api/company/orders?is_confirmed=true`,
+        {
+          method: "GET",
+          credentials: "include",
+        },
+      );
+      const data: TransformedForCompany[] = await res.json();
+      setOrderList(data);
     } catch (err) {
       console.error(err);
     }
@@ -72,15 +79,17 @@ export const ConfirmedList = () => {
         受注処理済み一覧
       </Typography>
       <Box sx={{ px: { xs: 1, sm: 2 }, py: 2 }}>
-        {Object.entries(groupingList).map(([order_id, items]) => {
-          const total = items.reduce(
-            (sum, item) => sum + item.price * item.quantity,
+        {orderList.map((o) => {
+          const total = o.products.reduce(
+            (sum, p) =>
+              p.custom
+                ? sum + p.custom.price * p.quantity
+                : sum + p.price * p.quantity,
             0,
           );
-
           return (
             <Card
-              key={order_id}
+              key={o.orderId}
               variant="outlined"
               sx={{
                 mb: 4,
@@ -99,10 +108,10 @@ export const ConfirmedList = () => {
                   }}
                 >
                   <Typography variant="subtitle1" fontWeight="bold">
-                    注文ID: {order_id}
+                    注文ID: {o.orderId}
                   </Typography>
                   <Typography variant="subtitle2" color="text.secondary">
-                    顧客: {items[0].user_name}
+                    顧客: {o.products[0].userName}
                   </Typography>
                 </Box>
 
@@ -118,22 +127,29 @@ export const ConfirmedList = () => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {items.map((item, index) => (
+                      {o.products.map((p, index) => (
                         <TableRow
-                          key={item.id}
+                          key={`${String(p.id)}-${String(p.custom?.id ?? "no-custom")}`}
                           sx={{
                             backgroundColor:
                               index % 2 === 0 ? "#fafafa" : "white",
                           }}
                         >
-                          <TableCell>{item.product_name}</TableCell>
-                          <TableCell>{item.model_number}</TableCell>
-                          <TableCell>{item.quantity}</TableCell>
-                          <TableCell>¥{item.price.toLocaleString()}</TableCell>
+                          <TableCell>{p.custom?.name ?? p.name}</TableCell>
+                          <TableCell>
+                            {p.custom?.model_number ?? p.model_number}
+                          </TableCell>
+                          <TableCell>{p.quantity}</TableCell>
+                          <TableCell>
+                            ¥{(p.custom?.price ?? p.price).toLocaleString()}
+                          </TableCell>
                           <TableCell
                             sx={{ fontWeight: "bold", color: "green" }}
                           >
-                            ¥{(item.price * item.quantity).toLocaleString()}
+                            ¥
+                            {(
+                              (p.custom?.price ?? p.price) * p.quantity
+                            ).toLocaleString()}
                           </TableCell>
                         </TableRow>
                       ))}

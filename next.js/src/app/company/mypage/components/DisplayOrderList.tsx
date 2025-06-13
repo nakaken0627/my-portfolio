@@ -20,54 +20,58 @@ import {
   Typography,
 } from "@mui/material";
 
-type OrderList = {
+type OrderProduct = {
   id: number;
-  company_id: number;
-  order_id: number;
-  user_name: string;
-  model_number: number;
-  product_id: number;
-  product_name: string;
-  quantity: number;
+  orderProductId: number;
+  name: string;
+  userName: string;
+  model_number: string;
   price: number;
+  quantity: number;
+  customization: {
+    id: number;
+    model_number: string;
+    name: string;
+    price: number;
+  } | null;
 };
 
-type GroupedOrderList = Record<number, OrderList[]>;
+type Transformed = {
+  orderId: number;
+  products: OrderProduct[];
+};
 
 export const DisplayOrderList = () => {
   const companyContext = useContext(CompanyContext);
-  const [orderList, setOrderList] = useState<OrderList[]>([]);
-  const [groupedOrderList, setGroupedOrderList] = useState<GroupedOrderList>(
-    {},
-  );
+  const [orderList, setOrderList] = useState<Transformed[]>([]);
   const [confirmedIds, setConfirmedIds] = useState<number[]>([]);
 
   const { myCompany } = companyContext ?? {};
 
   const fetchMyOrderList = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/company/orders`, {
-        method: "GET",
-        credentials: "include",
-      });
-      const data: OrderList[] = await res.json();
+      const res = await fetch(
+        `${API_BASE_URL}/api/company/orders?is_confirmed=false`,
+        {
+          method: "GET",
+          credentials: "include",
+        },
+      );
+      const data: Transformed[] = await res.json();
       setOrderList(data);
-
-      const groupedOrders = data.reduce<GroupedOrderList>((acc, item) => {
-        acc[item.order_id] ??= [];
-        acc[item.order_id].push(item);
-        return acc;
-      }, {});
-      setGroupedOrderList(groupedOrders);
     } catch (err) {
       console.error(err);
     }
   };
 
-  const orderTotalAmount = (order_id: number, items: OrderList[]) =>
-    items
-      .filter((item) => item.order_id === order_id)
-      .reduce((total, product) => total + product.price * product.quantity, 0);
+  const orderTotalAmount = (data: OrderProduct[]) => {
+    return data.reduce((total, p) => {
+      const custom = p.customization;
+      return custom
+        ? total + custom.price * p.quantity
+        : total + p.price * p.quantity;
+    }, 0);
+  };
 
   const handleCheckBoxStatus = (id: number) => {
     setConfirmedIds((prev) =>
@@ -93,7 +97,9 @@ export const DisplayOrderList = () => {
     if (confirmedIds.length > 0) {
       setConfirmedIds([]);
     } else {
-      const idArray = orderList.map((item) => item.id);
+      const idArray = orderList.flatMap((item) =>
+        item.products.map((i) => i.orderProductId),
+      );
       setConfirmedIds(idArray);
     }
   };
@@ -131,12 +137,12 @@ export const DisplayOrderList = () => {
         </Grid>
       </Grid>
 
-      {Object.entries(groupedOrderList).map(([order_id, items]) => {
-        const totalAmount = orderTotalAmount(Number(order_id), items);
+      {orderList.map((o) => {
+        const totalAmount = orderTotalAmount(o.products);
 
         return (
           <Card
-            key={order_id}
+            key={o.orderId}
             sx={{
               mb: 4,
               border: totalAmount >= 50000 ? "2px solid red" : "1px solid #ccc",
@@ -145,7 +151,7 @@ export const DisplayOrderList = () => {
           >
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                オーダーID: {order_id}
+                オーダーID: {o.orderId}
               </Typography>
               <Typography variant="subtitle1" gutterBottom>
                 合計金額: ¥{totalAmount.toLocaleString()}
@@ -164,31 +170,36 @@ export const DisplayOrderList = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {items.map((item) => (
+                    {o.products.map((p) => (
                       <TableRow
-                        key={`${String(item.order_id)}-${String(item.product_id)}`}
+                        key={`${String(p.id)}-${String(p.customization?.id)}`}
                       >
                         <TableCell>
                           <Checkbox
-                            checked={confirmedIds.includes(item.id)}
+                            checked={confirmedIds.includes(p.orderProductId)}
                             onChange={() => {
-                              handleCheckBoxStatus(item.id);
+                              handleCheckBoxStatus(p.orderProductId);
                             }}
                           />
                         </TableCell>
-                        <TableCell>{item.model_number}</TableCell>
-                        <TableCell>{item.product_name}</TableCell>
                         <TableCell>
-                          ¥{Math.round(item.price).toLocaleString()}
+                          {p.customization?.model_number ?? p.model_number}
                         </TableCell>
-                        <TableCell>{item.quantity}</TableCell>
+                        <TableCell>{p.customization?.name ?? p.name}</TableCell>
                         <TableCell>
                           ¥
                           {Math.round(
-                            item.price * item.quantity,
+                            p.customization?.price ?? p.price,
                           ).toLocaleString()}
                         </TableCell>
-                        <TableCell>{item.user_name}</TableCell>
+                        <TableCell>{p.quantity}</TableCell>
+                        <TableCell>
+                          ¥
+                          {Math.round(
+                            (p.customization?.price ?? p.price) * p.quantity,
+                          ).toLocaleString()}
+                        </TableCell>
+                        <TableCell>{p.userName}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

@@ -48,10 +48,11 @@ CREATE TABLE IF NOT EXISTS cart_products (
   id SERIAL PRIMARY KEY,
   cart_id INTEGER NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
   product_id INTEGER NOT NULL REFERENCES products(id),
+  customization_id INTEGER REFERENCES product_customizations(id),
   quantity INTEGER NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE (cart_id, product_id)
+  UNIQUE (cart_id, product_id,customization_id)
 );
 
 CREATE TABLE IF NOT EXISTS orders (
@@ -65,12 +66,13 @@ CREATE TABLE IF NOT EXISTS order_products (
   id SERIAL PRIMARY KEY,
   order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
   product_id INTEGER NOT NULL REFERENCES products(id),
+  customization_id INTEGER REFERENCES product_customizations(id),
   quantity INTEGER NOT NULL,
   price NUMERIC(10, 2) NOT NULL, --注文時点の単価情報で確定するためpriceを登録
   is_confirmed BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE (order_id, product_id)
+  UNIQUE (order_id, product_id,customization_id)
 );
 
 CREATE TABLE IF NOT EXISTS product_customizations(

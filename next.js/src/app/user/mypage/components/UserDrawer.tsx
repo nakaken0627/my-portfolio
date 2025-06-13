@@ -6,6 +6,7 @@ import { UserProductCustomizationList } from "./UserProductCustomizationList";
 type DrawerProps = {
   openDrawer: boolean;
   handleDrawerClose: () => void;
+  productId: number;
   customization: UserProductCustomization[];
 };
 
@@ -14,7 +15,8 @@ type Props = {
 };
 
 export const UserDrawer = ({ drawerProps }: Props) => {
-  const { openDrawer, handleDrawerClose, customization } = drawerProps;
+  const { openDrawer, handleDrawerClose, productId, customization } =
+    drawerProps;
   return (
     <Drawer anchor="bottom" open={openDrawer} onClose={handleDrawerClose}>
       <Box
@@ -29,7 +31,10 @@ export const UserDrawer = ({ drawerProps }: Props) => {
         <Typography variant="h6" sx={{ mb: 2 }}>
           カスタマイズ品一覧
         </Typography>
-        <UserProductCustomizationList customization={customization} />
+        <UserProductCustomizationList
+          customization={customization}
+          productId={productId}
+        />
       </Box>
     </Drawer>
   );

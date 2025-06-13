@@ -6,16 +6,16 @@ import {
   changStatusOfConfirm,
   checkoutUserCart,
   confirmedOrderList,
-  createOrChangeUserCartProduct,
+  createOrUpdateUserCartProduct,
   deleteCustomProduct,
   deleteCustomProductsForCompany,
   deleteProductsForCompany,
   deleteUserCartALLProducts,
   deleteUserCartProduct,
+  fetchAllProductsForUser,
   fetchDisplayProductsByCompany,
   fetchDisplayProductsForUser,
   findProductsForCompany,
-  findProductsFromUser,
   getOrCreateCart,
   getTotalProductsCount,
   getUserCartALLProducts,
@@ -49,7 +49,7 @@ router.delete("/company/custom-product", deleteCustomProduct);
 
 //発注者用API
 router.get("/user/profile", getMyUser);
-router.get("/user/products", findProductsFromUser);
+router.get("/user/products", fetchAllProductsForUser);
 router.get("/user/orders/history", orderHistory);
 router.get("/user/products/custom", fetchDisplayProductsForUser);
 router.get("/user/products/count", getTotalProductsCount);
@@ -57,7 +57,7 @@ router.get("/user/products/count", getTotalProductsCount);
 //カート機能
 router.get("/cart/cart", getOrCreateCart);
 router.get("/cart/products", getUserCartALLProducts);
-router.put("/cart/product/:productId", createOrChangeUserCartProduct);
+router.put("/cart/product", createOrUpdateUserCartProduct);
 router.post("/cart/checkout", checkoutUserCart);
 router.delete("/cart/products", deleteUserCartProduct);
 router.delete("/cart/all-products", deleteUserCartALLProducts);

@@ -36,56 +36,28 @@ export const createUser = async (username: string, password: string): Promise<Us
   }
 };
 
-export const findProductsForUser = async () => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(
-      `SELECT 
-          companies.name as company_name,
-          products.id as id,
-          model_number,
-          products.name as product_name, 
-          price, 
-          description,
-          image_name
-          FROM products
-          INNER JOIN companies
-          ON companies.id = products.company_id
-          ORDER BY company_id`,
-    );
-    return result.rows;
-  } finally {
-    client.release();
-  }
-};
-
-export const orderedProductList = async (user_id: number) => {
+export const orderedProductList = async (userId: number) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
       `
-      SELECT
-        ORDER_ID,
-        CARTS.ID as cart_id,
-        CART_PRODUCTS.PRODUCT_ID,
-        MODEL_NUMBER,
-        PRODUCTS.NAME as product_name,
-        PRICE,
-        QUANTITY,
-        COMPANIES.NAME as company_name
-      FROM
-        CARTS
-        INNER JOIN USERS ON USERS.ID = CARTS.USER_ID
-        INNER JOIN CART_PRODUCTS ON CART_PRODUCTS.CART_ID = CARTS.ID
-        INNER JOIN PRODUCTS ON CART_PRODUCTS.PRODUCT_ID = PRODUCTS.ID
-        INNER JOIN COMPANIES ON PRODUCTS.COMPANY_ID= COMPANIES.ID
-      WHERE
-        USER_ID = $1
-        AND IS_CHECKEDOUT = TRUE
-      ORDER BY
-        ORDER_ID DESC,
-        CART_PRODUCTS.PRODUCT_ID ASC`,
-      [user_id],
+        SELECT 
+          order_id ,
+          (to_jsonb(p) || jsonb_build_object('company_name',co.name,'quantity',cp.quantity)) AS product,
+          to_jsonb(pc) AS customization
+        FROM carts c
+        INNER JOIN users u ON c.user_id = u.id
+        INNER JOIN cart_products cp ON cp.cart_id = c.id 
+        INNER JOIN products p ON cp.product_id = p.id
+        LEFT JOIN product_customizations pc ON cp.customization_id = pc.id
+        INNER JOIN companies co ON p.company_id = co.id
+        WHERE
+          c.user_id = $1 
+        AND is_checkedout = TRUE
+        ORDER BY
+          order_id DESC,
+          cp.product_id ASC`,
+      [userId],
     );
     return result.rows;
   } finally {
@@ -94,6 +66,47 @@ export const orderedProductList = async (user_id: number) => {
 };
 
 export const findProductsWithCustomization = async (userId: number, limit: number, offset: number) => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(
+      `
+        SELECT 
+          (to_jsonb(p) || jsonb_build_object('company_name', c.name)) AS product,
+          to_jsonb(pc) AS customization
+        FROM (
+          SELECT * 
+          FROM products
+          ORDER BY id
+          LIMIT $2 OFFSET $3
+        ) p
+        INNER JOIN companies c
+        ON c.id = p.company_id
+        LEFT JOIN product_customizations pc
+        ON p.id = pc.product_id
+          AND (pc.user_id = $1 OR pc.user_id is NULL)
+          AND (pc.start_date IS NULL OR pc.start_date <= CURRENT_DATE)
+          AND (pc.end_date IS NULL OR pc.end_date >= CURRENT_DATE)
+        ORDER BY p.id
+      `,
+      [userId, limit, offset],
+    );
+    return result.rows;
+  } finally {
+    client.release();
+  }
+};
+
+export const countAllProducts = async () => {
+  const client: PoolClient = await pool.connect();
+  try {
+    const result = await client.query(`SELECT COUNT(*) FROM products`);
+    return result.rows[0];
+  } finally {
+    client.release();
+  }
+};
+
+export const findAllProductsWithCustomization = async (userId: number) => {
   const client: PoolClient = await pool.connect();
   try {
     const result = await client.query(
@@ -110,21 +123,10 @@ export const findProductsWithCustomization = async (userId: number, limit: numbe
           AND (pc.start_date IS NULL OR pc.start_date <= CURRENT_DATE)
           AND (pc.end_date IS NULL OR pc.end_date >= CURRENT_DATE)
         ORDER BY p.id
-        LIMIT $2 OFFSET $3
       `,
-      [userId, limit, offset],
+      [userId],
     );
     return result.rows;
-  } finally {
-    client.release();
-  }
-};
-
-export const countAllProducts = async () => {
-  const client: PoolClient = await pool.connect();
-  try {
-    const result = await client.query(`SELECT COUNT(*) FROM products`);
-    return result.rows[0];
   } finally {
     client.release();
   }
