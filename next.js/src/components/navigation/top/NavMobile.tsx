@@ -34,7 +34,6 @@ export const NavMobile = ({ toggleDrawer, drawerOpen }: Props) => {
           </IconButton>
           <Typography variant="h6">Top Panel</Typography>
         </Box>
-
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {navLinks.map((item) => (
             <Button

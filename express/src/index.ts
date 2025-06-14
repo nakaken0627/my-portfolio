@@ -1,4 +1,3 @@
-import path from "path";
 import type { Express, Request, Response } from "express";
 import connectPgSimple from "connect-pg-simple";
 import cors from "cors";
@@ -6,11 +5,10 @@ import dotenv from "dotenv";
 import express from "express";
 import session from "express-session";
 
-import apiRouter from "./presentation/routes/api.js";
-import authRouter from "./presentation/routes/auth.js";
-import pool from "./shared/config/database.js";
-import { logger } from "./shared/config/logger.js";
-import passport from "./shared/config/passport.js";
+import pool from "./config/database.js";
+import passport from "./config/passport.js";
+import apiRouter from "./routes/api.js";
+import authRouter from "./routes/auth.js";
 
 //expressのインスタンスを作成
 const app: Express = express();
@@ -21,9 +19,6 @@ const port = Number(process.env.PORT) || 3001;
 const sessionSecret = process.env.SESSION_SECRET;
 const frontIp = process.env.FRONT_IP || "localhost";
 const host = process.env.HOST || "localhost";
-const nodeEnv = process.env.NODE_ENV || "development";
-
-dotenv.config({ path: path.resolve(process.cwd(), `.env.${nodeEnv}`) });
 
 //特定のサーバからのアクセスを許可するcors設定
 const corsOptions = {
@@ -63,7 +58,7 @@ app.get("/", (req: Request, res: Response) => {
 //認証用
 app.use("/auth", authRouter);
 
-//情報取得/更新用のルーティング
+//情報取得用
 app.use("/api", apiRouter);
 
 //エラーハンドラー
@@ -74,8 +69,8 @@ app.use((req, res) => {
 //サーバを起動
 app
   .listen(port, host, () => {
-    logger.info(`Server is running at http://${host}:${port} in ${process.env.NODE_ENV} mode`);
+    console.warn(`Server is running at http://${host}:${port}`);
   })
   .on("error", (err) => {
-    logger.error("Server failed to start", { error: err, host, port });
+    console.error(err);
   });

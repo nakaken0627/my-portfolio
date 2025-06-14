@@ -3,7 +3,7 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { SigninSchema } from "@/app/auth/company-signin/components/SigninForm/SigninSchema";
-import { useCompanySignin } from "@/hooks/company/useCompanySignin";
+import { useSignin } from "@/hooks/company/useSignin";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField } from "@mui/material";
 
@@ -24,7 +24,7 @@ export const SigninForm = () => {
   });
 
   const router = useRouter();
-  const { trigger, isMutating } = useCompanySignin();
+  const { trigger, isMutating } = useSignin();
 
   const onSubmit: SubmitHandler<FormData> = async (inputData: FormData) => {
     try {

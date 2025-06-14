@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
@@ -17,12 +18,16 @@ import { navLinks } from "./NavLinks";
 import { SignoutFunc } from "./SignoutFunc";
 
 type Props = {
-  userInfo: { name: string } | null;
+  userInfoElement: ReactNode;
   toggleDrawer: () => void;
   drawerOpen: boolean;
 };
 
-export const NavMobile = ({ userInfo, toggleDrawer, drawerOpen }: Props) => {
+export const NavMobile = ({
+  userInfoElement,
+  toggleDrawer,
+  drawerOpen,
+}: Props) => {
   return (
     <>
       <Toolbar>
@@ -37,16 +42,11 @@ export const NavMobile = ({ userInfo, toggleDrawer, drawerOpen }: Props) => {
           <IconButton color="inherit" edge="start" onClick={toggleDrawer}>
             <MenuIcon />
           </IconButton>
-
           <Typography variant="h6">
             <Link href="/user/mypage">User Panel</Link>
           </Typography>
-
-          <Typography variant="body1" sx={{ mx: 2, borderBottom: "1px solid" }}>
-            ようこそ、{userInfo?.name === "test" ? "ゲスト" : userInfo?.name}様
-          </Typography>
+          {userInfoElement}
         </Box>
-
         <IconButton color="inherit" href="/user/cart">
           <ShoppingCartIcon />
         </IconButton>

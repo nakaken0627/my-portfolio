@@ -2,9 +2,7 @@ import { z } from "zod";
 
 export const AddDefaultProductSchema = z.object({
   modelNumber: z.string().nonempty("型番は必須です"),
-
-  name: z.string().nonempty("商品名は必須です"),
-
+  productName: z.string().nonempty("商品名は必須です"),
   price: z
     .number({
       required_error: "価格は必須です",
@@ -14,7 +12,6 @@ export const AddDefaultProductSchema = z.object({
     .positive("価格は0より大きい数値で入力してください"),
 
   description: z.string(),
-
   imageFile: z
     .union([z.instanceof(File), z.undefined()])
     .refine((file) => !file || file.size > 0, {
@@ -31,4 +28,5 @@ export const AddDefaultProductSchema = z.object({
       message: "画像サイズは5MB以下にしてください。",
     })
     .optional(),
+  // .nullable(),
 });

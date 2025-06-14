@@ -1,105 +1,132 @@
 "use client";
 
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { FormEvent, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useUserSignup } from "@/hooks/user/useUserSignup";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, TextField } from "@mui/material";
-
-import { SignupSchema } from "./SignupSchema";
-
-type FormData = {
-  name: string;
-  password: string;
-  confirmedPassword: string;
-};
-
-type CustomError = Error & {
-  info?: { message: string };
-};
+import { API_BASE_URL } from "@/lib/api";
+import {
+  Alert,
+  Box,
+  Button,
+  Container,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 export const SignupForm = () => {
-  const { handleSubmit, control } = useForm<FormData>({
-    mode: "onChange",
-    defaultValues: { name: "", password: "", confirmedPassword: "" },
-    resolver: zodResolver(SignupSchema),
-  });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmedPassword, setConfirmedPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const router = useRouter();
-  const { trigger, isMutating } = useUserSignup();
 
-  const onSubmit: SubmitHandler<FormData> = async (inputData: FormData) => {
-    try {
-      await trigger(inputData);
-      router.push("/user/dashboard");
-    } catch (err) {
-      const error = err as CustomError;
-      const msg = error.info?.message ?? "";
-      alert(msg || "新規登録に失敗しました");
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError(null);
+
+    if (password !== confirmedPassword) {
+      setError("パスワードが一致しません");
+      return;
     }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/user/signup`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data: { message: string } = await response.json();
+
+      if (response.ok) {
+        router.push("/user/mypage");
+      } else {
+        setError(data.message || "サインアップに失敗しました");
+      }
+    } catch (err) {
+      setError("ネットワークエラー");
+      console.error(err);
+    }
+
+    setUsername("");
+    setPassword("");
+    setConfirmedPassword("");
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
-      <Controller
-        name="name"
-        control={control}
-        rules={{ required: true }}
-        render={({ field, fieldState: { error } }) => (
-          <TextField
-            {...field}
-            margin="normal"
-            fullWidth
-            id="name"
-            label="ユーザーID"
-            error={!!error}
-            helperText={error?.message}
-          />
+    <Container maxWidth="sm" sx={{ pt: 5 }}>
+      <Paper elevation={4} sx={{ padding: 4, marginTop: 8 }}>
+        <Typography variant="h5" component="h1" gutterBottom align="center">
+          ユーザー新規登録
+        </Typography>
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
         )}
-      />
-      <Controller
-        name="password"
-        control={control}
-        rules={{ required: true }}
-        render={({ field, fieldState: { error } }) => (
+
+        <Box component="form" onSubmit={handleSubmit} noValidate>
           <TextField
-            {...field}
             margin="normal"
             fullWidth
+            required
+            id="username"
+            label="ユーザーID"
+            value={username}
+            onChange={(e) => {
+              setUsername(e.target.value);
+            }}
+          />
+          <TextField
+            margin="normal"
+            fullWidth
+            required
             id="password"
             label="パスワード"
             type="password"
-            error={!!error}
-            helperText={error?.message}
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
           />
-        )}
-      />
-      <Controller
-        name="confirmedPassword"
-        control={control}
-        rules={{ required: true }}
-        render={({ field, fieldState: { error } }) => (
           <TextField
-            {...field}
             margin="normal"
             fullWidth
+            required
             id="confirmedPassword"
             label="パスワード（確認用）"
             type="password"
-            error={!!error}
-            helperText={error?.message}
+            value={confirmedPassword}
+            onChange={(e) => {
+              setConfirmedPassword(e.target.value);
+            }}
           />
-        )}
-      />
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
-        disabled={isMutating}
-      >
-        登録
-      </Button>
-    </Box>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            登録
+          </Button>
+        </Box>
+
+        <Typography variant="body2" align="center">
+          すでにアカウントをお持ちの方は{" "}
+          <Link
+            href="/auth/user-signin"
+            style={{ color: "#1976d2", textDecoration: "none" }}
+          >
+            ログインはこちら
+          </Link>
+        </Typography>
+      </Paper>
+    </Container>
   );
 };

@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import Image from "next/image";
-import { CartContext } from "@/context/CartContext";
+import { CartContext } from "@/context/cart-context";
 import { UserProductWithCustom } from "@/types/user";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
@@ -103,10 +103,10 @@ export const UserProductItem = ({ id, product }: Props) => {
                 {product.name}
               </Typography>
               <Typography variant="body2" sx={{ my: 1 }}>
-                型番: {product.modelNumber}
+                型番: {product.model_number}
               </Typography>
               <Typography variant="body2" sx={{ my: 1 }}>
-                企業: {product.companyName}
+                企業: {product.company_name}
               </Typography>
               <Typography variant="body2" sx={{ my: 1 }}>
                 説明:

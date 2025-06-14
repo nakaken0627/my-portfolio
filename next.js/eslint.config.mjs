@@ -99,7 +99,7 @@ export default tseslint.config(
   },
   {
     rules: {
-      "no-console": ["error"],
+      "no-console": ["error", { allow: ["warn", "error"] }],
     },
   },
   // prettierとの競合を防ぐためにeslint-config-prettierを読み込む

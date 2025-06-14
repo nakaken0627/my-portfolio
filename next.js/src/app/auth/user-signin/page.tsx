@@ -1,14 +1,14 @@
 import { TopNav } from "@/components/navigation/top/TopNav";
 
-import { SigninPage } from "./components/SigninPage";
+import { SigninForm } from "./components/SigninForm";
 
-const AuthSigninPage = () => {
+const SigninPage = () => {
   return (
     <div>
       <TopNav />
-      <SigninPage />;
+      <SigninForm />;
     </div>
   );
 };
 
-export default AuthSigninPage;
+export default SigninPage;

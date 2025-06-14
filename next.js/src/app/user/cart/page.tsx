@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-import UserLayout from "../UserLayout";
+import { UserLayout } from "../UserLayout";
 import { CurrentCart } from "./components/CurrentCart";
 
 export default function UserCart() {

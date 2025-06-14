@@ -10,9 +10,9 @@ import { OrderCard } from "./OrderCard";
 
 export const DisplayOrderList = () => {
   const [confirmedIds, setConfirmedIds] = useState<number[]>([]);
+
   const { data, isError, isLoading } = useFetchOrderList();
   const { trigger } = useConfirmedOrders();
-
   if (!data) {
     return <Typography>データを取得中です...</Typography>;
   }

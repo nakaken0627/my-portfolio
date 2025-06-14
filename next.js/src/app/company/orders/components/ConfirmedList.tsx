@@ -7,7 +7,6 @@ import { OrderCard } from "./OrderCard";
 
 export const ConfirmedList = () => {
   const { data, isError, isLoading } = useFetchConfirmedList();
-
   if (!data) {
     return <Typography>データを取得中です...</Typography>;
   }

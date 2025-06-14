@@ -9,7 +9,7 @@ import { AddDefaultProductSchema } from "./AddDefaultProductSchema";
 
 type FormInput = {
   modelNumber: string;
-  name: string;
+  productName: string;
   price: number;
   description: string;
   imageFile?: File;
@@ -24,7 +24,7 @@ export const AddDefaultProduct = () => {
     mode: "onChange",
     defaultValues: {
       modelNumber: "",
-      name: "",
+      productName: "",
       price: 0,
       description: "",
       imageFile: undefined,
@@ -53,7 +53,7 @@ export const AddDefaultProduct = () => {
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack spacing={2}>
           <Controller
-            name="name"
+            name="productName"
             control={control}
             render={({ field, fieldState: { error } }) => (
               <TextField
@@ -81,7 +81,6 @@ export const AddDefaultProduct = () => {
               />
             )}
           />
-
           <Controller
             name="price"
             control={control}
@@ -122,6 +121,7 @@ export const AddDefaultProduct = () => {
             control={control}
             render={({ field: { onChange, ref }, fieldState: { error } }) => (
               <TextField
+                // {...field}
                 type="file"
                 size="small"
                 variant="standard"
@@ -142,7 +142,6 @@ export const AddDefaultProduct = () => {
               />
             )}
           />
-
           <Button
             type="submit"
             variant="contained"

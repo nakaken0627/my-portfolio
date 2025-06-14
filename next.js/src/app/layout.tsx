@@ -5,8 +5,6 @@ import { ThemeRegistry } from "../components/ThemeRegistry";
 
 import "./globals.css";
 
-import ErrorBoundary from "@/components/ErrorBoundary";
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -32,9 +30,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-amber-50 antialiased`}
       >
-        <ThemeRegistry>
-          <ErrorBoundary>{children}</ErrorBoundary>
-        </ThemeRegistry>
+        <ThemeRegistry>{children}</ThemeRegistry>
       </body>
     </html>
   );

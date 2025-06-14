@@ -10,11 +10,7 @@ import {
 
 import { AddCustomProduct } from "../AddCustomProduct/AddCustomProduct";
 
-type Props = {
-  onAddSuccess?: () => void;
-};
-
-export const ModalForm = ({ onAddSuccess }: Props) => {
+export const ModalForm = () => {
   return (
     <Box
       sx={{
@@ -48,7 +44,7 @@ export const ModalForm = ({ onAddSuccess }: Props) => {
         </AccordionSummary>
         <AccordionDetails sx={{ p: 1.5, pt: 0 }}>
           <Paper elevation={0} sx={{ p: 1, backgroundColor: "#fff" }}>
-            <AddCustomProduct onAddSuccess={onAddSuccess} />
+            <AddCustomProduct />
           </Paper>
         </AccordionDetails>
       </Accordion>

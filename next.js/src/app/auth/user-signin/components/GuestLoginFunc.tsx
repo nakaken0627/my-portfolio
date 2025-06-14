@@ -1,26 +1,29 @@
-"use client";
-
 import { useRouter } from "next/navigation";
-import { useUserSignin } from "@/hooks/user/useUserSignin";
+import { API_BASE_URL } from "@/lib/api";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { Box, Button, Tooltip } from "@mui/material";
 
-type CustomError = Error & {
-  info?: { message: string };
-};
-
 export const GuestLoginFunc = () => {
   const router = useRouter();
-  const { trigger, isMutating } = useUserSignin();
 
   const handleGuestLogin = async () => {
     try {
-      await trigger({ username: "test", password: "test" });
-      router.push("/user/dashboard");
+      const response = await fetch(`${API_BASE_URL}/auth/user/login`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: "test",
+          password: "test",
+        }),
+      });
+      if (response.ok) {
+        router.push("/user/dashboard");
+      }
     } catch (err) {
-      const error = err as CustomError;
-      const msg = error.info?.message ?? "";
-      alert(msg || "ログインに失敗しました");
+      console.error(err);
     }
   };
 
@@ -33,7 +36,6 @@ export const GuestLoginFunc = () => {
           color="secondary"
           fullWidth
           startIcon={<PersonOutlineIcon />}
-          disabled={isMutating}
           sx={{
             borderWidth: 2,
             fontWeight: "bold",

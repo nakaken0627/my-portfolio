@@ -28,7 +28,6 @@ export const OrderTable = ({ products, total }: Props) => {
             <TableCell>小計</TableCell>
           </TableRow>
         </TableHead>
-
         <TableBody>
           {products.map((p, index) => (
             <TableRow
@@ -49,7 +48,6 @@ export const OrderTable = ({ products, total }: Props) => {
             </TableRow>
           ))}
         </TableBody>
-
         <TableFooter>
           <TableRow>
             <TableCell

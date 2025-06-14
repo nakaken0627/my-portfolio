@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useContext } from "react";
-import { CartContext } from "@/context/CartContext";
+import { CartContext } from "@/context/cart-context";
 import { UserProductWithCustom } from "@/types/user";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
@@ -58,7 +58,6 @@ export const CartCard = ({ products, cartProducts }: Props) => {
         >
           型番
         </Grid>
-
         <Grid
           size={{ xs: 2 }}
           display="flex"
@@ -73,7 +72,6 @@ export const CartCard = ({ products, cartProducts }: Props) => {
         >
           商品名
         </Grid>
-
         <Grid
           size={{ xs: 1 }}
           display="flex"
@@ -88,7 +86,6 @@ export const CartCard = ({ products, cartProducts }: Props) => {
         >
           種別
         </Grid>
-
         <Grid
           size={{ xs: 2 }}
           display="flex"
@@ -103,7 +100,6 @@ export const CartCard = ({ products, cartProducts }: Props) => {
         >
           価格
         </Grid>
-
         <Grid
           size={{ xs: 2 }}
           display="flex"
@@ -118,7 +114,6 @@ export const CartCard = ({ products, cartProducts }: Props) => {
         >
           数量
         </Grid>
-
         <Grid
           size={{ xs: 2 }}
           display="flex"
@@ -133,7 +128,6 @@ export const CartCard = ({ products, cartProducts }: Props) => {
         >
           小計
         </Grid>
-
         <Grid
           size={{ xs: 1 }}
           display="flex"
@@ -190,32 +184,23 @@ export const CartCard = ({ products, cartProducts }: Props) => {
               }}
             >
               <Typography>
-                {custom?.modelNumber ?? product.modelNumber}
+                {custom?.model_number ?? product.model_number}
               </Typography>
             </Grid>
-
             <Grid
               size={{ xs: 2 }}
               display="flex"
               justifyContent="center"
               alignItems="center"
               sx={{
-                minWidth: "100px",
+                minWidth: 10,
                 whiteSpace: "nowrap",
-                overflowX: "auto",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
               }}
             >
-              <Typography
-                sx={{
-                  overflow: "hidden",
-                  whiteSpace: "nowrap",
-                  overflowX: "auto",
-                }}
-              >
-                {custom?.name ?? product.name}
-              </Typography>
+              <Typography>{custom?.name ?? product.name}</Typography>
             </Grid>
-
             <Grid
               size={{ xs: 1 }}
               display="flex"
@@ -230,7 +215,6 @@ export const CartCard = ({ products, cartProducts }: Props) => {
             >
               <Typography>{custom ? `個別品` : "共通品"}</Typography>
             </Grid>
-
             <Grid
               size={{ xs: 2 }}
               display="flex"
@@ -247,7 +231,6 @@ export const CartCard = ({ products, cartProducts }: Props) => {
                 ¥{Math.round(custom?.price ?? product.price).toLocaleString()}
               </Typography>
             </Grid>
-
             <Grid
               size={{ xs: 2 }}
               sx={{
@@ -265,7 +248,6 @@ export const CartCard = ({ products, cartProducts }: Props) => {
                 >
                   -
                 </Button>
-
                 <TextField
                   value={cartProduct.quantity}
                   onChange={(e) =>
@@ -306,7 +288,6 @@ export const CartCard = ({ products, cartProducts }: Props) => {
                     },
                   }}
                 />
-
                 <Button
                   size="small"
                   sx={{ minWidth: 32, px: 1 }}
@@ -338,7 +319,6 @@ export const CartCard = ({ products, cartProducts }: Props) => {
                 ).toLocaleString()}
               </Typography>
             </Grid>
-
             <Grid
               size={{ xs: 1 }}
               display="flex"

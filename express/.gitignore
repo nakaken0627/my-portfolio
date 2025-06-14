@@ -7,9 +7,7 @@ node_modules/
 
 # 環境変数
 .env
-.env.local
-.env.*.local
-.env.*
+.env.*   # .env.local や .env.production なども除外
 
 # ログファイル
 npm-debug.log*
