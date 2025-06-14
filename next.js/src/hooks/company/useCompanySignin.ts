@@ -20,7 +20,7 @@ const fetcher = async (url: string, { arg }: { arg: FormData }) => {
     body: JSON.stringify(arg),
   });
   if (!res.ok) {
-    const error: CustomError = new Error("ログインエラーが発生");
+    const error: CustomError = new Error("ログイン時にエラーが発生しました");
     error.info = await res.json();
     throw error;
   }
