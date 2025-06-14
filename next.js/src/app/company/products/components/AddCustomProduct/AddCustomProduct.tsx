@@ -33,7 +33,11 @@ type CustomError = Error & {
   info?: { message: string };
 };
 
-export const AddCustomProduct = () => {
+type Props = {
+  onAddSuccess?: () => void;
+};
+
+export const AddCustomProduct = ({ onAddSuccess }: Props) => {
   const { handleSubmit, control, watch, setValue, reset } = useForm<FormData>({
     mode: "onChange",
     defaultValues: {
@@ -49,6 +53,7 @@ export const AddCustomProduct = () => {
     resolver: zodResolver(AddCustomProductSchema),
     criteriaMode: "all",
   });
+
   const { products, isErrorProducts, isLoadingProducts } =
     useFetchCompanyProducts();
   const { users, isErrorUsers, isLoadingUsers } = useFetchUsers();
@@ -61,6 +66,9 @@ export const AddCustomProduct = () => {
     try {
       await trigger(inputData);
       reset();
+      if (onAddSuccess) {
+        onAddSuccess();
+      }
     } catch (err) {
       const error = err as CustomError;
       const msg = error.info?.message ?? "";
@@ -101,6 +109,7 @@ export const AddCustomProduct = () => {
       <Typography variant="h6" gutterBottom>
         個別商品登録
       </Typography>
+
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <Stack>
           <Grid container alignItems="center" spacing={2} mb={2}>
@@ -139,6 +148,7 @@ export const AddCustomProduct = () => {
                 )}
               />
             </Grid>
+
             <Grid size={{ xs: 12, md: 4 }}>
               <Controller
                 name="userId"
@@ -162,6 +172,7 @@ export const AddCustomProduct = () => {
                 )}
               />
             </Grid>
+
             <Grid size={{ xs: 12, md: 4 }}>
               {watchedUserId !== null &&
                 String(watchedUserId).trim() !== "" && (
@@ -217,6 +228,7 @@ export const AddCustomProduct = () => {
                 )}
               />
             </Grid>
+
             <Grid size={{ xs: 12, md: 4 }}>
               <Controller
                 name="price"
@@ -267,6 +279,7 @@ export const AddCustomProduct = () => {
                 )}
               />
             </Grid>
+
             <Grid size={{ xs: 12, md: 6 }}>
               <Controller
                 name="endDate"

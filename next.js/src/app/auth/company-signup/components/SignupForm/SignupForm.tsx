@@ -2,7 +2,7 @@
 
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useSignup } from "@/hooks/company/useSignup";
+import { useCompanySignup } from "@/hooks/company/useCompanySignup";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField } from "@mui/material";
 
@@ -26,7 +26,7 @@ export const SignupForm = () => {
   });
 
   const router = useRouter();
-  const { trigger, isMutating } = useSignup();
+  const { trigger, isMutating } = useCompanySignup();
 
   const onSubmit: SubmitHandler<FormData> = async (inputData: FormData) => {
     try {

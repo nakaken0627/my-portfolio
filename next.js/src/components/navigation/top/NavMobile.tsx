@@ -6,11 +6,11 @@ import {
   Drawer,
   IconButton,
   List,
+  ListItemButton,
   ListItemText,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { ListItemButton } from "node_modules/@mui/material";
 
 import { navLinks } from "./NavLinks";
 
@@ -34,6 +34,7 @@ export const NavMobile = ({ toggleDrawer, drawerOpen }: Props) => {
           </IconButton>
           <Typography variant="h6">Top Panel</Typography>
         </Box>
+
         <Box sx={{ display: "flex", alignItems: "center" }}>
           {navLinks.map((item) => (
             <Button

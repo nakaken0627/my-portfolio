@@ -12,7 +12,7 @@ const fetcher = async (url: string) => {
 };
 
 export const useFetchCompanyProducts = () => {
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     `${API_BASE_URL}/api/company/products/custom`,
     fetcher,
   );
@@ -20,5 +20,6 @@ export const useFetchCompanyProducts = () => {
     products: data,
     isLoadingProducts: isLoading,
     isErrorProducts: error,
+    mutateProducts: mutate,
   };
 };

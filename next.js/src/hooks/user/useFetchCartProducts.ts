@@ -18,6 +18,7 @@ const fetcher = async (url: string) => {
 
 export const useFetchCartProducts = (cartId: number | null) => {
   const isFetch = typeof cartId === "number";
+
   const { data, error, isLoading } = useSWR(
     isFetch
       ? `${API_BASE_URL}/api/cart/products?cartId=${String(cartId)}`

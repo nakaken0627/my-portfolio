@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useDeleteProducts } from "@/hooks/company/useDeleteProducts";
 import { useFetchCompanyProducts } from "@/hooks/company/useFetchCompanyProducts";
 import { ProductWithCustomization } from "@/types/company";
@@ -25,7 +25,7 @@ type CustomError = Error & {
 };
 
 export const ProductList = () => {
-  const { products, isErrorProducts, isLoadingProducts } =
+  const { products, isErrorProducts, isLoadingProducts, mutateProducts } =
     useFetchCompanyProducts();
   const { trigger, isMutating } = useDeleteProducts();
 
@@ -59,7 +59,32 @@ export const ProductList = () => {
 
   const handleModalClose = () => {
     setModalOpen(false);
+    void mutateProducts();
   };
+
+  const handleAddSuccess = useCallback(async () => {
+    const updatedProductsData = await mutateProducts();
+    if (updatedProductsData && selectedProduct) {
+      const newSelectedProduct = updatedProductsData.find(
+        (p) => p.id === selectedProduct.id,
+      );
+      setSelectedProduct(newSelectedProduct);
+    }
+  }, [mutateProducts, selectedProduct]);
+
+  const handleCustomDeleteSuccess = useCallback(async () => {
+    // 削除処理時に商品一覧を再フェッチし、SWRのキャッシュを最新の状態に更新
+    const updatedProductsData = await mutateProducts();
+    // selectedProductも更新されたデータから最新のものを探し直すことで削除後の状態を反映
+    if (updatedProductsData && selectedProduct) {
+      const newSelectedProduct = updatedProductsData.find(
+        (p) => p.id === selectedProduct.id,
+      );
+      setSelectedProduct(newSelectedProduct);
+    } else {
+      setSelectedProduct(undefined);
+    }
+  }, [mutateProducts, selectedProduct]);
 
   if (!products) {
     return <Typography>データを取得中です...</Typography>;
@@ -73,6 +98,7 @@ export const ProductList = () => {
       <Typography variant="h5" gutterBottom>
         商品一覧
       </Typography>
+
       <TableContainer
         component={Paper}
         elevation={3}
@@ -87,36 +113,42 @@ export const ProductList = () => {
               >
                 選択
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{ fontWeight: "bold", minWidth: 80 }}
               >
                 商品ID
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{ fontWeight: "bold", minWidth: 120 }}
               >
                 商品名
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{ fontWeight: "bold", minWidth: 100 }}
               >
                 型番
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{ fontWeight: "bold", minWidth: 100 }}
               >
                 価格
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{ fontWeight: "bold", minWidth: 200 }}
               >
                 説明
               </TableCell>
+
               <TableCell
                 align="center"
                 sx={{ fontWeight: "bold", minWidth: 100 }}
@@ -147,6 +179,7 @@ export const ProductList = () => {
                   ¥{Number(p.price).toLocaleString()}
                 </TableCell>
                 <TableCell align="left">{p.description}</TableCell>
+
                 <TableCell align="center">
                   <Button
                     variant="outlined"
@@ -180,6 +213,8 @@ export const ProductList = () => {
         open={modalOpen}
         onClose={handleModalClose}
         productWithCustoms={selectedProduct}
+        onAddSuccess={handleAddSuccess}
+        onCustomDeleteSuccess={handleCustomDeleteSuccess}
       />
     </Container>
   );

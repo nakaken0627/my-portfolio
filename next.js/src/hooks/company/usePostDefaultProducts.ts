@@ -4,7 +4,7 @@ import useSWRMutation from "swr/mutation";
 
 type FormInput = {
   modelNumber: string;
-  productName: string;
+  name: string;
   price: number;
   description: string;
   imageFile?: File;
@@ -16,8 +16,8 @@ type CustomError = Error & {
 
 const fetcher = async (url: string, { arg }: { arg: FormInput }) => {
   const formData = new FormData();
-  formData.append("model_number", arg.modelNumber);
-  formData.append("name", arg.productName);
+  formData.append("modelNumber", arg.modelNumber);
+  formData.append("name", arg.name);
   formData.append("price", arg.price.toString());
   formData.append("description", arg.description);
 

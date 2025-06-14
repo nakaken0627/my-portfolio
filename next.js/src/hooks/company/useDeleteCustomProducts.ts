@@ -1,5 +1,5 @@
 import { API_BASE_URL } from "@/lib/api";
-import { mutate } from "swr";
+// import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
 
 const fetcher = async (url: string, { arg }: { arg: number }) => {
@@ -15,15 +15,8 @@ const fetcher = async (url: string, { arg }: { arg: number }) => {
 
 export const useDeleteCustomProducts = () => {
   const { trigger, isMutating } = useSWRMutation(
-    `${API_BASE_URL}/api/company/custom-product`,
+    `${API_BASE_URL}/api/company/product/custom`,
     fetcher,
-    {
-      onSuccess: async () => {
-        await mutate(`${API_BASE_URL}/api/company/products/custom`, undefined, {
-          revalidate: true,
-        });
-      },
-    },
   );
   return { trigger, isMutating };
 };

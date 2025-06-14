@@ -13,10 +13,10 @@ export const UserProductList = () => {
   const [page, setPage] = useState(1);
 
   const { result, isLoading, isError } = useFetchPageProducts(page, limit);
-  if (!result) return <div>読み込み中...</div>;
 
-  if (isLoading) return <div>読み込み中...</div>;
-  if (isError) return <div>エラーが発生しました。</div>;
+  if (!result) return <Typography>読み込み中...</Typography>;
+  if (isLoading) return <Typography>読み込み中...</Typography>;
+  if (isError) return <Typography>エラーが発生しました。</Typography>;
 
   return (
     <Container maxWidth="lg" sx={{ padding: 2, py: 1 }}>
@@ -26,6 +26,7 @@ export const UserProductList = () => {
       >
         商品一覧
       </Typography>
+
       <Grid container spacing={4}>
         {result.data.map((p) => (
           <Grid size={{ xs: 12, sm: 6 }} key={p.id}>
@@ -33,6 +34,7 @@ export const UserProductList = () => {
           </Grid>
         ))}
       </Grid>
+
       <UserPagiNation
         page={page}
         setPage={setPage}

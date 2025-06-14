@@ -17,6 +17,7 @@ type Props = {
 export const UserDrawer = ({ drawerProps }: Props) => {
   const { openDrawer, handleDrawerClose, productId, customization } =
     drawerProps;
+
   return (
     <Drawer anchor="bottom" open={openDrawer} onClose={handleDrawerClose}>
       <Box

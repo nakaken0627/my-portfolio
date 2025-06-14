@@ -18,7 +18,13 @@ export default tseslint.config(
     files: ["**/*.{js,jsx,ts,tsx}"],
 
     // グローバルで無視するファイル
-    ignores: ["**/.next/**/*", "*.config.*", "**/.prettierrc.mjs"],
+    ignores: [
+      "**/.next/**/*",
+      "*.config.*",
+      "**/.prettierrc.mjs",
+      "jest.config.js",
+      "eslint.config.mjs",
+    ],
   },
   eslint.configs.recommended,
   tseslint.configs.strictTypeChecked,
@@ -99,7 +105,7 @@ export default tseslint.config(
   },
   {
     rules: {
-      "no-console": ["error", { allow: ["warn", "error"] }],
+      "no-console": ["error"],
     },
   },
   // prettierとの競合を防ぐためにeslint-config-prettierを読み込む

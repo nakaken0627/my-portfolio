@@ -1,26 +1,6 @@
 import { API_BASE_URL } from "@/lib/api";
 import { getCookies } from "@/lib/getCookies";
-
-type OrderProduct = {
-  id: number;
-  name: string;
-  company_name: string;
-  model_number: string;
-  price: number;
-  quantity: number;
-};
-
-type OrderCustom = {
-  id: number;
-  model_number: string;
-  name: string;
-  price: number;
-};
-
-type Transformed = {
-  orderId: number;
-  products: (OrderProduct & { customization: OrderCustom | null })[];
-};
+import { Transformed } from "@/types/user";
 
 export const fetchOrderServer = async () => {
   const cookie = await getCookies();
