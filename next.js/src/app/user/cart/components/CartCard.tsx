@@ -1,15 +1,10 @@
 import { Dispatch, SetStateAction, useContext } from "react";
 import { CartContext } from "@/context/CartContext";
+import { CartProduct } from "@/types/cart";
 import { UserProductWithCustom } from "@/types/user";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 
 import { calcProductTotalAmount } from "./calcProductTotalAmount";
-
-type CartProduct = {
-  productId: number;
-  customizationId: number | null;
-  quantity: number;
-};
 
 type Props = {
   cartId: number;

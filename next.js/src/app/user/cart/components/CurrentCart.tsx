@@ -5,6 +5,7 @@ import { CartContext } from "@/context/CartContext";
 import { useErrorHandling } from "@/hooks/useErrorHandling";
 import { useFetchUserProducts } from "@/hooks/user/useFetchUserProducts";
 import { API_BASE_URL } from "@/lib/api";
+import { CartProductWithPrice } from "@/types/cart";
 import {
   Box,
   Button,
@@ -14,15 +15,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import { calcCartTotalAmount } from "./calcCartTotalAmount";
 import { CartCard } from "./CartCard";
-
-type CartProduct = {
-  productId: number;
-  customizationId: number | null;
-  quantity: number;
-};
-
-type CartProductWithPrice = CartProduct & { price: number | null };
 
 export const CurrentCart = () => {
   const { products } = useFetchUserProducts();
@@ -71,22 +65,6 @@ export const CurrentCart = () => {
     }
   };
 
-  const calcCartTotalAmount = () => {
-    return cartProducts.reduce((total, item) => {
-      const product = products.find((p) => p.id === item.productId);
-      if (!product) return total;
-
-      const custom =
-        item.customizationId !== null
-          ? product.custom.find((c) => c.id === item.customizationId)
-          : null;
-
-      const targetPrice = custom ? custom.price : product.price;
-
-      return total + targetPrice * item.quantity;
-    }, 0);
-  };
-
   return (
     <Container maxWidth="lg" sx={{ py: 2 }}>
       <Typography variant="h4" gutterBottom>
@@ -109,7 +87,8 @@ export const CurrentCart = () => {
 
         <Box display="flex" justifyContent="flex-end">
           <Typography variant="h6">
-            合計: ¥{calcCartTotalAmount().toLocaleString()}
+            合計: ¥
+            {calcCartTotalAmount(cartProducts, products).toLocaleString()}
           </Typography>
         </Box>
 

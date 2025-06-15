@@ -17,6 +17,7 @@ const config: Config = {
     "<rootDir>/dist/",
     "<rootDir>/.next/",
   ],
+  testPathIgnorePatterns: ["<rootDir>/src/__tests__/mocks/"],
 };
 
 export default createJestConfig(config);
