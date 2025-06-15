@@ -182,7 +182,7 @@ export const AddCustomProduct = ({ onAddSuccess }: Props) => {
                       color={isExistingUser ? "primary" : "error"}
                     >
                       {isExistingUser
-                        ? `ユーザー名：${isExistingUser.name}`
+                        ? `ユーザー名 : ${isExistingUser.name}`
                         : " ※ユーザーは存在しません"}
                     </Typography>
                   </Box>
