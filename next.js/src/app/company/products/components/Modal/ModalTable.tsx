@@ -86,7 +86,7 @@ export const ModalTable = ({ customs, onCustomDeleteSuccess }: Props) => {
                 align="center"
                 sx={{ fontWeight: "bold", minWidth: 100 }}
               >
-                価格
+                個別単価
               </TableCell>
               <TableCell
                 align="center"
@@ -130,7 +130,7 @@ export const ModalTable = ({ customs, onCustomDeleteSuccess }: Props) => {
                 <TableCell align="center">
                   ¥{Number(c.price).toLocaleString()}
                 </TableCell>
-                <TableCell align="left">{c.description}</TableCell>
+                <TableCell align="center">{c.description}</TableCell>
                 <TableCell align="center">{c.start_date || "-"}</TableCell>
                 <TableCell align="center">{c.end_date || "-"}</TableCell>
               </TableRow>

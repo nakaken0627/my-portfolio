@@ -21,8 +21,8 @@ export const OrderTable = ({ products, total }: Props) => {
       <Table size="small">
         <TableHead>
           <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-            <TableCell>商品名</TableCell>
             <TableCell>型番</TableCell>
+            <TableCell>商品名</TableCell>
             <TableCell>数量</TableCell>
             <TableCell>単価</TableCell>
             <TableCell>小計</TableCell>
@@ -37,8 +37,8 @@ export const OrderTable = ({ products, total }: Props) => {
                 backgroundColor: index % 2 === 0 ? "#fafafa" : "white",
               }}
             >
-              <TableCell>{p.custom?.name ?? p.name}</TableCell>
               <TableCell>{p.custom?.model_number ?? p.model_number}</TableCell>
+              <TableCell>{p.custom?.name ?? p.name}</TableCell>
               <TableCell>{p.quantity}</TableCell>
               <TableCell>
                 ¥{(p.custom?.price ?? p.price).toLocaleString()}

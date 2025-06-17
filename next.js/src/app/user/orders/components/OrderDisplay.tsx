@@ -48,9 +48,9 @@ export const OrderDisplay = ({ orders }: Props) => {
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell>商品番号</TableCell>
+                <TableCell>型番</TableCell>
                 <TableCell>商品名</TableCell>
-                <TableCell>価格</TableCell>
+                <TableCell>単価</TableCell>
                 <TableCell>数量</TableCell>
                 <TableCell>金額</TableCell>
                 <TableCell>発注先</TableCell>

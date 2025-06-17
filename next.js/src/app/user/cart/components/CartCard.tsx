@@ -96,7 +96,7 @@ export const CartCard = ({ products, cartProducts }: Props) => {
             textOverflow: "ellipsis",
           }}
         >
-          価格
+          単価
         </Grid>
 
         <Grid

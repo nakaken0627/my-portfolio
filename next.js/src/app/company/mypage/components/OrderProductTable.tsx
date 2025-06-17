@@ -27,11 +27,11 @@ export const OrderProductTable = ({
         <TableHead>
           <TableRow>
             <TableCell />
-            <TableCell>商品番号</TableCell>
+            <TableCell>型番</TableCell>
             <TableCell>商品名</TableCell>
-            <TableCell>価格</TableCell>
+            <TableCell>単価</TableCell>
             <TableCell>数量</TableCell>
-            <TableCell>金額</TableCell>
+            <TableCell>小計</TableCell>
             <TableCell>発注者</TableCell>
           </TableRow>
         </TableHead>
