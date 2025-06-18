@@ -5,11 +5,15 @@ export const AddCustomProductSchema = z
     productId: z
       .number({ required_error: "商品IDの入力は必須です" })
       .nullable(),
+
     userId: z
       .number({ invalid_type_error: "数値で入力してください" })
       .nullable(),
+
     modelNumber: z.string().nonempty("型番は必須です"),
+
     productName: z.string().nonempty("商品名は必須です"),
+
     price: z
       .number({
         required_error: "価格は必須です",
@@ -17,8 +21,11 @@ export const AddCustomProductSchema = z
       })
       .int()
       .positive(),
+
     description: z.string(),
+
     startDate: z.string(),
+
     endDate: z.string(),
   })
 

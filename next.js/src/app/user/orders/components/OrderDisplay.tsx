@@ -1,3 +1,4 @@
+import { OrderCustom, OrderProduct, Transformed } from "@/types/user";
 import {
   Box,
   Container,
@@ -11,37 +12,16 @@ import {
   Typography,
 } from "@mui/material";
 
-type OrderProduct = {
-  id: number;
-  name: string;
-  company_name: string;
-  model_number: string;
-  price: number;
-  quantity: number;
-};
-
-type OrderCustom = {
-  id: number;
-  model_number: string;
-  name: string;
-  price: number;
-};
-
-type Transformed = {
-  orderId: number;
-  products: (OrderProduct & { customization: OrderCustom | null })[];
-};
-
 type Props = {
   orders: Transformed[];
 };
 
 export const OrderDisplay = ({ orders }: Props) => {
   const orderTotalAmount = (
-    data: (OrderProduct & { customization: OrderCustom | null })[],
+    data: (OrderProduct & { custom: OrderCustom | null })[],
   ) => {
     return data.reduce((total, p) => {
-      const custom = p.customization;
+      const custom = p.custom;
       return custom
         ? total + custom.price * p.quantity
         : total + p.price * p.quantity;
@@ -78,28 +58,22 @@ export const OrderDisplay = ({ orders }: Props) => {
             </TableHead>
             <TableBody>
               {o.products.map((p) => (
-                <TableRow
-                  key={`${String(p.id)}-${String(p.customization?.id)}`}
-                  hover
-                >
+                <TableRow key={`${String(p.id)}-${String(p.custom?.id)}`} hover>
                   <TableCell>
-                    {p.customization?.model_number ?? p.model_number}
+                    {p.custom?.modelNumber ?? p.modelNumber}
                   </TableCell>
-                  <TableCell>{p.customization?.name ?? p.name}</TableCell>
+                  <TableCell>{p.custom?.name ?? p.name}</TableCell>
                   <TableCell>
-                    ¥
-                    {Math.round(
-                      p.customization?.price ?? p.price,
-                    ).toLocaleString()}
+                    ¥{Math.round(p.custom?.price ?? p.price).toLocaleString()}
                   </TableCell>
                   <TableCell>{p.quantity}</TableCell>
                   <TableCell>
                     ¥
                     {Math.round(
-                      (p.customization?.price ?? p.price) * p.quantity,
+                      (p.custom?.price ?? p.price) * p.quantity,
                     ).toLocaleString()}
                   </TableCell>
-                  <TableCell>{p.company_name}</TableCell>
+                  <TableCell>{p.companyName}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
