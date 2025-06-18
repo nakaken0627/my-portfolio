@@ -15,18 +15,22 @@ import {
 
 type Props = {
   customs: ProductCustomizations[];
+  onCustomDeleteSuccess?: () => void;
 };
 
 type CustomError = Error & {
   info?: { message: string };
 };
 
-export const ModalTable = ({ customs }: Props) => {
+export const ModalTable = ({ customs, onCustomDeleteSuccess }: Props) => {
   const { trigger, isMutating } = useDeleteCustomProducts();
 
   const handleDeleteCustomProduct = async (customId: number) => {
     try {
       await trigger(customId);
+      if (onCustomDeleteSuccess) {
+        onCustomDeleteSuccess();
+      }
     } catch (err) {
       const error = err as CustomError;
       const msg = error.info?.message ?? "";

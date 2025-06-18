@@ -1,7 +1,8 @@
 "use client";
 
 import { useContext } from "react";
-import { CartContext } from "@/context/cart-context";
+import { CartContext } from "@/context/CartContext";
+import { useErrorHandling } from "@/hooks/useErrorHandling";
 import { useFetchUserProducts } from "@/hooks/user/useFetchUserProducts";
 import { API_BASE_URL } from "@/lib/api";
 import {
@@ -15,26 +16,27 @@ import {
 
 import { CartCard } from "./CartCard";
 
+type CartProduct = {
+  productId: number;
+  customizationId: number | null;
+  quantity: number;
+};
+
+type CartProductWithPrice = CartProduct & { price: number | null };
+
 export const CurrentCart = () => {
   const { products } = useFetchUserProducts();
-
   const cartContext = useContext(CartContext);
+  const handleError = useErrorHandling();
 
   if (!cartContext) {
     return <Typography>Loading...</Typography>;
   }
+
   const { cartId, cartProducts, setCartProducts } = cartContext;
 
   if (!products) return;
   if (!cartId) return null;
-
-  type CartProduct = {
-    productId: number;
-    customizationId: number | null;
-    quantity: number;
-  };
-
-  type CartProductWithPrice = CartProduct & { price: number | null };
 
   const cartProductsWithPrice = (): CartProductWithPrice[] => {
     return cartProducts.map((cp) => {
@@ -65,7 +67,7 @@ export const CurrentCart = () => {
       });
       setCartProducts([]);
     } catch (err) {
-      console.error(err);
+      handleError(err, { component: "CurrentCart", action: "handleCheckout" });
     }
   };
 
@@ -90,6 +92,7 @@ export const CurrentCart = () => {
       <Typography variant="h4" gutterBottom>
         カート
       </Typography>
+
       <Paper elevation={3} sx={{ p: 3, backgroundColor: "#f1f8e9" }}>
         {cartProducts.length === 0 ? (
           <Typography>カートが空です</Typography>
@@ -103,11 +106,13 @@ export const CurrentCart = () => {
         )}
 
         <Divider sx={{ my: 3 }} />
+
         <Box display="flex" justifyContent="flex-end">
           <Typography variant="h6">
             合計: ¥{calcCartTotalAmount().toLocaleString()}
           </Typography>
         </Box>
+
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Button
             variant="contained"
