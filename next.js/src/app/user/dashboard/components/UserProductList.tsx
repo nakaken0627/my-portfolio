@@ -14,9 +14,9 @@ export const UserProductList = () => {
 
   const { result, isLoading, isError } = useFetchPageProducts(page, limit);
 
-  if (!result) return <div>読み込み中...</div>;
-  if (isLoading) return <div>読み込み中...</div>;
-  if (isError) return <div>エラーが発生しました。</div>;
+  if (!result) return <Typography>読み込み中...</Typography>;
+  if (isLoading) return <Typography>読み込み中...</Typography>;
+  if (isError) return <Typography>エラーが発生しました。</Typography>;
 
   return (
     <Container maxWidth="lg" sx={{ padding: 2, py: 1 }}>

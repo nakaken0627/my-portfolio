@@ -17,7 +17,7 @@ export const useErrorHandling = () => {
       logger.error(err, context);
       setError(err instanceof Error ? err : new Error(String(err))); // Stateを更新することでuseEffectが発火する
     },
-    [],
+    [setError],
   );
 
   return handleError;

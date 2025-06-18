@@ -20,7 +20,7 @@ export const AddCustomProductSchema = z
         invalid_type_error: "数値で入力して下さい",
       })
       .int()
-      .positive(),
+      .positive("価格は0より大きい数値で入力してください"),
 
     description: z.string(),
 

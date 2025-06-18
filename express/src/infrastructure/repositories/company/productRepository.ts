@@ -9,10 +9,12 @@ export const fetchMergedCompanyProducts = async (companyId: number) => {
     const result = await client.query(
       ` SELECT
           row_to_json(p.*) AS product,
-          row_to_json(pc.*) AS customization
+          (to_jsonb(pc) || jsonb_build_object('user_name',u.name)) AS customization
         FROM products p
         LEFT JOIN product_customizations pc
           ON p.id = pc.product_id
+        LEFT JOIN users u
+		      ON u.id = pc.user_id
         WHERE p.company_id =$1
         ORDER BY p.id , pc.id DESC`,
       [companyId],

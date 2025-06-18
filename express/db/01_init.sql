@@ -8,6 +8,14 @@ CREATE TABLE IF NOT EXISTS companies (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS session (
     sid VARCHAR NOT NULL PRIMARY KEY,
     sess JSON NOT NULL,
@@ -27,12 +35,19 @@ CREATE TABLE IF NOT EXISTS products (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE IF NOT EXISTS product_customizations(
+  id SERIAL PRIMARY KEY,
+  product_id INTEGER NOT NULL REFERENCES products(id),
+  user_id INTEGER NOT NULL REFERENCES users(id),
+  name VARCHAR(255) NOT NULL,
+  model_number VARCHAR(255) NOT NULL,
+  price NUMERIC(10,2) NOT NULL,
+  description TEXT,
+  document_url TEXT,
+  start_date DATE,
+  end_date DATE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS carts (
@@ -75,17 +90,3 @@ CREATE TABLE IF NOT EXISTS order_products (
   UNIQUE (order_id, product_id,customization_id)
 );
 
-CREATE TABLE IF NOT EXISTS product_customizations(
-  id SERIAL PRIMARY KEY,
-  product_id INTEGER NOT NULL REFERENCES products(id),
-  user_id INTEGER NOT NULL REFERENCES users(id),
-  name VARCHAR(255) NOT NULL,
-  model_number VARCHAR(255) NOT NULL,
-  price NUMERIC(10,2) NOT NULL,
-  description TEXT,
-  document_url TEXT,
-  start_date DATE,
-  end_date DATE,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);

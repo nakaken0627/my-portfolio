@@ -27,6 +27,7 @@ type CustomError = Error & {
 export const ProductList = () => {
   const { products, isErrorProducts, isLoadingProducts, mutateProducts } =
     useFetchCompanyProducts();
+
   const { trigger, isMutating } = useDeleteProducts();
 
   const [selectedIds, setSelectedIds] = useState<number[]>([]);

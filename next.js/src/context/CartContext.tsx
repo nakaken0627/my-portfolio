@@ -11,6 +11,7 @@ import { useFetchCart } from "@/hooks/user/useFetchCart";
 import { useFetchCartProducts } from "@/hooks/user/useFetchCartProducts";
 import { API_BASE_URL } from "@/lib/api";
 import { logger } from "@/lib/logger";
+import { Typography } from "@mui/material";
 
 type CartProduct = {
   productId: number;
@@ -60,7 +61,7 @@ export const CartContextProvider = ({
   }, [cartItems]);
 
   if (isLoadingCart || isLoadingCartProducts) {
-    return <div>Loading cart...</div>;
+    return <Typography>Loading cart...</Typography>;
   }
 
   const sendCartLatestData = async (
