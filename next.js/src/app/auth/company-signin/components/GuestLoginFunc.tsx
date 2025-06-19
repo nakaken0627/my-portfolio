@@ -25,19 +25,22 @@ export const GuestLoginFunc = () => {
   };
 
   return (
-    <Box sx={{ mt: 3 }}>
+    <Box sx={{ mt: 2 }}>
       <Tooltip title="登録なしですぐに試せます" arrow>
         <Button
           onClick={handleGuestLogin}
-          variant="outlined"
-          color="secondary"
           fullWidth
           startIcon={<PersonOutlineIcon />}
           disabled={isMutating}
           sx={{
-            borderWidth: 2,
+            backgroundColor: "#E6F0FA",
+            color: "#0000CD",
             fontWeight: "bold",
+            border: "2px solid #0000CD",
             textTransform: "none",
+            "&:hover": {
+              backgroundColor: "#D0E2F0",
+            },
           }}
         >
           ゲストとして試す

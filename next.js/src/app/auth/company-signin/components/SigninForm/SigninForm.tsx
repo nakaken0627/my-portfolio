@@ -2,10 +2,11 @@
 
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { SigninSchema } from "@/app/auth/company-signin/components/SigninForm/SigninSchema";
 import { useCompanySignin } from "@/hooks/company/useCompanySignin";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField } from "@mui/material";
+
+import { SigninSchema } from "./SigninSchema";
 
 type FormData = {
   username: string;
@@ -73,12 +74,22 @@ export const SigninForm = () => {
           />
         )}
       />
+
       <Button
         type="submit"
         fullWidth
         variant="contained"
-        sx={{ mt: 3, mb: 2 }}
         disabled={isMutating}
+        sx={{
+          mt: 3,
+          mb: 2,
+          backgroundColor: "#0000CD",
+          fontWeight: "bold",
+          textTransform: "none",
+          "&:hover": {
+            backgroundColor: "#00008B",
+          },
+        }}
       >
         ログイン
       </Button>

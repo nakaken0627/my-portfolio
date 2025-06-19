@@ -3,11 +3,15 @@ import { Typography } from "@mui/material";
 
 export const RouteForSignup = () => {
   return (
-    <Typography variant="body2" align="center">
+    <Typography variant="body2" align="center" sx={{ mt: 2, color: "#4A4A4A" }}>
       アカウントをお持ちでない方は{" "}
       <Link
         href="/auth/company-signup"
-        style={{ color: "#1976d2", textDecoration: "none" }}
+        style={{
+          color: "#0000CD",
+          fontWeight: "bold",
+          textDecoration: "none",
+        }}
       >
         新規登録はこちら
       </Link>

@@ -38,6 +38,7 @@ export const SignupForm = () => {
       alert(msg || "新規登録に失敗しました");
     }
   };
+
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
       <Controller
@@ -94,8 +95,17 @@ export const SignupForm = () => {
         type="submit"
         fullWidth
         variant="contained"
-        sx={{ mt: 3, mb: 2 }}
         disabled={isMutating}
+        sx={{
+          mt: 3,
+          mb: 2,
+          backgroundColor: "#0000CD",
+          fontWeight: "bold",
+          textTransform: "none",
+          "&:hover": {
+            backgroundColor: "#00008B",
+          },
+        }}
       >
         登録
       </Button>
