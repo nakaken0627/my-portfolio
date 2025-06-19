@@ -30,7 +30,7 @@ export const GuestLoginFunc = () => {
         <Button
           onClick={handleGuestLogin}
           variant="outlined"
-          color="secondary"
+          color="success"
           fullWidth
           startIcon={<PersonOutlineIcon />}
           disabled={isMutating}

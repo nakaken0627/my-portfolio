@@ -53,6 +53,9 @@ export const SigninForm = () => {
             label="企業ID"
             error={!!error}
             helperText={error?.message}
+            variant="outlined"
+            focused
+            color="info"
           />
         )}
       />
@@ -71,6 +74,9 @@ export const SigninForm = () => {
             type="password"
             error={!!error}
             helperText={error?.message}
+            variant="outlined"
+            focused
+            color="info"
           />
         )}
       />

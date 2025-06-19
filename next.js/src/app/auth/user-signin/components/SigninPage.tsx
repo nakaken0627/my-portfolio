@@ -1,23 +1,39 @@
-import { Container, Divider, Paper, Typography } from "@mui/material";
+import { Box, Container, Divider, Paper, Typography } from "@mui/material";
 
 import { GuestLoginFunc } from "./GuestLoginFunc";
 import { LinkForSignup } from "./LinkForSignup";
-import { SigninForm } from "./SigninForm";
+import { SigninForm } from "./SigninForm/SigninForm";
 
 export const SigninPage = () => {
   return (
-    <Container maxWidth="sm" sx={{ pt: 5 }}>
-      <Paper elevation={4} sx={{ padding: 4, marginTop: 8 }}>
-        <Typography variant="h5" component="h1" gutterBottom align="center">
-          ユーザーログイン
-        </Typography>
+    <Box sx={{ backgroundColor: "#F5F5F5", minHeight: "100vh", py: 10 }}>
+      <Container maxWidth="sm">
+        <Paper
+          elevation={3}
+          sx={{
+            px: 4,
+            py: 5,
+            borderRadius: 3,
+            border: "1px solid #D3D3D3",
+            backgroundColor: "#ffffff",
+          }}
+        >
+          <Typography
+            variant="h5"
+            component="h1"
+            gutterBottom
+            align="center"
+            sx={{ fontWeight: "bold", color: "#4A4A4A" }}
+          >
+            ユーザーログイン
+          </Typography>
 
-        <SigninForm />
-
-        <LinkForSignup />
-        <Divider sx={{ my: 3, opacity: 0.8 }}></Divider>
-        <GuestLoginFunc />
-      </Paper>
-    </Container>
+          <SigninForm />
+          <LinkForSignup />
+          <Divider sx={{ my: 3, opacity: 0.8 }} />
+          <GuestLoginFunc />
+        </Paper>
+      </Container>
+    </Box>
   );
 };
