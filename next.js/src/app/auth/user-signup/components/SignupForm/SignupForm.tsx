@@ -41,10 +41,10 @@ export const SignupForm = () => {
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+      {/* ユーザーID */}
       <Controller
         name="name"
         control={control}
-        rules={{ required: true }}
         render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}
@@ -54,13 +54,17 @@ export const SignupForm = () => {
             label="ユーザーID"
             error={!!error}
             helperText={error?.message}
+            variant="outlined"
+            focused
+            color="success"
           />
         )}
       />
+
+      {/* パスワード */}
       <Controller
         name="password"
         control={control}
-        rules={{ required: true }}
         render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}
@@ -71,13 +75,17 @@ export const SignupForm = () => {
             type="password"
             error={!!error}
             helperText={error?.message}
+            variant="outlined"
+            focused
+            color="success"
           />
         )}
       />
+
+      {/* パスワード確認 */}
       <Controller
         name="confirmedPassword"
         control={control}
-        rules={{ required: true }}
         render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}
@@ -88,15 +96,30 @@ export const SignupForm = () => {
             type="password"
             error={!!error}
             helperText={error?.message}
+            variant="outlined"
+            focused
+            color="success"
           />
         )}
       />
+
+      {/* 登録ボタン */}
       <Button
         type="submit"
         fullWidth
         variant="contained"
-        sx={{ mt: 3, mb: 2 }}
         disabled={isMutating}
+        sx={{
+          mt: 3,
+          mb: 2,
+          backgroundColor: "#E6F4EA",
+          color: "#333333",
+          fontWeight: "bold",
+          textTransform: "none",
+          "&:hover": {
+            backgroundColor: "#C8E6C9",
+          },
+        }}
       >
         登録
       </Button>

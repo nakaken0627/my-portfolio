@@ -7,7 +7,11 @@ export const LinkForSignin = () => {
       すでにアカウントをお持ちの方は{" "}
       <Link
         href="/auth/user-signin"
-        style={{ color: "#1976d2", textDecoration: "none" }}
+        style={{
+          color: "#2E7D32",
+          fontWeight: "bold",
+          textDecoration: "none",
+        }}
       >
         ログインはこちら
       </Link>

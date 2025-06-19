@@ -54,6 +54,9 @@ export const SignupForm = () => {
             label="企業ID"
             error={!!error}
             helperText={error?.message}
+            variant="outlined"
+            focused
+            color="info"
           />
         )}
       />
@@ -71,6 +74,9 @@ export const SignupForm = () => {
             type="password"
             error={!!error}
             helperText={error?.message}
+            variant="outlined"
+            focused
+            color="info"
           />
         )}
       />
@@ -88,6 +94,9 @@ export const SignupForm = () => {
             type="password"
             error={!!error}
             helperText={error?.message}
+            variant="outlined"
+            focused
+            color="info"
           />
         )}
       />
