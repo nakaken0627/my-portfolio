@@ -9,7 +9,6 @@ import { NavMobile } from "./NavMobile";
 export const TopNav = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const toggleDrawer = () => {
@@ -18,7 +17,7 @@ export const TopNav = () => {
 
   return (
     <Box>
-      <AppBar sx={{ backgroundColor: "#f26140" }}>
+      <AppBar sx={{ backgroundColor: "#E88E89 ", boxShadow: "none" }}>
         {isMobile ? (
           <NavMobile toggleDrawer={toggleDrawer} drawerOpen={drawerOpen} />
         ) : (

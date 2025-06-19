@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
@@ -9,7 +10,6 @@ import {
   ListItemButton,
   ListItemText,
   Toolbar,
-  Typography,
 } from "@mui/material";
 
 import { navLinks } from "./NavLinks";
@@ -32,7 +32,27 @@ export const NavMobile = ({ toggleDrawer, drawerOpen }: Props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6">Top Panel</Typography>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Link href="/" passHref>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+              >
+                <Image
+                  src="/logo.jpeg"
+                  alt="Smart Deal EC ロゴ"
+                  width={120}
+                  height={40}
+                  style={{
+                    objectFit: "contain",
+                  }}
+                />
+              </Box>
+            </Link>
+          </Box>
         </Box>
 
         <Box sx={{ display: "flex", alignItems: "center" }}>

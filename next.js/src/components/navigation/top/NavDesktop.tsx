@@ -1,13 +1,28 @@
+import Image from "next/image";
 import Link from "next/link";
-import { Box, Button, Toolbar, Typography } from "@mui/material";
+import { Box, Button, Toolbar } from "@mui/material";
 
 import { navLinks } from "./NavLinks";
 
 export const NavDesktop = () => {
   return (
     <Toolbar>
-      <Box sx={{ mr: 2 }}>
-        <Typography variant="h6">Top Panel</Typography>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Link href="/" passHref>
+          <Box
+            sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+          >
+            <Image
+              src="/logo.jpeg"
+              alt="Smart Deal EC ロゴ"
+              width={120}
+              height={40}
+              style={{
+                objectFit: "contain",
+              }}
+            />
+          </Box>
+        </Link>
       </Box>
       <Box>
         {navLinks.map((item) => (

@@ -1,81 +1,133 @@
+import Image from "next/image";
 import Link from "next/link";
 import { TopNav } from "@/components/navigation/top/TopNav";
 import { Box, Button, Toolbar, Typography } from "@mui/material";
 
 export default function Home() {
   return (
-    <div>
+    <div style={{ backgroundColor: "#F5F5F5", minHeight: "100vh" }}>
       <TopNav />
       <Toolbar />
-      <Box sx={{ display: "flex" }}>
+
+      {/* ロゴ表示 */}
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: "700px", // 最大幅を制限（例：600px）
+          mx: "auto", // 中央寄せ
+          px: { xs: 2, sm: 4 },
+          py: 2,
+        }}
+      >
+        <Image
+          src="/logo.jpeg"
+          alt="Smart Deal EC ロゴ"
+          width={600}
+          height={100}
+          style={{
+            width: "100%",
+            height: "auto",
+            objectFit: "contain",
+          }}
+        />
+      </Box>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 4,
+          flexWrap: "wrap",
+          px: 2,
+        }}
+      >
+        {/* ユーザー用ボタン */}
         <Box
           sx={{
             m: 2,
             p: 2,
-            width: "80%",
-            height: "50vh",
+            width: { xs: "90%", sm: "40%" },
+            height: "200px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            bgcolor: "background.paper",
-            boxShadow: 1,
-            borderRadius: 2,
-            border: "1px solid grey",
+            bgcolor: "#ffffff",
+            borderRadius: 3,
+            boxShadow: 3,
+            border: `1px solid #D3D3D3`,
           }}
         >
           <Button
             component={Link}
             href="/auth/user-signin"
             sx={{
-              m: 2,
-              p: 2,
-              width: "80%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              bgcolor: "background.paper",
-              boxShadow: 1,
+              width: "100%",
+              height: "100%",
+              bgcolor: "#E6F4EA",
+              color: "#333333",
               borderRadius: 2,
-              border: "1px solid grey",
+              fontSize: "1.2rem",
+              fontWeight: "bold",
+              "&:hover": {
+                bgcolor: "#C8E6C9",
+              },
             }}
           >
-            <Typography>ユーザー様</Typography>
+            ユーザー様はこちら
           </Button>
         </Box>
+
+        {/* 企業用ボタン */}
         <Box
           sx={{
             m: 2,
             p: 2,
-            width: "80%",
-            height: "50vh",
+            width: { xs: "90%", sm: "40%" },
+            height: "200px",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            bgcolor: "background.paper",
-            boxShadow: 1,
-            borderRadius: 2,
-            border: "1px solid grey",
+            bgcolor: "#ffffff",
+            borderRadius: 3,
+            boxShadow: 3,
+            border: `1px solid #D3D3D3`,
           }}
         >
           <Button
             component={Link}
             href="/auth/company-signin"
             sx={{
-              m: 2,
-              p: 2,
-              width: "80%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              bgcolor: "background.paper",
-              boxShadow: 1,
+              width: "100%",
+              height: "100%",
+              bgcolor: "#E6F0FA",
+              color: "#333333",
               borderRadius: 2,
-              border: "1px solid grey",
+              fontSize: "1.2rem",
+              fontWeight: "bold",
+              "&:hover": {
+                bgcolor: "#D0E2F0",
+              },
             }}
           >
-            <Typography>販売企業様</Typography>
+            販売企業様はこちら
           </Button>
         </Box>
+      </Box>
+
+      {/* フッターアクセント */}
+      <Box
+        sx={{
+          mt: 6,
+          py: 3,
+          bgcolor: "#FCE8E6",
+          textAlign: "center",
+          borderTop: "1px solid #D3D3D3",
+        }}
+      >
+        <Typography variant="h6" sx={{ color: "#4A4A4A" }}>
+          Smart Deal ECへようこそ
+        </Typography>
       </Box>
     </div>
   );
