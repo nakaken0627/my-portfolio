@@ -15,9 +15,17 @@ export const ConfirmedList = () => {
   if (isLoading) return <Typography>データを取得中です...</Typography>;
 
   return (
-    <Container maxWidth="lg" sx={{ py: 1 }}>
-      <Typography variant="h4" gutterBottom>
-        受注処理済み一覧
+    <Container
+      maxWidth="lg"
+      sx={{
+        py: 3,
+        backgroundColor: "#F5F5F5",
+        borderRadius: 2,
+        minHeight: "100vh",
+      }}
+    >
+      <Typography variant="h4" gutterBottom sx={{ color: "#4A4A4A" }}>
+        確定済み一覧
       </Typography>
       <Box sx={{ px: { xs: 1, sm: 2 }, py: 2 }}>
         {data.map((order) => (

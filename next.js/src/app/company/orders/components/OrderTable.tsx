@@ -17,37 +17,82 @@ type Props = {
 
 export const OrderTable = ({ products, total }: Props) => {
   return (
-    <TableContainer component={Paper} variant="outlined">
-      <Table size="small">
+    <TableContainer
+      component={Paper}
+      sx={{
+        backgroundColor: "#F5F8FF",
+        border: "1px solid #DDDDDD",
+        overflowX: "auto",
+      }}
+    >
+      <Table size="small" sx={{ minWidth: 600 }}>
         <TableHead>
-          <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-            <TableCell>型番</TableCell>
-            <TableCell>商品名</TableCell>
-            <TableCell>数量</TableCell>
-            <TableCell>単価</TableCell>
-            <TableCell>小計</TableCell>
+          <TableRow sx={{ backgroundColor: "#E6E6E6" }}>
+            {["型番", "商品名", "数量", "単価", "小計"].map((label) => (
+              <TableCell
+                key={label}
+                sx={{
+                  color: "#333",
+                  fontWeight: "bold",
+                  minWidth: 90,
+                  padding: "6px 12px",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {label}
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
 
         <TableBody>
-          {products.map((p, index) => (
-            <TableRow
-              key={`${String(p.id)}-${String(p.custom?.id ?? "no-custom")}`}
-              sx={{
-                backgroundColor: index % 2 === 0 ? "#fafafa" : "white",
-              }}
-            >
-              <TableCell>{p.custom?.model_number ?? p.model_number}</TableCell>
-              <TableCell>{p.custom?.name ?? p.name}</TableCell>
-              <TableCell>{p.quantity}</TableCell>
-              <TableCell>
-                ¥{(p.custom?.price ?? p.price).toLocaleString()}
-              </TableCell>
-              <TableCell sx={{ fontWeight: "bold", color: "green" }}>
-                ¥{((p.custom?.price ?? p.price) * p.quantity).toLocaleString()}
-              </TableCell>
-            </TableRow>
-          ))}
+          {products.map((p, index) => {
+            const price = p.custom?.price ?? p.price;
+            const subtotal = price * p.quantity;
+            return (
+              <TableRow
+                key={`${String(p.id)}-${String(p.custom?.id ?? "no-custom")}`}
+                sx={{
+                  backgroundColor: index % 2 === 0 ? "#fafafa" : "#fff",
+                }}
+              >
+                <TableCell
+                  sx={{
+                    minWidth: 110,
+                    padding: "6px 12px",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {p.custom?.model_number ?? p.model_number}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    minWidth: 130,
+                    padding: "6px 12px",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {p.custom?.name ?? p.name}
+                </TableCell>
+                <TableCell sx={{ minWidth: 50, padding: "6px 12px" }}>
+                  {p.quantity}
+                </TableCell>
+                <TableCell sx={{ minWidth: 70, padding: "6px 12px" }}>
+                  ¥{price.toLocaleString()}
+                </TableCell>
+                <TableCell
+                  sx={{
+                    fontWeight: "bold",
+                    color: "green",
+                    minWidth: 90,
+                    padding: "6px 12px",
+                  }}
+                >
+                  ¥{subtotal.toLocaleString()}
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
 
         <TableFooter>
@@ -58,6 +103,7 @@ export const OrderTable = ({ products, total }: Props) => {
               sx={{
                 fontWeight: "bold",
                 backgroundColor: "#f0f0f0",
+                whiteSpace: "nowrap",
               }}
             >
               合計
@@ -67,6 +113,7 @@ export const OrderTable = ({ products, total }: Props) => {
                 fontWeight: "bold",
                 color: "#d32f2f",
                 backgroundColor: "#f0f0f0",
+                whiteSpace: "nowrap",
               }}
             >
               ¥{total.toLocaleString()}
