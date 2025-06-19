@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useConfirmedOrders } from "@/hooks/company/useConfirmedOrders";
 import { useFetchOrderList } from "@/hooks/company/useFetchOrderList";
-import { Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 
 import { OrderActionButtons } from "./OrderActionButtons";
 import { OrderCard } from "./OrderCard";
@@ -42,14 +42,33 @@ export const DisplayOrderList = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 1 }}>
-      <Typography variant="h4" gutterBottom>
-        注文一覧
-      </Typography>
-      <OrderActionButtons
-        onConfirm={() => handleClickChangeStatus(confirmedIds)}
-        onToggleAll={handlePushAllIds}
-      />
+    <Container
+      maxWidth="lg"
+      sx={{
+        py: 3,
+        backgroundColor: "#F5F5F5",
+        borderRadius: 2,
+        minHeight: "100vh",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 2,
+        }}
+      >
+        <Typography
+          variant="h4"
+          sx={{ color: "#4A4A4A", whiteSpace: "nowrap" }}
+        >
+          注文一覧
+        </Typography>
+        <OrderActionButtons
+          onConfirm={() => handleClickChangeStatus(confirmedIds)}
+          onToggleAll={handlePushAllIds}
+        />
+      </Box>
 
       {data.map((order) => (
         <OrderCard

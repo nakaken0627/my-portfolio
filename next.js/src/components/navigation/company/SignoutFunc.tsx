@@ -28,16 +28,17 @@ export const SignoutFunc = () => {
 
   return (
     <Button
-      variant="outlined"
+      variant="contained"
       size="small"
       onClick={handleClickSignout}
       sx={{
-        borderColor: "#B0C4DE",
-        color: "#333",
+        backgroundColor: "#B0C4DE",
+        color: "#333333",
+        fontWeight: "bold",
         textTransform: "none",
+        boxShadow: "none",
         "&:hover": {
-          backgroundColor: "#E6F0FA",
-          borderColor: "#A2BBD7",
+          backgroundColor: "#91B0D8",
         },
       }}
     >

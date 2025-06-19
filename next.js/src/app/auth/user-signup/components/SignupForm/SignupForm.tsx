@@ -41,7 +41,6 @@ export const SignupForm = () => {
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
-      {/* ユーザーID */}
       <Controller
         name="name"
         control={control}
@@ -61,7 +60,6 @@ export const SignupForm = () => {
         )}
       />
 
-      {/* パスワード */}
       <Controller
         name="password"
         control={control}
@@ -82,7 +80,6 @@ export const SignupForm = () => {
         )}
       />
 
-      {/* パスワード確認 */}
       <Controller
         name="confirmedPassword"
         control={control}
@@ -103,7 +100,6 @@ export const SignupForm = () => {
         )}
       />
 
-      {/* 登録ボタン */}
       <Button
         type="submit"
         fullWidth

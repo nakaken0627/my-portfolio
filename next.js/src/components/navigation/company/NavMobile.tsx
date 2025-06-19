@@ -42,7 +42,6 @@ export const CompanyNavMobile = ({
           gap: isSmallScreen ? 1 : 0,
         }}
       >
-        {/* 上段：メニュー・ロゴ・ログアウト（常に横並び） */}
         <Box
           sx={{
             width: "100%",
@@ -77,7 +76,6 @@ export const CompanyNavMobile = ({
           </Box>
         </Box>
 
-        {/* 下段：companyInfo（500px未満のときのみ） */}
         {isSmallScreen && (
           <Box
             sx={{

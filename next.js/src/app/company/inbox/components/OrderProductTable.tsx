@@ -22,22 +22,59 @@ export const OrderProductTable = ({
   onCheck,
 }: Props) => {
   return (
-    <TableContainer component={Paper}>
-      <Table>
+    <TableContainer
+      component={Paper}
+      sx={{
+        backgroundColor: "#F5F8FF",
+        border: "1px solid #DDDDDD",
+        overflowX: "auto",
+      }}
+    >
+      <Table sx={{ minWidth: 800 }}>
         <TableHead>
-          <TableRow>
+          <TableRow sx={{ backgroundColor: "#E6E6E6" }}>
             <TableCell />
-            <TableCell>型番</TableCell>
-            <TableCell>商品名</TableCell>
-            <TableCell>単価</TableCell>
-            <TableCell>数量</TableCell>
-            <TableCell>小計</TableCell>
-            <TableCell>発注者</TableCell>
+            <TableCell
+              sx={{ color: "#333333", fontWeight: "bold", minWidth: 100 }}
+            >
+              型番
+            </TableCell>
+            <TableCell
+              sx={{ color: "#333333", fontWeight: "bold", minWidth: 120 }}
+            >
+              商品名
+            </TableCell>
+            <TableCell
+              sx={{ color: "#333333", fontWeight: "bold", minWidth: 80 }}
+            >
+              単価
+            </TableCell>
+            <TableCell
+              sx={{ color: "#333333", fontWeight: "bold", minWidth: 60 }}
+            >
+              数量
+            </TableCell>
+            <TableCell
+              sx={{ color: "#333333", fontWeight: "bold", minWidth: 100 }}
+            >
+              小計
+            </TableCell>
+            <TableCell
+              sx={{ color: "#333333", fontWeight: "bold", minWidth: 120 }}
+            >
+              発注者
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {products.map((p) => (
-            <TableRow key={`${String(p.id)}-${String(p.custom?.id)}`}>
+            <TableRow
+              key={`${String(p.id)}-${String(p.custom?.id)}`}
+              sx={{
+                borderBottom: "1px solid #DDDDDD",
+                color: "#666666",
+              }}
+            >
               <TableCell>
                 <Checkbox
                   checked={confirmedIds.includes(p.orderProductId)}

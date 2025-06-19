@@ -1,5 +1,5 @@
 import { OrderProduct, OrderTransformed } from "@/types/company";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Box, Card, CardContent, Typography } from "@mui/material";
 
 import { OrderProductTable } from "./OrderProductTable";
 
@@ -26,17 +26,42 @@ export const OrderCard = ({ order, confirmedIds, onCheck }: Props) => {
       key={order.orderId}
       sx={{
         mb: 4,
-        border: totalAmount >= 50000 ? "2px solid red" : "1px solid #ccc",
-        backgroundColor: totalAmount >= 50000 ? "#fff5f5" : "white",
+        border: `1.5px solid #B0C4DE`,
+        backgroundColor: "#E6F0FA",
+        ...(totalAmount >= 50000 && {
+          border: "2px solid #FF9999",
+          backgroundColor: "#FFF5F5",
+        }),
       }}
     >
       <CardContent>
-        <Typography variant="h6" gutterBottom>
-          オーダーID: {order.orderId}
-        </Typography>
-        <Typography variant="subtitle1" gutterBottom>
-          合計金額: ¥{totalAmount.toLocaleString()}
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: "center",
+            justifyContent: "flex-start",
+            gap: 2,
+            mb: 2,
+          }}
+        >
+          <Typography
+            variant="h5"
+            sx={{ color: "#333333", fontWeight: "bold" }}
+          >
+            オーダーID: {order.orderId}
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              color: "#333333",
+              fontWeight: "bold",
+            }}
+          >
+            合計金額: ¥{totalAmount.toLocaleString()}
+          </Typography>
+        </Box>
+
         <OrderProductTable
           products={order.products}
           confirmedIds={confirmedIds}
