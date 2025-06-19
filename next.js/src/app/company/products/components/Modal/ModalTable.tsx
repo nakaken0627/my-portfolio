@@ -41,7 +41,7 @@ export const ModalTable = ({ customs, onCustomDeleteSuccess }: Props) => {
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
-        カスタマイズ一覧
+        カスタム品一覧
       </Typography>
 
       <TableContainer

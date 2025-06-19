@@ -3,7 +3,7 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { usePostDefaultProducts } from "@/hooks/company/usePostDefaultProducts";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField } from "@mui/material";
 
 import { AddDefaultProductSchema } from "./AddDefaultProductSchema";
 
@@ -47,9 +47,9 @@ export const AddDefaultProduct = () => {
 
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>
+      {/* <Typography variant="h6" gutterBottom>
         商品登録
-      </Typography>
+      </Typography> */}
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack spacing={2}>
           <Controller

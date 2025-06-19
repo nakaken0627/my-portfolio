@@ -106,9 +106,9 @@ export const AddCustomProduct = ({ onAddSuccess }: Props) => {
 
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>
+      {/* <Typography variant="h6" gutterBottom>
         個別商品登録
-      </Typography>
+      </Typography> */}
 
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <Stack>

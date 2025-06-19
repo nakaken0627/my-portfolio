@@ -95,7 +95,7 @@ export const ProductList = () => {
   if (isLoadingProducts) return <Typography>データを取得中です...</Typography>;
 
   return (
-    <Container maxWidth="lg" sx={{ py: 2 }}>
+    <Container maxWidth="lg">
       <Typography variant="h5" gutterBottom>
         商品一覧
       </Typography>
