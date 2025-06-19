@@ -39,7 +39,7 @@ export const NavMobile = ({ userInfo, toggleDrawer, drawerOpen }: Props) => {
           </IconButton>
 
           <Typography variant="h6">
-            <Link href="/user/mypage">User Panel</Link>
+            <Link href="/user/dashboard ">User Panel</Link>
           </Typography>
 
           <Typography variant="body1" sx={{ mx: 2, borderBottom: "1px solid" }}>

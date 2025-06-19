@@ -21,7 +21,16 @@ export const CompanyNavClient = ({ companyInfo }: Props) => {
 
   return (
     <Box>
-      <AppBar>
+      <AppBar
+        position="static"
+        elevation={1}
+        sx={{
+          backgroundColor: "#E6F0FA",
+          color: "#333333",
+          borderBottom: "1px solid #DDDDDD",
+        }}
+      >
+        {" "}
         {isMobile ? (
           <CompanyNavMobile
             drawerOpen={drawerOpen}

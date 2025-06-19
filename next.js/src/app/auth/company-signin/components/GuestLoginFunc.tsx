@@ -16,7 +16,7 @@ export const GuestLoginFunc = () => {
   const handleGuestLogin = async () => {
     try {
       await trigger({ username: "test", password: "test" });
-      router.push("/company/mypage");
+      router.push("/company/inbox");
     } catch (err) {
       const error = err as CustomError;
       const msg = error.info?.message ?? "";

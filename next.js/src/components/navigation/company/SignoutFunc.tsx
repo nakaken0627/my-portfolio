@@ -28,11 +28,18 @@ export const SignoutFunc = () => {
 
   return (
     <Button
-      color="inherit"
       variant="outlined"
       size="small"
       onClick={handleClickSignout}
-      sx={{ ml: 2 }}
+      sx={{
+        borderColor: "#B0C4DE",
+        color: "#333",
+        textTransform: "none",
+        "&:hover": {
+          backgroundColor: "#E6F0FA",
+          borderColor: "#A2BBD7",
+        },
+      }}
     >
       ログアウト
     </Button>

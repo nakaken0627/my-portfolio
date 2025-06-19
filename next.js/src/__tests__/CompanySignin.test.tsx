@@ -37,7 +37,7 @@ describe("Test CompanySignin", () => {
     mockTrigger.mockClear();
   });
 
-  test('ログイン成功時に"/company/mypage"にリダイレクト', async () => {
+  test('ログイン成功時に"/company/inbox"にリダイレクト', async () => {
     mockTrigger.mockResolvedValue(true);
 
     render(<SigninForm />);
@@ -51,7 +51,7 @@ describe("Test CompanySignin", () => {
       });
     });
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith("/company/mypage");
+      expect(mockPush).toHaveBeenCalledWith("/company/inbox");
     });
   });
 

@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
@@ -10,7 +11,7 @@ import {
   ListItemButton,
   ListItemText,
   Toolbar,
-  Typography,
+  useMediaQuery,
 } from "@mui/material";
 
 import { navLinks } from "./NavLinks";
@@ -27,26 +28,97 @@ export const CompanyNavMobile = ({
   companyInfo,
   drawerOpen,
 }: Props) => {
+  const isSmallScreen = useMediaQuery("(max-width:500px)");
+
   return (
     <>
-      <Toolbar sx={{ justifyContent: "space-between" }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <IconButton color="inherit" onClick={toggleDrawer}>
-            <MenuIcon />
-          </IconButton>
+      <Toolbar
+        sx={{
+          flexDirection: isSmallScreen ? "column" : "row",
+          alignItems: isSmallScreen ? "stretch" : "center",
+          justifyContent: isSmallScreen ? "flex-start" : "space-between",
+          px: 2,
+          py: 1,
+          gap: isSmallScreen ? 1 : 0,
+        }}
+      >
+        {/* 上段：メニュー・ロゴ・ログアウト（常に横並び） */}
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: 1,
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <IconButton color="inherit" onClick={toggleDrawer}>
+              <MenuIcon />
+            </IconButton>
 
-          <Typography variant="h6">Company Panel</Typography>
+            <Box
+              sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+            >
+              <Image
+                src="/logo.jpeg"
+                alt="Smart Deal EC ロゴ"
+                width={120}
+                height={40}
+                style={{ objectFit: "contain" }}
+              />
+            </Box>
+          </Box>
 
-          {companyInfo}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            {!isSmallScreen && <Box>{companyInfo}</Box>}
+            <SignoutFunc />
+          </Box>
         </Box>
-        <SignoutFunc />
+
+        {/* 下段：companyInfo（500px未満のときのみ） */}
+        {isSmallScreen && (
+          <Box
+            sx={{
+              mt: 2,
+              mx: "auto",
+              px: 2,
+              py: 1,
+              maxWidth: "100%",
+              textAlign: "center",
+              color: "#666",
+              fontSize: "0.9rem",
+              wordBreak: "break-word",
+            }}
+          >
+            {companyInfo}
+          </Box>
+        )}
       </Toolbar>
 
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer}>
-        <Box sx={{ width: 250 }} onClick={toggleDrawer}>
+        <Box
+          sx={{
+            width: 250,
+            backgroundColor: "#F5F5F5",
+            height: "100%",
+            color: "#333",
+          }}
+          onClick={toggleDrawer}
+        >
           <List>
             {navLinks.map((link) => (
-              <ListItemButton key={link.href} component={Link} href={link.href}>
+              <ListItemButton
+                key={link.href}
+                component={Link}
+                href={link.href}
+                sx={{
+                  "&:hover": {
+                    backgroundColor: "#E6F0FA",
+                  },
+                }}
+              >
                 <ListItemText primary={link.label} />
               </ListItemButton>
             ))}

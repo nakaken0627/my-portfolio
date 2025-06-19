@@ -31,7 +31,7 @@ export const SignupForm = () => {
   const onSubmit: SubmitHandler<FormData> = async (inputData: FormData) => {
     try {
       await trigger(inputData);
-      router.push("/company/mypage");
+      router.push("/company/inbox");
     } catch (err) {
       const error = err as CustomError;
       const msg = error.info?.message ?? "";

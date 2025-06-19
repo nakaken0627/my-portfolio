@@ -42,7 +42,7 @@ describe("Test CompanySignup", () => {
     mockTrigger.mockClear();
   });
 
-  test("新規登録時に/company/mypageにリダイレクト", async () => {
+  test("新規登録時に/company/inboxにリダイレクト", async () => {
     mockTrigger.mockResolvedValue(true);
 
     render(<SignupForm />);
@@ -57,7 +57,7 @@ describe("Test CompanySignup", () => {
       });
     });
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith("/company/mypage");
+      expect(mockPush).toHaveBeenCalledWith("/company/inbox");
     });
   });
 
