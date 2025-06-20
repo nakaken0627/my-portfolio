@@ -1,7 +1,7 @@
 export type ProductWithCustomization = {
   id: number;
   name: string;
-  model_number: string;
+  modelNumber: string;
   price: number;
   description: string;
   imageUrl: string;
@@ -10,13 +10,13 @@ export type ProductWithCustomization = {
 
 export type ProductCustomizations = {
   id: number;
-  user_name?: string;
-  model_number: string;
+  userName?: string;
+  modelNumber: string;
   name: string;
   price: number;
   description: string;
-  start_date: string;
-  end_date: string;
+  startDate: string;
+  endDate: string;
 };
 
 export type OrderProduct = {
@@ -24,12 +24,12 @@ export type OrderProduct = {
   orderProductId: number;
   name: string;
   userName: string;
-  model_number: string;
+  modelNumber: string;
   price: number;
   quantity: number;
   custom: {
     id: number;
-    model_number: string;
+    modelNumber: string;
     name: string;
     price: number;
   } | null;

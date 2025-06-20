@@ -3,7 +3,7 @@ type OrderProductWithCustom = {
   orderProductId: number;
   name: string;
   userName: string;
-  model_number: string;
+  modelNumber: string;
   price: number;
   quantity: number;
   custom: OrderCustom | null;
@@ -11,7 +11,7 @@ type OrderProductWithCustom = {
 
 type OrderCustom = {
   id: number;
-  model_number: string;
+  modelNumber: string;
   name: string;
   price: number;
 };

@@ -33,7 +33,6 @@ export const ConfirmedList = () => {
           fontWeight: "bold",
         }}
       >
-        {" "}
         確定済一覧
       </Typography>
       <Box sx={{ px: { xs: 1, sm: 2 }, py: 2 }}>

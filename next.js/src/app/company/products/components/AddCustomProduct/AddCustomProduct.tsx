@@ -83,7 +83,7 @@ export const AddCustomProduct = ({ onAddSuccess }: Props) => {
     );
     if (matchedProduct) {
       setValue("productName", matchedProduct.name);
-      setValue("modelNumber", matchedProduct.model_number);
+      setValue("modelNumber", matchedProduct.modelNumber);
       setValue("price", matchedProduct.price);
       setValue("description", matchedProduct.description);
     } else {

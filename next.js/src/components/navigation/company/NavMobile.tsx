@@ -73,10 +73,10 @@ export const CompanyNavMobile = ({
                 />
               </Box>
             </Link>
+            {!isSmallScreen && <Box>{companyInfo}</Box>}
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            {!isSmallScreen && <Box>{companyInfo}</Box>}
             <SignoutFunc />
           </Box>
         </Box>
@@ -84,13 +84,11 @@ export const CompanyNavMobile = ({
         {isSmallScreen && (
           <Box
             sx={{
-              mt: 2,
+              mt: 1,
               mx: "auto",
               px: 2,
-              py: 1,
               maxWidth: "100%",
               textAlign: "center",
-              color: "#666",
               fontSize: "0.9rem",
               wordBreak: "break-word",
             }}

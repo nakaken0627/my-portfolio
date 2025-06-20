@@ -175,7 +175,7 @@ export const ProductList = () => {
                 </TableCell>
                 <TableCell align="center">{p.id}</TableCell>
                 <TableCell align="center">{p.name}</TableCell>
-                <TableCell align="center">{p.model_number}</TableCell>
+                <TableCell align="center">{p.modelNumber}</TableCell>
                 <TableCell align="center">
                   ¥{Number(p.price).toLocaleString()}
                 </TableCell>

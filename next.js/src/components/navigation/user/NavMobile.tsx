@@ -25,7 +25,7 @@ type Props = {
 };
 
 export const NavMobile = ({ userInfo, toggleDrawer, drawerOpen }: Props) => {
-  const isSmallScreen = useMediaQuery("(max-width:500px)");
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
 
   return (
     <>
@@ -64,17 +64,8 @@ export const NavMobile = ({ userInfo, toggleDrawer, drawerOpen }: Props) => {
               />
             </Box>
           </Link>
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-          }}
-        >
           {!isSmallScreen && (
-            <Box>
+            <Box alignItems="left">
               <Typography
                 variant="body1"
                 sx={{ color: "#333333", fontWeight: "bold", mr: 2 }}
@@ -84,7 +75,15 @@ export const NavMobile = ({ userInfo, toggleDrawer, drawerOpen }: Props) => {
               </Typography>
             </Box>
           )}
+        </Box>
 
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
           <IconButton color="inherit" href="/user/cart">
             <ShoppingCartIcon />
           </IconButton>

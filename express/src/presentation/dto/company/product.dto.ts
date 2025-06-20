@@ -1,14 +1,23 @@
-import { ProductCustom } from "../../../domain/models/company/productModel.js";
-
 export type DisplayProductDto = {
   id: number;
   name: string;
-  model_number: string;
+  modelNumber: string;
   price: number;
   description: string;
-  image_name?: string;
+  imageName?: string;
   imageUrl?: string | null;
-  custom: ProductCustom[];
+  custom: ProductCustomDTO[];
+};
+
+type ProductCustomDTO = {
+  id: number;
+  userName: string;
+  modelNumber: string;
+  name: string;
+  price: number;
+  description: string;
+  startDate: string;
+  endDate: string;
 };
 
 export type CreateProductDTO = {

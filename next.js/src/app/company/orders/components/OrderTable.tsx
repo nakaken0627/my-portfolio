@@ -63,7 +63,7 @@ export const OrderTable = ({ products, total }: Props) => {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {p.custom?.model_number ?? p.model_number}
+                  {p.custom?.modelNumber ?? p.modelNumber}
                 </TableCell>
                 <TableCell
                   sx={{

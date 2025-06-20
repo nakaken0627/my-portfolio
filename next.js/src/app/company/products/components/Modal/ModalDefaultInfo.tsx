@@ -28,7 +28,7 @@ export const ModalDefaultInfo = ({ product }: Props) => {
           <Typography variant="h6" gutterBottom>
             {product.name}
           </Typography>
-          <Typography sx={{ mb: 1 }}>型番: {product.model_number}</Typography>
+          <Typography sx={{ mb: 1 }}>型番: {product.modelNumber}</Typography>
           <Typography sx={{ fontWeight: "bold", fontSize: "1.2rem" }}>
             価格: ¥{Number(product.price).toLocaleString()}
           </Typography>

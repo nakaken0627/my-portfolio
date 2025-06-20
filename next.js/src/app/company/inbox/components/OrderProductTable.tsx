@@ -83,7 +83,7 @@ export const OrderProductTable = ({
                   }}
                 />
               </TableCell>
-              <TableCell>{p.custom?.model_number ?? p.model_number}</TableCell>
+              <TableCell>{p.custom?.modelNumber ?? p.modelNumber}</TableCell>
               <TableCell>{p.custom?.name ?? p.name}</TableCell>
               <TableCell>
                 ¥{Math.round(p.custom?.price ?? p.price).toLocaleString()}
