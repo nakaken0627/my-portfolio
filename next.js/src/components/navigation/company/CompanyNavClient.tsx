@@ -30,7 +30,6 @@ export const CompanyNavClient = ({ companyInfo }: Props) => {
           borderBottom: "1px solid #DDDDDD",
         }}
       >
-        {" "}
         {isMobile ? (
           <CompanyNavMobile
             drawerOpen={drawerOpen}

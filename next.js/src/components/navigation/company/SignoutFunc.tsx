@@ -1,5 +1,3 @@
-"use client";
-
 import { useRouter } from "next/navigation";
 import { useErrorHandling } from "@/hooks/useErrorHandling";
 import { API_BASE_URL } from "@/lib/api";

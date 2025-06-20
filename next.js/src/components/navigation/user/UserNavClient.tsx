@@ -21,7 +21,15 @@ export const UserNavClient = ({ userInfo }: Props) => {
 
   return (
     <Box>
-      <AppBar>
+      <AppBar
+        position="static"
+        elevation={1}
+        sx={{
+          backgroundColor: "#E6F4EA",
+          color: "#333333",
+          borderBottom: "1px solid #DDDDDD",
+        }}
+      >
         {isMobile ? (
           <NavMobile
             drawerOpen={drawerOpen}
