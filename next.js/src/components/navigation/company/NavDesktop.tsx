@@ -14,17 +14,22 @@ export const CompanyNavDesktop = ({ companyInfo }: Props) => {
   return (
     <Toolbar sx={{ display: "flex", width: "100%" }}>
       <Box sx={{ display: "flex", flexGrow: 1, alignItems: "center", gap: 2 }}>
-        <Box sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
-          <Image
-            src="/logo.jpeg"
-            alt="Smart Deal EC ロゴ"
-            width={120}
-            height={40}
-            style={{
-              objectFit: "contain",
-            }}
-          />
-        </Box>
+        <Link href="/company/inbox" passHref>
+          <Box
+            sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+          >
+            <Image
+              src="/logo.jpeg"
+              alt="Smart Deal EC ロゴ"
+              width={120}
+              height={40}
+              style={{
+                objectFit: "contain",
+              }}
+            />
+          </Box>
+        </Link>
+
         {companyInfo}
       </Box>
       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

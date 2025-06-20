@@ -56,18 +56,23 @@ export const CompanyNavMobile = ({
             <IconButton color="inherit" onClick={toggleDrawer}>
               <MenuIcon />
             </IconButton>
-
-            <Box
-              sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-            >
-              <Image
-                src="/logo.jpeg"
-                alt="Smart Deal EC ロゴ"
-                width={120}
-                height={40}
-                style={{ objectFit: "contain" }}
-              />
-            </Box>
+            <Link href="/company/inbox" passHref>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  cursor: "pointer",
+                }}
+              >
+                <Image
+                  src="/logo.jpeg"
+                  alt="Smart Deal EC ロゴ"
+                  width={120}
+                  height={40}
+                  style={{ objectFit: "contain" }}
+                />
+              </Box>
+            </Link>
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>

@@ -22,7 +22,12 @@ export const UserProductList = () => {
     <Container maxWidth="lg" sx={{ padding: 2, py: 1 }}>
       <Typography
         variant="h4"
-        sx={{ mb: 4, color: "green", textAlign: "center" }}
+        sx={{
+          mb: 4,
+          color: "#333333",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
       >
         商品一覧
       </Typography>

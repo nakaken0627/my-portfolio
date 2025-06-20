@@ -51,18 +51,19 @@ export const NavMobile = ({ userInfo, toggleDrawer, drawerOpen }: Props) => {
           <IconButton color="inherit" onClick={toggleDrawer}>
             <MenuIcon sx={{ color: "#333" }} />
           </IconButton>
-
-          <Box
-            sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
-          >
-            <Image
-              src="/logo.jpeg"
-              alt="Smart Deal EC ロゴ"
-              width={120}
-              height={40}
-              style={{ objectFit: "contain" }}
-            />
-          </Box>
+          <Link href="/user/dashboard" passHref>
+            <Box
+              sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
+            >
+              <Image
+                src="/logo.jpeg"
+                alt="Smart Deal EC ロゴ"
+                width={120}
+                height={40}
+                style={{ objectFit: "contain" }}
+              />
+            </Box>
+          </Link>
         </Box>
 
         <Box

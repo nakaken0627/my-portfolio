@@ -66,12 +66,30 @@ export const CurrentCart = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 2 }}>
-      <Typography variant="h4" gutterBottom>
+    <Container
+      maxWidth="lg"
+      sx={{ backgroundColor: "#E6F4EA", borderRadius: 2, p: { xs: 1, sm: 2 } }}
+    >
+      <Typography
+        variant="h4"
+        sx={{
+          mb: 4,
+          color: "#333333",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
         カート
       </Typography>
-
-      <Paper elevation={3} sx={{ p: 3, backgroundColor: "#f1f8e9" }}>
+      <Paper
+        elevation={3}
+        sx={{
+          p: 2,
+          backgroundColor: "#F5F8FF",
+          border: "1px solid #DDDDDD",
+        }}
+      >
+        {" "}
         {cartProducts.length === 0 ? (
           <Typography>カートが空です</Typography>
         ) : (
@@ -82,28 +100,31 @@ export const CurrentCart = () => {
             setCartProducts={setCartProducts}
           />
         )}
-
-        <Divider sx={{ my: 3 }} />
-
-        <Box display="flex" justifyContent="flex-end">
+        <Divider sx={{ my: 2 }} />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            flexWrap: "wrap",
+            gap: 1,
+          }}
+        >
           <Typography variant="h6">
             合計: ¥
             {calcCartTotalAmount(cartProducts, products).toLocaleString()}
           </Typography>
         </Box>
-
         <Box display="flex" justifyContent="flex-end" mt={2}>
           <Button
             variant="contained"
-            sx={{
-              backgroundColor: "#81c784",
-              px: 4,
-              py: 1.5,
-              "&:hover": {
-                backgroundColor: "#66bb6a",
-              },
-            }}
             onClick={handleCheckout}
+            sx={{
+              backgroundColor: "#81C784",
+              px: 3,
+              py: 1,
+              fontWeight: "bold",
+              "&:hover": { backgroundColor: "#66BB6A" },
+            }}
           >
             チェックアウト
           </Button>

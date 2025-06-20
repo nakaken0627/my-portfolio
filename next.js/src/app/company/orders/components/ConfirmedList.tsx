@@ -24,8 +24,17 @@ export const ConfirmedList = () => {
         minHeight: "100vh",
       }}
     >
-      <Typography variant="h4" gutterBottom sx={{ color: "#4A4A4A" }}>
-        確定済み一覧
+      <Typography
+        variant="h4"
+        sx={{
+          mb: 2,
+          color: "#333333",
+          textAlign: "center",
+          fontWeight: "bold",
+        }}
+      >
+        {" "}
+        確定済一覧
       </Typography>
       <Box sx={{ px: { xs: 1, sm: 2 }, py: 2 }}>
         {data.map((order) => (

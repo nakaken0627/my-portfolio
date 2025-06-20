@@ -30,6 +30,7 @@ export const SignoutFunc = () => {
       size="small"
       onClick={handleClickSignout}
       sx={{
+        ml: 2,
         backgroundColor: "#A5C8B1",
         color: "#333333",
         fontWeight: "bold",
