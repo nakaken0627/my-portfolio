@@ -15,7 +15,7 @@ export const OrderActionButtons = ({ onConfirm, onToggleAll }: Props) => {
       >
         <Grid>
           <Button variant="contained" color="primary" onClick={onConfirm}>
-            受注確定
+            注文確定
           </Button>
         </Grid>
         <Grid>

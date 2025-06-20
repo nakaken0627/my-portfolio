@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useConfirmedOrders } from "@/hooks/company/useConfirmedOrders";
 import { useFetchOrderList } from "@/hooks/company/useFetchOrderList";
-import { Box, Container, Typography } from "@mui/material";
+import PlaylistAddOutlinedIcon from "@mui/icons-material/PlaylistAddOutlined";
+import { Box, Container, Paper, Typography } from "@mui/material";
 
 import { OrderActionButtons } from "./OrderActionButtons";
 import { OrderCard } from "./OrderCard";
@@ -56,6 +57,7 @@ export const DisplayOrderList = () => {
           display: "flex",
           flexWrap: "wrap",
           gap: 2,
+          mb: 3,
         }}
       >
         <Typography
@@ -70,14 +72,42 @@ export const DisplayOrderList = () => {
         />
       </Box>
 
-      {data.map((order) => (
-        <OrderCard
-          key={order.orderId}
-          order={order}
-          confirmedIds={confirmedIds}
-          onCheck={handleCheckBoxStatus}
-        />
-      ))}
+      {/* ▼ データがない場合の表示 */}
+      {data.length === 0 ? (
+        <Paper
+          elevation={3}
+          sx={{
+            backgroundColor: "#E6F0FA",
+            borderRadius: 2,
+            py: 6,
+            px: 2,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+          }}
+        >
+          <PlaylistAddOutlinedIcon
+            sx={{ fontSize: 60, color: "#A2BBD7", mb: 2 }}
+          />
+          <Typography variant="h6" sx={{ color: "#4A4A4A", mb: 1 }}>
+            現在、注文は登録されていません
+          </Typography>
+          <Typography variant="body2" sx={{ color: "#777" }}>
+            ユーザーから注文が届くと、こちらに表示されます。
+          </Typography>
+        </Paper>
+      ) : (
+        data.map((order) => (
+          <OrderCard
+            key={order.orderId}
+            order={order}
+            confirmedIds={confirmedIds}
+            onCheck={handleCheckBoxStatus}
+          />
+        ))
+      )}
     </Container>
   );
 };

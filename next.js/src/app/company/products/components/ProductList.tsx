@@ -50,7 +50,7 @@ export const ProductList = () => {
     } catch (err) {
       const error = err as CustomError;
       const msg = error.info?.message ?? "";
-      alert(msg || "削除に失敗しました");
+      alert(msg || "関連データが存在するため削除できません");
     }
   };
 
