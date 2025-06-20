@@ -6,6 +6,7 @@ import { useErrorHandling } from "@/hooks/useErrorHandling";
 import { useFetchUserProducts } from "@/hooks/user/useFetchUserProducts";
 import { API_BASE_URL } from "@/lib/api";
 import { CartProductWithPrice } from "@/types/cart";
+import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import {
   Box,
   Button,
@@ -90,9 +91,34 @@ export const CurrentCart = () => {
         }}
       >
         {cartProducts.length === 0 ? (
-          <Typography textAlign="center" fontWeight="bold">
-            カートが空です
-          </Typography>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            sx={{
+              py: 6,
+              borderRadius: 2,
+            }}
+          >
+            <ShoppingCartCheckoutIcon
+              sx={{ fontSize: 80, color: "#A0A0A0", mb: 2 }}
+            />
+            <Typography
+              variant="h6"
+              sx={{ color: "#555555", fontWeight: "bold", mb: 1 }}
+            >
+              カートは空です
+            </Typography>
+            <Typography
+              variant="body2"
+              sx={{ color: "#777777", textAlign: "center" }}
+            >
+              商品ページからお好きな商品を選んで
+              <br />
+              カートに追加してください。
+            </Typography>
+          </Box>
         ) : (
           <CartCard
             cartId={cartId}
