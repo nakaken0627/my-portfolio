@@ -89,9 +89,10 @@ export const CurrentCart = () => {
           border: "1px solid #DDDDDD",
         }}
       >
-        {" "}
         {cartProducts.length === 0 ? (
-          <Typography>カートが空です</Typography>
+          <Typography textAlign="center" fontWeight="bold">
+            カートが空です
+          </Typography>
         ) : (
           <CartCard
             cartId={cartId}
