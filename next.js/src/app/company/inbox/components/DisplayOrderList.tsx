@@ -72,7 +72,7 @@ export const DisplayOrderList = () => {
         />
       </Box>
 
-      {/* ▼ データがない場合の表示 */}
+      {/* データがない場合の表示画面 */}
       {data.length === 0 ? (
         <Paper
           elevation={3}
