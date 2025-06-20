@@ -65,10 +65,11 @@ export const CompanyNavMobile = ({
                 }}
               >
                 <Image
-                  src="/logo.jpeg"
+                  src="/logo.png"
                   alt="Smart Deal EC ロゴ"
                   width={120}
                   height={40}
+                  priority
                   style={{ objectFit: "contain" }}
                 />
               </Box>

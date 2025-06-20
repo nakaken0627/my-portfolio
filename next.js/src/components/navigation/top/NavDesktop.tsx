@@ -13,10 +13,11 @@ export const NavDesktop = () => {
             sx={{ display: "flex", alignItems: "center", cursor: "pointer" }}
           >
             <Image
-              src="/logo.jpeg"
+              src="/logo.png"
               alt="Smart Deal EC ロゴ"
               width={120}
               height={40}
+              priority
               style={{
                 objectFit: "contain",
               }}

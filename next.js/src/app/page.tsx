@@ -20,10 +20,11 @@ export default function Home() {
         }}
       >
         <Image
-          src="/logo.jpeg"
+          src="/logo.png"
           alt="Smart Deal EC ロゴ"
           width={600}
           height={100}
+          priority
           style={{
             width: "100%",
             height: "auto",
