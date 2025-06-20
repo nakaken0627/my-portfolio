@@ -4,7 +4,9 @@ import { useCallback, useState } from "react";
 import { useDeleteProducts } from "@/hooks/company/useDeleteProducts";
 import { useFetchCompanyProducts } from "@/hooks/company/useFetchCompanyProducts";
 import { ProductWithCustomization } from "@/types/company";
+import InventoryIcon from "@mui/icons-material/Inventory";
 import {
+  Box,
   Button,
   Checkbox,
   Container,
@@ -100,123 +102,153 @@ export const ProductList = () => {
         商品一覧
       </Typography>
 
-      <TableContainer
-        component={Paper}
-        elevation={3}
-        sx={{ overflowX: "auto", backgroundColor: "#fafafa" }}
-      >
-        <Table size="small">
-          <TableHead>
-            <TableRow sx={{ backgroundColor: "#e3f2fd" }}>
-              <TableCell
-                align="center"
-                sx={{ fontWeight: "bold", minWidth: 80 }}
-              >
-                選択
-              </TableCell>
-
-              <TableCell
-                align="center"
-                sx={{ fontWeight: "bold", minWidth: 80 }}
-              >
-                商品ID
-              </TableCell>
-
-              <TableCell
-                align="center"
-                sx={{ fontWeight: "bold", minWidth: 120 }}
-              >
-                商品名
-              </TableCell>
-
-              <TableCell
-                align="center"
-                sx={{ fontWeight: "bold", minWidth: 100 }}
-              >
-                型番
-              </TableCell>
-
-              <TableCell
-                align="center"
-                sx={{ fontWeight: "bold", minWidth: 100 }}
-              >
-                価格
-              </TableCell>
-
-              <TableCell
-                align="center"
-                sx={{ fontWeight: "bold", minWidth: 200 }}
-              >
-                説明
-              </TableCell>
-
-              <TableCell
-                align="center"
-                sx={{ fontWeight: "bold", minWidth: 100 }}
-              >
-                詳細
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {products.map((p) => (
-              <TableRow
-                key={String(p.id)}
-                hover
-                sx={{ "&:hover": { backgroundColor: "#f0f8ff" } }}
-              >
-                <TableCell align="center">
-                  <Checkbox
-                    checked={selectedIds.includes(p.id)}
-                    onChange={() => {
-                      handleCheckBoxStatus(p.id);
-                    }}
-                  />
-                </TableCell>
-                <TableCell align="center">{p.id}</TableCell>
-                <TableCell align="center">{p.name}</TableCell>
-                <TableCell align="center">{p.modelNumber}</TableCell>
-                <TableCell align="center">
-                  ¥{Number(p.price).toLocaleString()}
-                </TableCell>
-                <TableCell align="left">{p.description}</TableCell>
-
-                <TableCell align="center">
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    color="primary"
-                    onClick={() => {
-                      handleModalOpen();
-                      setSelectedProduct(p);
-                    }}
+      {/*  データがないときの表示 */}
+      {products.length === 0 ? (
+        <Paper
+          elevation={3}
+          sx={{
+            backgroundColor: "#E6F0FA",
+            py: 6,
+            px: 3,
+            textAlign: "center",
+            borderRadius: 2,
+            mt: 4,
+          }}
+        >
+          <InventoryIcon sx={{ fontSize: 60, color: "#A2BBD7", mb: 2 }} />
+          <Typography
+            variant="h6"
+            sx={{ color: "#4A4A4A", fontWeight: "bold", mb: 1 }}
+          >
+            商品がまだ登録されていません
+          </Typography>
+          <Typography
+            variant="body2"
+            sx={{ color: "#666666", whiteSpace: "pre-line" }}
+          >
+            {`上部の商品登録から「新規商品登録」を選択し、
+            商品を登録してください`}
+          </Typography>
+        </Paper>
+      ) : (
+        <Box>
+          <TableContainer
+            component={Paper}
+            elevation={3}
+            sx={{ overflowX: "auto", backgroundColor: "#fafafa" }}
+          >
+            <Table size="small">
+              <TableHead>
+                <TableRow sx={{ backgroundColor: "#e3f2fd" }}>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", minWidth: 80 }}
                   >
-                    詳細 : {p.custom.length}
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                    選択
+                  </TableCell>
 
-      <Button
-        variant="contained"
-        color="error"
-        onClick={handleDeleteProducts}
-        sx={{ mt: 2 }}
-        disabled={isMutating}
-      >
-        選択商品を削除
-      </Button>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", minWidth: 80 }}
+                  >
+                    商品ID
+                  </TableCell>
 
-      <ProductsDetailModal
-        open={modalOpen}
-        onClose={handleModalClose}
-        productWithCustoms={selectedProduct}
-        onAddSuccess={handleAddSuccess}
-        onCustomDeleteSuccess={handleCustomDeleteSuccess}
-      />
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", minWidth: 120 }}
+                  >
+                    商品名
+                  </TableCell>
+
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", minWidth: 100 }}
+                  >
+                    型番
+                  </TableCell>
+
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", minWidth: 100 }}
+                  >
+                    価格
+                  </TableCell>
+
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", minWidth: 200 }}
+                  >
+                    説明
+                  </TableCell>
+
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", minWidth: 100 }}
+                  >
+                    詳細
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {products.map((p) => (
+                  <TableRow
+                    key={String(p.id)}
+                    hover
+                    sx={{ "&:hover": { backgroundColor: "#f0f8ff" } }}
+                  >
+                    <TableCell align="center">
+                      <Checkbox
+                        checked={selectedIds.includes(p.id)}
+                        onChange={() => {
+                          handleCheckBoxStatus(p.id);
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell align="center">{p.id}</TableCell>
+                    <TableCell align="center">{p.name}</TableCell>
+                    <TableCell align="center">{p.modelNumber}</TableCell>
+                    <TableCell align="center">
+                      ¥{Number(p.price).toLocaleString()}
+                    </TableCell>
+                    <TableCell align="left">{p.description}</TableCell>
+
+                    <TableCell align="center">
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        color="primary"
+                        onClick={() => {
+                          handleModalOpen();
+                          setSelectedProduct(p);
+                        }}
+                      >
+                        詳細 : {p.custom.length}
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleDeleteProducts}
+            sx={{ mt: 2 }}
+            disabled={isMutating}
+          >
+            選択商品を削除
+          </Button>
+          <ProductsDetailModal
+            open={modalOpen}
+            onClose={handleModalClose}
+            productWithCustoms={selectedProduct}
+            onAddSuccess={handleAddSuccess}
+            onCustomDeleteSuccess={handleCustomDeleteSuccess}
+          />
+        </Box>
+      )}
     </Container>
   );
 };
