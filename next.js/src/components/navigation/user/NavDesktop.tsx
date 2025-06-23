@@ -34,7 +34,6 @@ export const NavDesktop = ({ userInfo }: Props) => {
           variant="body1"
           sx={{ color: "#333333", fontWeight: "bold", mr: 2 }}
         >
-          {" "}
           ようこそ、{userInfo?.name === "test" ? "ゲスト" : userInfo?.name}様
         </Typography>
       </Box>
@@ -48,7 +47,7 @@ export const NavDesktop = ({ userInfo }: Props) => {
             sx={{
               color: "#333",
               textTransform: "none",
-              fontWeight: "medium",
+              fontWeight: "bold",
               "&:hover": {
                 color: "#B0C4DE",
                 backgroundColor: "transparent",

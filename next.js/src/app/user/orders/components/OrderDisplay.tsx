@@ -77,7 +77,6 @@ export const OrderDisplay = ({ orders }: Props) => {
             sx={{
               p: { xs: 2, sm: 3 },
               mb: 4,
-              backgroundColor: "#F5F5F5",
               borderRadius: 2,
             }}
           >
@@ -113,7 +112,7 @@ export const OrderDisplay = ({ orders }: Props) => {
               }}
             >
               <Table size="small" sx={{ minWidth: 600 }}>
-                <TableHead sx={{ backgroundColor: "#D3D3D3" }}>
+                <TableHead sx={{ backgroundColor: "#EDEDED" }}>
                   <TableRow>
                     <TableCell sx={{ minWidth: 100, fontWeight: "bold" }}>
                       型番

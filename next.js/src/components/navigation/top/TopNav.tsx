@@ -15,9 +15,17 @@ export const TopNav = () => {
     setDrawerOpen(!drawerOpen);
   };
 
+  // bgcolor: "#FCE8E6",
+
   return (
     <Box>
-      <AppBar sx={{ backgroundColor: "#E88E89 ", boxShadow: "none" }}>
+      <AppBar
+        sx={{
+          bgcolor: "#FCE8E6",
+          boxShadow: "none",
+          borderBottom: "1px solid #D3D3D3",
+        }}
+      >
         {isMobile ? (
           <NavMobile toggleDrawer={toggleDrawer} drawerOpen={drawerOpen} />
         ) : (

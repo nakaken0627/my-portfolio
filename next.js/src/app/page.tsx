@@ -9,28 +9,51 @@ export default function Home() {
       <TopNav />
       <Toolbar />
 
-      {/* ロゴ表示 */}
+      {/* ロゴ＋コンセプトエリア */}
       <Box
         sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          alignItems: "center",
+          justifyContent: "center",
           width: "100%",
-          maxWidth: "700px", // 最大幅を制限（例：600px）
-          mx: "auto", // 中央寄せ
+          maxWidth: "1000px",
+          mx: "auto",
           px: { xs: 2, sm: 4 },
-          py: 2,
+          py: 4,
+          gap: 4,
         }}
       >
-        <Image
-          src="/logo.png"
-          alt="Smart Deal EC ロゴ"
-          width={600}
-          height={100}
-          priority
-          style={{
-            width: "100%",
-            height: "auto",
-            objectFit: "contain",
-          }}
-        />
+        {/* ロゴ */}
+        <Box sx={{ flex: 1, textAlign: "center" }}>
+          <Image
+            src="/logo.png"
+            alt="Smart Deal EC ロゴ"
+            width={400}
+            height={100}
+            priority
+            style={{
+              width: "100%",
+              height: "auto",
+              objectFit: "contain",
+            }}
+          />
+        </Box>
+
+        {/* コンセプト */}
+        <Box sx={{ flex: 1 }}>
+          <Typography
+            variant="h5"
+            sx={{ color: "#4A4A4A", fontWeight: "bold", mb: 2 }}
+          >
+            企業とユーザーをつなぐ、新しい取引のかたち
+          </Typography>
+          <Typography sx={{ color: "#4A4A4A" }}>
+            Smart Deal
+            ECは、信頼できる企業とユーザーが安心して取引できるプラットフォームを提供します。
+            スムーズな注文管理と柔軟なサービス設計で、双方にとって最適なショッピング体験を実現します。
+          </Typography>
+        </Box>
       </Box>
 
       <Box

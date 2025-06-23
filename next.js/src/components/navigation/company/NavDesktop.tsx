@@ -42,7 +42,7 @@ export const CompanyNavDesktop = ({ companyInfo }: Props) => {
             sx={{
               color: "#333",
               textTransform: "none",
-              fontWeight: "medium",
+              fontWeight: "bold",
               "&:hover": {
                 color: "#B0C4DE",
                 backgroundColor: "transparent",

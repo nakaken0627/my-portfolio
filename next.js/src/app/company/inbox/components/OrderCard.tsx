@@ -26,8 +26,8 @@ export const OrderCard = ({ order, confirmedIds, onCheck }: Props) => {
       key={order.orderId}
       sx={{
         mb: 4,
-        border: `1.5px solid #B0C4DE`,
-        backgroundColor: "#E6F0FA",
+        border: `1.5px solid (2, 2, 2)`,
+        // backgroundColor: "#E6F0FA",
         ...(totalAmount >= 50000 && {
           border: "2px solid #FF9999",
           backgroundColor: "#FFF5F5",
@@ -55,10 +55,22 @@ export const OrderCard = ({ order, confirmedIds, onCheck }: Props) => {
             variant="subtitle1"
             sx={{
               color: "#333333",
+              // color: "#DF3447",
               fontWeight: "bold",
             }}
           >
-            合計金額: ¥{totalAmount.toLocaleString()}
+            合計金額:
+          </Typography>
+
+          <Typography
+            variant="subtitle1"
+            sx={{
+              // color: "#333333",
+              color: "#DF3447",
+              fontWeight: "bold",
+            }}
+          >
+            ¥{totalAmount.toLocaleString()}
           </Typography>
         </Box>
 

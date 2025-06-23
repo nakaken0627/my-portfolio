@@ -32,6 +32,7 @@ export const NavDesktop = () => {
             href={item.href}
             component={Link}
             color="inherit"
+            sx={{ color: "#4A4A4A", fontWeight: "bold" }}
           >
             {item.label}
           </Button>

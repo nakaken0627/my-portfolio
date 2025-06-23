@@ -10,6 +10,7 @@ import {
   ListItemButton,
   ListItemText,
   Toolbar,
+  useMediaQuery,
 } from "@mui/material";
 
 import { navLinks } from "./NavLinks";
@@ -20,6 +21,8 @@ type Props = {
 };
 
 export const NavMobile = ({ toggleDrawer, drawerOpen }: Props) => {
+  const isSmallScreen = useMediaQuery("(max-width:500px)");
+
   return (
     <>
       <Toolbar>
@@ -28,7 +31,7 @@ export const NavMobile = ({ toggleDrawer, drawerOpen }: Props) => {
             edge="start"
             color="inherit"
             onClick={toggleDrawer}
-            sx={{ mr: 2 }}
+            sx={{ mr: 2, color: "#4A4A4A" }}
           >
             <MenuIcon />
           </IconButton>
@@ -55,18 +58,21 @@ export const NavMobile = ({ toggleDrawer, drawerOpen }: Props) => {
           </Box>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          {navLinks.map((item) => (
-            <Button
-              key={item.href}
-              href={item.href}
-              component={Link}
-              color="inherit"
-            >
-              {item.label}
-            </Button>
-          ))}
-        </Box>
+        {!isSmallScreen && (
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            {navLinks.map((item) => (
+              <Button
+                key={item.href}
+                href={item.href}
+                component={Link}
+                color="inherit"
+                sx={{ color: "#4A4A4A", fontWeight: "bold" }}
+              >
+                {item.label}
+              </Button>
+            ))}
+          </Box>
+        )}
       </Toolbar>
 
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer}>
@@ -74,7 +80,10 @@ export const NavMobile = ({ toggleDrawer, drawerOpen }: Props) => {
           <List>
             {navLinks.map((link) => (
               <ListItemButton key={link.href} component={Link} href={link.href}>
-                <ListItemText primary={link.label} />
+                <ListItemText
+                  primary={link.label}
+                  slotProps={{ primary: { sx: { color: "#4A4A4A" } } }}
+                />
               </ListItemButton>
             ))}
           </List>

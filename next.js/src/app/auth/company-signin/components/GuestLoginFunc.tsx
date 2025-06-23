@@ -33,8 +33,6 @@ export const GuestLoginFunc = () => {
           startIcon={<PersonOutlineIcon />}
           disabled={isMutating}
           sx={{
-            backgroundColor: "#E6F0FA",
-            color: "#0000CD",
             fontWeight: "bold",
             border: "2px solid #0000CD",
             textTransform: "none",

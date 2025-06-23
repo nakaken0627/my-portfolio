@@ -25,7 +25,7 @@ export const OrderProductTable = ({
     <TableContainer
       component={Paper}
       sx={{
-        backgroundColor: "#F5F8FF",
+        // backgroundColor: "#F5F8FF",
         border: "1px solid #DDDDDD",
         overflowX: "auto",
       }}

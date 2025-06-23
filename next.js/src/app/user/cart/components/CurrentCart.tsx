@@ -86,7 +86,7 @@ export const CurrentCart = () => {
         elevation={3}
         sx={{
           p: 2,
-          backgroundColor: "#F5F8FF",
+          // backgroundColor: "#F5F8FF",
           border: "1px solid #DDDDDD",
         }}
       >

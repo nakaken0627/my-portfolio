@@ -162,7 +162,8 @@ export const CartCard = ({ products, cartProducts }: Props) => {
             spacing={2}
             alignItems="center"
             sx={{
-              backgroundColor: "#e8f5e9",
+              "&:nth-of-type(even)": { backgroundColor: "#F9F9F9" },
+
               borderRadius: 2,
               mb: 1,
               px: 2,
@@ -255,7 +256,13 @@ export const CartCard = ({ products, cartProducts }: Props) => {
               <Box display="flex" alignItems="center" justifyContent="center">
                 <Button
                   size="small"
-                  sx={{ minWidth: 32, px: 1 }}
+                  sx={{
+                    fontSize: 15,
+                    minWidth: 32,
+                    px: 1,
+                    color: "black",
+                    fontWeight: "bold",
+                  }}
                   onClick={() => reduceProduct(product.id, custom?.id ?? null)}
                 >
                   -
@@ -304,7 +311,13 @@ export const CartCard = ({ products, cartProducts }: Props) => {
 
                 <Button
                   size="small"
-                  sx={{ minWidth: 32, px: 1 }}
+                  sx={{
+                    minWidth: 32,
+                    px: 1,
+                    color: "black",
+                    fontWeight: "bold",
+                    fontSize: 12,
+                  }}
                   onClick={() => addProduct(product.id, custom?.id ?? null)}
                 >
                   +
