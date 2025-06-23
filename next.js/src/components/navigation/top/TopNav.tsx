@@ -15,8 +15,6 @@ export const TopNav = () => {
     setDrawerOpen(!drawerOpen);
   };
 
-  // bgcolor: "#FCE8E6",
-
   return (
     <Box>
       <AppBar

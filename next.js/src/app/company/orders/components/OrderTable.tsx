@@ -83,7 +83,6 @@ export const OrderTable = ({ products, total }: Props) => {
                 <TableCell
                   sx={{
                     fontWeight: "bold",
-                    color: "green",
                     minWidth: 90,
                     padding: "6px 12px",
                   }}
@@ -101,6 +100,7 @@ export const OrderTable = ({ products, total }: Props) => {
               colSpan={4}
               align="right"
               sx={{
+                fontSize: 16,
                 fontWeight: "bold",
                 backgroundColor: "#f0f0f0",
                 whiteSpace: "nowrap",
@@ -110,6 +110,7 @@ export const OrderTable = ({ products, total }: Props) => {
             </TableCell>
             <TableCell
               sx={{
+                fontSize: 16,
                 fontWeight: "bold",
                 color: "#d32f2f",
                 backgroundColor: "#f0f0f0",

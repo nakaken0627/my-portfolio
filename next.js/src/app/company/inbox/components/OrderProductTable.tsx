@@ -25,7 +25,6 @@ export const OrderProductTable = ({
     <TableContainer
       component={Paper}
       sx={{
-        // backgroundColor: "#F5F8FF",
         border: "1px solid #DDDDDD",
         overflowX: "auto",
       }}
@@ -35,31 +34,37 @@ export const OrderProductTable = ({
           <TableRow sx={{ backgroundColor: "#E6E6E6" }}>
             <TableCell />
             <TableCell
+              align="center"
               sx={{ color: "#333333", fontWeight: "bold", minWidth: 100 }}
             >
               型番
             </TableCell>
             <TableCell
+              align="center"
               sx={{ color: "#333333", fontWeight: "bold", minWidth: 120 }}
             >
               商品名
             </TableCell>
             <TableCell
+              align="center"
               sx={{ color: "#333333", fontWeight: "bold", minWidth: 80 }}
             >
               単価
             </TableCell>
             <TableCell
+              align="center"
               sx={{ color: "#333333", fontWeight: "bold", minWidth: 60 }}
             >
               数量
             </TableCell>
             <TableCell
+              align="center"
               sx={{ color: "#333333", fontWeight: "bold", minWidth: 100 }}
             >
               小計
             </TableCell>
             <TableCell
+              align="center"
               sx={{ color: "#333333", fontWeight: "bold", minWidth: 120 }}
             >
               発注者
@@ -75,7 +80,7 @@ export const OrderProductTable = ({
                 color: "#666666",
               }}
             >
-              <TableCell>
+              <TableCell align="center">
                 <Checkbox
                   checked={confirmedIds.includes(p.orderProductId)}
                   onChange={() => {
@@ -83,19 +88,21 @@ export const OrderProductTable = ({
                   }}
                 />
               </TableCell>
-              <TableCell>{p.custom?.modelNumber ?? p.modelNumber}</TableCell>
-              <TableCell>{p.custom?.name ?? p.name}</TableCell>
-              <TableCell>
+              <TableCell align="center">
+                {p.custom?.modelNumber ?? p.modelNumber}
+              </TableCell>
+              <TableCell align="center">{p.custom?.name ?? p.name}</TableCell>
+              <TableCell align="center">
                 ¥{Math.round(p.custom?.price ?? p.price).toLocaleString()}
               </TableCell>
-              <TableCell>{p.quantity}</TableCell>
-              <TableCell>
+              <TableCell align="center">{p.quantity}</TableCell>
+              <TableCell align="center">
                 ¥
                 {Math.round(
                   (p.custom?.price ?? p.price) * p.quantity,
                 ).toLocaleString()}
               </TableCell>
-              <TableCell>{p.userName}</TableCell>
+              <TableCell align="center">{p.userName}</TableCell>
             </TableRow>
           ))}
         </TableBody>

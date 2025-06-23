@@ -98,7 +98,7 @@ export const ProductList = () => {
 
   return (
     <Container maxWidth="lg">
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h5" gutterBottom textAlign="center" sx={{ my: 2 }}>
         商品一覧
       </Typography>
 

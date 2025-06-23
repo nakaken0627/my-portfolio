@@ -22,7 +22,6 @@ export const OrderCard = ({ order }: Props) => {
         boxShadow: 3,
         borderRadius: 2,
         border: "1.5px solid #B0C4DE",
-        backgroundColor: "#E6F0FA",
         overflowX: "auto",
       }}
     >

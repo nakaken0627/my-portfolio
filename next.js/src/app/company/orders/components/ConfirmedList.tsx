@@ -19,8 +19,7 @@ export const ConfirmedList = () => {
     <Container
       maxWidth="lg"
       sx={{
-        py: 3,
-        backgroundColor: "#F5F5F5",
+        py: 2,
         borderRadius: 2,
         minHeight: "100vh",
       }}
@@ -28,7 +27,7 @@ export const ConfirmedList = () => {
       <Typography
         variant="h4"
         sx={{
-          mb: 4,
+          mb: 2,
           color: "#333333",
           textAlign: "center",
           fontWeight: "bold",
@@ -64,7 +63,7 @@ export const ConfirmedList = () => {
           </Typography>
         </Paper>
       ) : (
-        <Box sx={{ px: { xs: 1, sm: 2 }, py: 2 }}>
+        <Box sx={{ px: { xs: 1, sm: 2 }, py: 1 }}>
           {data.map((order) => (
             <OrderCard key={order.orderId} order={order} />
           ))}

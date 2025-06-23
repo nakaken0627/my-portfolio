@@ -47,7 +47,6 @@ export const DisplayOrderList = () => {
       maxWidth="lg"
       sx={{
         py: 3,
-        backgroundColor: "#F5F5F5",
         borderRadius: 2,
         minHeight: "100vh",
       }}
