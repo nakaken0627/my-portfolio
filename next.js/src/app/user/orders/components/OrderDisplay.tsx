@@ -35,7 +35,7 @@ export const OrderDisplay = ({ orders }: Props) => {
       <Typography
         variant="h4"
         sx={{
-          mb: 4,
+          mb: 2,
           color: "#333333",
           textAlign: "center",
           fontWeight: "bold",
@@ -94,12 +94,20 @@ export const OrderDisplay = ({ orders }: Props) => {
               >
                 注文ID: {o.orderId}
               </Typography>
-              <Typography
-                variant="subtitle1"
-                sx={{ color: "#4A4A4A", fontWeight: "bold" }}
-              >
-                合計金額: ¥{orderTotalAmount(o.products).toLocaleString()}
-              </Typography>
+              <Box sx={{ display: "flex", alignItems: "flex-end", gap: 1 }}>
+                <Typography
+                  variant="subtitle1"
+                  sx={{ color: "#4A4A4A", fontWeight: "bold" }}
+                >
+                  合計金額:
+                </Typography>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "red", fontWeight: "bold" }}
+                >
+                  ¥{orderTotalAmount(o.products).toLocaleString()}
+                </Typography>
+              </Box>
             </Box>
 
             <Divider sx={{ mb: 2 }} />

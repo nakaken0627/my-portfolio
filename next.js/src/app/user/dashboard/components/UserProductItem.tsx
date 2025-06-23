@@ -102,11 +102,14 @@ export const UserProductItem = ({ id, product }: Props) => {
               >
                 {product.name}
               </Typography>
-              <Typography variant="body2" sx={{ my: 1 }}>
-                型番: {product.modelNumber}
+              <Typography
+                variant="body2"
+                sx={{ my: 1, fontSize: 13, color: "gray" }}
+              >
+                販売企業: {product.companyName}
               </Typography>
               <Typography variant="body2" sx={{ my: 1 }}>
-                企業: {product.companyName}
+                型番: {product.modelNumber}
               </Typography>
               <Typography variant="body2" sx={{ my: 1 }}>
                 説明:
@@ -114,7 +117,7 @@ export const UserProductItem = ({ id, product }: Props) => {
               <Typography variant="body2">・{product.description}</Typography>
               <Typography
                 variant="subtitle1"
-                sx={{ my: 1, mt: 1, fontWeight: "bold" }}
+                sx={{ my: 1, mt: 1, fontWeight: "bold", color: "red" }}
               >
                 ¥{Math.round(product.price).toLocaleString()}
               </Typography>
@@ -125,7 +128,7 @@ export const UserProductItem = ({ id, product }: Props) => {
                 color="success"
                 fullWidth
                 startIcon={<AddShoppingCartIcon />}
-                sx={{ px: 3, whiteSpace: "nowrap" }}
+                sx={{ px: 3, whiteSpace: "nowrap", fontWeight: "bold" }}
                 onClick={() => addProduct(product.id, null)}
               >
                 カートへ
@@ -134,7 +137,8 @@ export const UserProductItem = ({ id, product }: Props) => {
           </Grid>
         </Grid>
         <Button
-          variant="outlined"
+          variant="contained"
+          color="success"
           fullWidth
           startIcon={<FormatListBulletedOutlinedIcon />}
           onClick={handleDrawerOpen}
@@ -144,11 +148,11 @@ export const UserProductItem = ({ id, product }: Props) => {
             whiteSpace: "nowrap",
             overflow: "hidden",
             textOverflow: "ellipsis",
-            color: "#4caf50",
             borderColor: "#4caf50",
+            fontWeight: "bold",
           }}
         >
-          個別商品一覧 （{String(product.custom.length)}）
+          カスタム品一覧 （{String(product.custom.length)}）
         </Button>
       </Card>
 

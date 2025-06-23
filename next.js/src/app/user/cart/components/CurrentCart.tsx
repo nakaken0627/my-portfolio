@@ -67,10 +67,7 @@ export const CurrentCart = () => {
   };
 
   return (
-    <Container
-      maxWidth="lg"
-      sx={{ backgroundColor: "#E6F4EA", borderRadius: 2, p: { xs: 1, sm: 2 } }}
-    >
+    <Container maxWidth="lg" sx={{ borderRadius: 2, p: { xs: 1, sm: 2 } }}>
       <Typography
         variant="h4"
         sx={{
@@ -86,7 +83,6 @@ export const CurrentCart = () => {
         elevation={3}
         sx={{
           p: 2,
-          // backgroundColor: "#F5F8FF",
           border: "1px solid #DDDDDD",
         }}
       >
@@ -133,12 +129,13 @@ export const CurrentCart = () => {
             display: "flex",
             justifyContent: "flex-end",
             flexWrap: "wrap",
+            alignItems: "flex-end",
             gap: 1,
           }}
         >
-          <Typography variant="h6">
-            合計: ¥
-            {calcCartTotalAmount(cartProducts, products).toLocaleString()}
+          <Typography variant="subtitle1">合計:</Typography>
+          <Typography variant="h6" sx={{ color: "red" }}>
+            ¥{calcCartTotalAmount(cartProducts, products).toLocaleString()}
           </Typography>
         </Box>
         <Box display="flex" justifyContent="flex-end" mt={2}>

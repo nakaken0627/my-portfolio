@@ -31,6 +31,8 @@ export const CartCard = ({ products, cartProducts }: Props) => {
         alignItems="center"
         sx={{
           fontWeight: "bold",
+          backgroundColor: "#EDEDED",
+          fontSize: 14,
           mb: 1,
           px: 2,
           py: 1,
@@ -362,6 +364,7 @@ export const CartCard = ({ products, cartProducts }: Props) => {
               <Button
                 color="error"
                 size="small"
+                sx={{ fontWeight: "bold" }}
                 onClick={() => deleteProduct(product.id, custom?.id ?? null)}
               >
                 削除

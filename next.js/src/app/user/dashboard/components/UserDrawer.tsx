@@ -30,7 +30,7 @@ export const UserDrawer = ({ drawerProps }: Props) => {
         }}
       >
         <Typography variant="h6" sx={{ mb: 2 }}>
-          カスタマイズ品一覧
+          カスタム品一覧
         </Typography>
         <UserProductCustomizationList
           customization={customization}
