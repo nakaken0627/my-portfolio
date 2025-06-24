@@ -16,18 +16,17 @@ export const OrderCard = ({ order }: Props) => {
   );
   return (
     <Card
-      key={order.orderId}
       variant="outlined"
       sx={{
         mb: 4,
         boxShadow: 3,
         borderRadius: 2,
+        border: "1.5px solid #B0C4DE",
         overflowX: "auto",
       }}
     >
       <CardContent>
         <OrderHeader order={order} />
-
         <OrderTable products={order.products} total={total} />
       </CardContent>
     </Card>

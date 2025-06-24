@@ -27,7 +27,6 @@ export const RegisterSection = () => {
           border: "1px solid #e0e0e0",
           boxShadow: "none",
           borderRadius: 1,
-          mt: 2,
           "&:before": { display: "none" },
         }}
       >

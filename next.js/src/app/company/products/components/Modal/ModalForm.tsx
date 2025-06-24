@@ -43,7 +43,7 @@ export const ModalForm = ({ onAddSuccess }: Props) => {
           }}
         >
           <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-            カスタム品登録（オプション）
+            カスタム品登録
           </Typography>
         </AccordionSummary>
         <AccordionDetails sx={{ p: 1.5, pt: 0 }}>

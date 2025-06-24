@@ -83,7 +83,7 @@ export const AddCustomProduct = ({ onAddSuccess }: Props) => {
     );
     if (matchedProduct) {
       setValue("productName", matchedProduct.name);
-      setValue("modelNumber", matchedProduct.model_number);
+      setValue("modelNumber", matchedProduct.modelNumber);
       setValue("price", matchedProduct.price);
       setValue("description", matchedProduct.description);
     } else {
@@ -106,9 +106,9 @@ export const AddCustomProduct = ({ onAddSuccess }: Props) => {
 
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>
+      {/* <Typography variant="h6" gutterBottom>
         個別商品登録
-      </Typography>
+      </Typography> */}
 
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <Stack>

@@ -1,5 +1,3 @@
-// "use client";
-
 import { useRouter } from "next/navigation";
 import { API_BASE_URL } from "@/lib/api";
 import { logger } from "@/lib/logger";
@@ -28,11 +26,20 @@ export const SignoutFunc = () => {
 
   return (
     <Button
-      color="inherit"
-      variant="outlined"
+      variant="contained"
       size="small"
       onClick={handleClickSignout}
-      sx={{ ml: 2 }}
+      sx={{
+        ml: 2,
+        backgroundColor: "#A5C8B1",
+        color: "#333333",
+        fontWeight: "bold",
+        textTransform: "none",
+        boxShadow: "none",
+        "&:hover": {
+          backgroundColor: "#8CB39A",
+        },
+      }}
     >
       ログアウト
     </Button>

@@ -1,5 +1,4 @@
 import { API_BASE_URL } from "@/lib/api";
-// import { mutate } from "swr";
 import useSWRMutation from "swr/mutation";
 
 const fetcher = async (url: string, { arg }: { arg: number }) => {

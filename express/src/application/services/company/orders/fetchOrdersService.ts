@@ -13,9 +13,24 @@ export const fetchOrdersService = async (isConfirmedBool: boolean, companyId: nu
       grouped[order_id] = [];
     }
 
+    const customData = custom
+      ? {
+          id: custom.id,
+          modelNumber: custom.model_number,
+          name: custom.name,
+          price: custom.price,
+        }
+      : null;
+
     grouped[order_id].push({
-      ...product,
-      custom: custom ?? null,
+      id: product.id,
+      orderProductId: product.orderProductId,
+      name: product.name,
+      userName: product.userName,
+      modelNumber: product.model_number,
+      price: product.price,
+      quantity: product.quantity,
+      custom: customData,
     });
   }
 

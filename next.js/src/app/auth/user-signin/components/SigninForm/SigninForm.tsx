@@ -27,7 +27,7 @@ export const SigninForm = () => {
   const router = useRouter();
   const { trigger, isMutating } = useUserSignin();
 
-  const onSubmit: SubmitHandler<FormData> = async (inputData: FormData) => {
+  const onSubmit: SubmitHandler<FormData> = async (inputData) => {
     try {
       await trigger(inputData);
       router.push("/user/dashboard");
@@ -43,7 +43,6 @@ export const SigninForm = () => {
       <Controller
         name="username"
         control={control}
-        rules={{ required: true }}
         render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}
@@ -53,6 +52,9 @@ export const SigninForm = () => {
             label="ユーザーID"
             error={!!error}
             helperText={error?.message}
+            variant="outlined"
+            focused
+            color="success"
           />
         )}
       />
@@ -60,7 +62,6 @@ export const SigninForm = () => {
       <Controller
         name="password"
         control={control}
-        rules={{ required: true }}
         render={({ field, fieldState: { error } }) => (
           <TextField
             {...field}
@@ -71,14 +72,28 @@ export const SigninForm = () => {
             type="password"
             error={!!error}
             helperText={error?.message}
+            variant="outlined"
+            focused
+            color="success"
           />
         )}
       />
+
       <Button
         type="submit"
         fullWidth
         variant="contained"
-        sx={{ mt: 3, mb: 2 }}
+        sx={{
+          mt: 3,
+          mb: 2,
+          backgroundColor: "#E6F4EA",
+          color: "#333333",
+          fontWeight: "bold",
+          textTransform: "none",
+          "&:hover": {
+            backgroundColor: "#C8E6C9",
+          },
+        }}
         disabled={isMutating}
       >
         ログイン

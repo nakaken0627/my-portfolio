@@ -41,7 +41,7 @@ export const ModalTable = ({ customs, onCustomDeleteSuccess }: Props) => {
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
-        カスタマイズ一覧
+        カスタム品一覧
       </Typography>
 
       <TableContainer
@@ -124,15 +124,15 @@ export const ModalTable = ({ customs, onCustomDeleteSuccess }: Props) => {
                   </Button>
                 </TableCell>
                 <TableCell align="center">{c.id}</TableCell>
-                <TableCell align="center">{c.user_name ?? "共通品"}</TableCell>
+                <TableCell align="center">{c.userName ?? "共通品"}</TableCell>
                 <TableCell align="center">{c.name}</TableCell>
-                <TableCell align="center">{c.model_number}</TableCell>
+                <TableCell align="center">{c.modelNumber}</TableCell>
                 <TableCell align="center">
                   ¥{Number(c.price).toLocaleString()}
                 </TableCell>
                 <TableCell align="center">{c.description}</TableCell>
-                <TableCell align="center">{c.start_date || "-"}</TableCell>
-                <TableCell align="center">{c.end_date || "-"}</TableCell>
+                <TableCell align="center">{c.startDate || "-"}</TableCell>
+                <TableCell align="center">{c.endDate || "-"}</TableCell>
               </TableRow>
             ))}
           </TableBody>

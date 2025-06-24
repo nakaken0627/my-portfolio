@@ -2,10 +2,11 @@
 
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { SigninSchema } from "@/app/auth/company-signin/components/SigninForm/SigninSchema";
 import { useCompanySignin } from "@/hooks/company/useCompanySignin";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField } from "@mui/material";
+
+import { SigninSchema } from "./SigninSchema";
 
 type FormData = {
   username: string;
@@ -29,7 +30,7 @@ export const SigninForm = () => {
   const onSubmit: SubmitHandler<FormData> = async (inputData: FormData) => {
     try {
       await trigger(inputData);
-      router.push("/company/mypage");
+      router.push("/company/inbox");
     } catch (err) {
       const error = err as CustomError;
       const msg = error.info?.message ?? "";
@@ -52,6 +53,9 @@ export const SigninForm = () => {
             label="企業ID"
             error={!!error}
             helperText={error?.message}
+            variant="outlined"
+            focused
+            color="info"
           />
         )}
       />
@@ -70,15 +74,28 @@ export const SigninForm = () => {
             type="password"
             error={!!error}
             helperText={error?.message}
+            variant="outlined"
+            focused
+            color="info"
           />
         )}
       />
+
       <Button
         type="submit"
         fullWidth
         variant="contained"
-        sx={{ mt: 3, mb: 2 }}
         disabled={isMutating}
+        sx={{
+          mt: 3,
+          mb: 2,
+          backgroundColor: "#0000CD",
+          fontWeight: "bold",
+          textTransform: "none",
+          "&:hover": {
+            backgroundColor: "#00008B",
+          },
+        }}
       >
         ログイン
       </Button>

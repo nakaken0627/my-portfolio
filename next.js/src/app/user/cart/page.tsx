@@ -6,7 +6,7 @@ import { CurrentCart } from "./components/CurrentCart";
 export default function UserCart() {
   return (
     <UserLayout>
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ backgroundColor: "#fafafa", minHeight: "100vh", p: 2 }}>
         <CurrentCart />
       </Box>
     </UserLayout>

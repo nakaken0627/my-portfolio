@@ -1,10 +1,10 @@
-import { ProductCustom } from "../../../../domain/models/company/productModel.js";
+import { Product, ProductCustom } from "../../../../domain/models/company/productModel.js";
 import { fetchMergedCompanyProducts } from "../../../../infrastructure/repositories/company/productRepository.js";
 import { getSignedImageUrl } from "../../../../infrastructure/s3/s3Service.js";
 import { DisplayProductDto } from "../../../../presentation/dto/company/product.dto.js";
 
 type RowData = {
-  product: Omit<DisplayProductDto, "customization" | "imageUrl">;
+  product: Omit<Product, "customization" | "imageUrl">;
   customization: ProductCustom;
 };
 
@@ -23,12 +23,30 @@ export const fetchDisplayProductsService = async (companyId: number): Promise<Di
   const groupedProducts = enrichedProducts.reduce<GroupedProduct>((acc, { productWithUrl, customization }) => {
     if (!acc[productWithUrl.id]) {
       acc[productWithUrl.id] = {
-        ...productWithUrl,
+        id: productWithUrl.id,
+        name: productWithUrl.name,
+        modelNumber: productWithUrl.model_number,
+        price: productWithUrl.price,
+        description: productWithUrl.description,
+        imageName: productWithUrl.image_name,
+        imageUrl: productWithUrl.imageUrl,
         custom: [],
       };
     }
+
     if (customization) {
-      acc[productWithUrl.id].custom.push(customization);
+      const customData = {
+        id: customization.id,
+        userName: customization.user_name,
+        modelNumber: customization.model_number,
+        name: customization.name,
+        price: customization.price,
+        description: customization.description,
+        startDate: customization.start_date,
+        endDate: customization.end_date,
+      };
+
+      acc[productWithUrl.id].custom.push(customData);
     }
     return acc;
   }, {});

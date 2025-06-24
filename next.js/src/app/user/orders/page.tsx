@@ -6,7 +6,7 @@ import { OrderPage } from "./components/OrderPage";
 export default function UserCart() {
   return (
     <UserLayout>
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 2, minHeight: "100vh" }}>
         <OrderPage />
       </Box>
     </UserLayout>
