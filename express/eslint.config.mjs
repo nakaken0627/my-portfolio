@@ -7,6 +7,9 @@ import globals from "globals";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
+  {
+    ignores: ["node_modules/**", "dist/**", ".next/**", "build/**"],
+  },
   pluginJs.configs.recommended,
   {
     files: ["**/*.{js,mjs,cjs,ts}"], // 対象ファイルのパターンを指定
