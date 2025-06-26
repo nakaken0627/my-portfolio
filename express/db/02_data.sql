@@ -27,7 +27,7 @@ INSERT INTO products (company_id, model_number, name, price, description) VALUES
 
 -- 共通品(マスタデータ)のサンプル
 INSERT INTO product_customizations
-(product_id, user_id, price, description, product_name, model_number)
+(product_id, user_id, price, description, name, model_number)
 VALUES
 (1, 0, 12800.00, '高速インターネット向けルーター', 'ルーター', 'TW-1001'),
 (2, 0, 7400.00, 'ギガビット対応のネットワークスイッチ', 'ネットワークスイッチ', 'TW-2002'),
@@ -42,7 +42,7 @@ VALUES
 
 -- 個別品のサンプル
 INSERT INTO product_customizations
-(product_id, user_id, price, description, start_date, end_date, product_name, model_number)
+(product_id, user_id, price, description, start_date, end_date, name, model_number)
 VALUES
 (1, 1, 10000.00, '【〇〇様向け】専用ルーター', '2025-04-01', '2025-06-01', 'ルーター', 'TW-1001-01'),
 (2, 1, 7000.00, '【特別単価】ギガビット対応のネットワークスイッチ', '2025-05-01', '2026-05-10', 'ネットワークスイッチ', 'TW-2002-01'),
