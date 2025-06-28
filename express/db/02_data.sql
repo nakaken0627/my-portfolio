@@ -13,17 +13,17 @@ INSERT INTO users (id,name, password) VALUES
 (3,'user_b','$2b$12$yTgbjAqRqNiA.vNZhd0W9OtunHHd5xt7U0FnAmRKNnoM5kpG34Zju'), --ハッシュ化前のPW：12345
 (4,'user_c','$2b$12$fOXpjcaE2PgBWwifxjZbaeGB/dlXKiROiaEFb/F/YkSiP16l3eOvO'); --ハッシュ化前のPW：12345
 
-INSERT INTO products (company_id, model_number, name, price, description) VALUES
-(1, 'TW-1001', 'ルーター', 12800.00, '高速インターネット向けルーター'),
-(1, 'TW-2002', 'ネットワークスイッチ', 7400.00, 'ギガビット対応のネットワークスイッチ'),
-(1, 'GF-330', '電気ケトル', 3600.00, '省エネ設計の電気ケトル'),
-(1, 'GF-991', '太陽光充電器', 5800.00, 'ポータブル太陽光充電器'),
-(1, 'CR-01', 'LED電球', 1200.00, 'Bluetooth対応のスマート電球'),
-(2, 'CR-07', 'エアフィルター', 9200.00, 'PM2.5対応の空気清浄フィルター'),
-(2, 'NS-900', 'ToDo管理ソフト', 2400.00, 'ToDo管理アプリ（ソフトウェアライセンス）'),
-(2, 'NS-777', '時間管理ソフト', 1800.00, '時間管理ツール（クラウド対応）'),
-(2, 'AQ-10X', '浄水器', 15800.00, '家庭用浄水器'),
-(2, 'AQ-22W', 'クリーナーボトル', 950.00, '霧吹き式クリーナーボトル');
+INSERT INTO products (company_id, model_number, name, price, description,image_name) VALUES
+(1, 'TW-1001', 'ルーター', 12800.00, '高速インターネット向けルーター','8e50b833b0ed1ab69dd5d7a736315c56e4fe1b7b7bb190a1d98792cc95e8fd91'),
+(1, 'TW-2002', 'ネットワークスイッチ', 7400.00, 'ギガビット対応のネットワークスイッチ','1a0e7da3ca6c523fbc0c147fb813b48e0323ef697fbc3bdb70cae5a8a509737f'),
+(1, 'GF-330', '電気ケトル', 3600.00, '省エネ設計の電気ケトル','513e9b8374e4dd5bdb7c27fb8b654664180b0b61bafbdb032120f6c55ecfce0e'),
+(1, 'GF-991', '太陽光充電器', 5800.00, 'ポータブル太陽光充電器','423676ee2523ff13f557b5f5403b7a8c30b1a0e895c34c7e276880669066c328'),
+(1, 'CR-01', 'LED電球', 1200.00, 'Bluetooth対応のスマート電球','ea1765590a1ca2be2d7ef330dff0e79483d25c50e5c964400989a86ada93546c'),
+(2, 'CR-07', 'エアフィルター', 9200.00, 'PM2.5対応の空気清浄フィルター','e6309f3478247e2ecb5af33a25df4c97955f5e4872e1e1d41576e8c6d14f5c4f'),
+(2, 'NS-900', 'ToDo管理ソフト', 2400.00, 'ToDo管理アプリ（ソフトウェアライセンス）',null),
+(2, 'NS-777', '時間管理ソフト', 1800.00, '時間管理ツール（クラウド対応）',null),
+(2, 'AQ-10X', '浄水器', 15800.00, '家庭用浄水器',null),
+(2, 'AQ-22W', 'クリーナーボトル', 950.00, '霧吹き式クリーナーボトル',null);
 
 -- 共通品(マスタデータ)のサンプル
 INSERT INTO product_customizations
