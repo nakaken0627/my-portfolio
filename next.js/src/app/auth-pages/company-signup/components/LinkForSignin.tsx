@@ -6,7 +6,7 @@ export const LinkForSignin = () => {
     <Typography variant="body2" align="center" sx={{ mt: 2, color: "#4A4A4A" }}>
       すでにアカウントをお持ちの方は{" "}
       <Link
-        href="/auth/company-signin"
+        href="/auth-pages/company-signin"
         style={{
           color: "#0000CD",
           fontWeight: "bold",

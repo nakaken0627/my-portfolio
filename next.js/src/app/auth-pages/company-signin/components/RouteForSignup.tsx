@@ -6,7 +6,7 @@ export const RouteForSignup = () => {
     <Typography variant="body2" align="center" sx={{ mt: 2, color: "#4A4A4A" }}>
       アカウントをお持ちでない方は{" "}
       <Link
-        href="/auth/company-signup"
+        href="/auth-pages/company-signup"
         style={{
           color: "#0000CD",
           fontWeight: "bold",
