@@ -47,9 +47,6 @@ export const AddDefaultProduct = () => {
 
   return (
     <Box>
-      {/* <Typography variant="h6" gutterBottom>
-        商品登録
-      </Typography> */}
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
         <Stack spacing={2}>
           <Controller

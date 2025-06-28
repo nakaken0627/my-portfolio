@@ -14,6 +14,8 @@ import passport from "./shared/config/passport.js";
 //expressのインスタンスを作成
 const app: Express = express();
 
+// app.set("trust proxy", 1); //本番環境でリバースプロキシのために必須の設定
+
 //環境変数を設定
 dotenv.config();
 const port = Number(process.env.PORT) || 3001;
