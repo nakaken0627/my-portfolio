@@ -32,7 +32,7 @@ describe("Test CompanySignout", () => {
     });
 
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith("/auth/company-signin");
+      expect(mockPush).toHaveBeenCalledWith("/auth-pages/company-signin");
     });
   });
 });

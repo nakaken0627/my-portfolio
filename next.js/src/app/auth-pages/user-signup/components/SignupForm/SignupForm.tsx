@@ -108,12 +108,12 @@ export const SignupForm = () => {
         sx={{
           mt: 3,
           mb: 2,
-          backgroundColor: "#E6F4EA",
-          color: "#333333",
+          backgroundColor: "#2E7D32",
+          color: "#FFFFFF",
           fontWeight: "bold",
           textTransform: "none",
           "&:hover": {
-            backgroundColor: "#C8E6C9",
+            backgroundColor: "#1B5E20",
           },
         }}
       >

@@ -24,14 +24,14 @@ const mockProducts = [
   {
     id: 1,
     name: "テスト商品A",
-    model_number: "MODEL-A-001",
+    modelNumber: "MODEL-A-001",
     price: 1000,
     description: "テスト商品Aの説明",
   },
   {
     id: 2,
     name: "テスト商品B",
-    model_number: "MODEL-B-001",
+    modelNumber: "MODEL-B-001",
     price: 2000,
     description: "テスト商品Bの説明",
   },

@@ -6,7 +6,7 @@ export const LinkForSignup = () => {
     <Typography variant="body2" align="center" sx={{ mt: 2, color: "#4A4A4A" }}>
       アカウントをお持ちでない方は{" "}
       <Link
-        href="/auth/user-signup"
+        href="/auth-pages/user-signup"
         style={{
           color: "#2E7D32",
           fontWeight: "bold",
