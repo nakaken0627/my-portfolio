@@ -92,7 +92,7 @@
 
 ### ⚪︎ インフラ構成図
 
-<img src="assets/infra.png">
+<img src="assets/infrastructure.png">
 
 <br/>
 
