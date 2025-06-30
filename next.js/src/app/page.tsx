@@ -84,7 +84,7 @@ export default function Home() {
         >
           <Button
             component={Link}
-            href="/auth/user-signin"
+            href="/auth-pages/user-signin"
             sx={{
               width: "100%",
               height: "100%",
@@ -120,7 +120,7 @@ export default function Home() {
         >
           <Button
             component={Link}
-            href="/auth/company-signin"
+            href="/auth-pages/company-signin"
             sx={{
               width: "100%",
               height: "100%",

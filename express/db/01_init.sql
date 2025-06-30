@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS products (
 CREATE TABLE IF NOT EXISTS product_customizations(
   id SERIAL PRIMARY KEY,
   product_id INTEGER NOT NULL REFERENCES products(id),
-  user_id INTEGER NOT NULL REFERENCES users(id),
+  user_id INTEGER  REFERENCES users(id),
   name VARCHAR(255) NOT NULL,
   model_number VARCHAR(255) NOT NULL,
   price NUMERIC(10,2) NOT NULL,

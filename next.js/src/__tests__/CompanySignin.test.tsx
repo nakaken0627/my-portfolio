@@ -1,4 +1,4 @@
-import { SigninForm } from "@/app/auth/company-signin/components/SigninForm/SigninForm";
+import { SigninForm } from "@/app/auth-pages/company-signin/components/SigninForm/SigninForm";
 import { useCompanySignin } from "@/hooks/company/useCompanySignin";
 import {
   act,

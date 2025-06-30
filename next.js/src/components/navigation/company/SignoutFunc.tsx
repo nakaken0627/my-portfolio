@@ -15,7 +15,7 @@ export const SignoutFunc = () => {
       });
       if (!res.ok) throw new Error("ログアウト失敗");
 
-      router.push("/auth/company-signin");
+      router.push("/auth-pages/company-signin");
     } catch (err) {
       handleError(err, {
         component: "SignoutFunc",
