@@ -26,7 +26,7 @@ INSERT INTO products (company_id, model_number, name, price, description,image_n
 (2, 'AQ-22W', 'クリーナーボトル', 950.00, '霧吹き式クリーナーボトル',null);
 
 -- 共通品(マスタデータ)のサンプル
-INSERT INTO product_customizations
+INSERT INTO products
 (product_id, user_id, price, description, name, model_number)
 VALUES
 (1, 0, 12800.00, '高速インターネット向けルーター', 'ルーター', 'TW-1001'),
