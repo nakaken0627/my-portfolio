@@ -6,7 +6,15 @@ import { SigninForm } from "./SigninForm/SigninForm";
 
 export const SigninPage = () => {
   return (
-    <Box sx={{ backgroundColor: "#F5F5F5", minHeight: "100vh", py: 10 }}>
+    <Box
+      sx={{
+        backgroundColor: "#F5F5F5",
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Container maxWidth="sm">
         <Paper
           elevation={3}

@@ -5,7 +5,15 @@ import { SignupForm } from "./SignupForm/SignupForm";
 
 export const SignupPage = () => {
   return (
-    <Box sx={{ backgroundColor: "#F5F5F5", minHeight: "100vh", py: 10 }}>
+    <Box
+      sx={{
+        backgroundColor: "#F5F5F5",
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Container maxWidth="sm">
         <Paper
           elevation={4}
